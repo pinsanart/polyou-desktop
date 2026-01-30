@@ -3,17 +3,14 @@ from sqlalchemy import (
     String,
     Integer,
     ForeignKey,
-    SmallInteger,
     DateTime,
-    Date,
-    Boolean,
     Enum as SQLEnum,
 )
 from typing import List, Optional
 from enum import Enum
 from datetime import datetime
 
-from ..core.utc_safe import utcnow
+from ..dependencies.time.utc_safe import utcnow
 
 # =========================================================
 # Base
@@ -24,7 +21,7 @@ class PolyouDB(DeclarativeBase):
 # =========================================================
 # Enums
 # =========================================================
-class Fields(Enum):
+class Fields(str, Enum):
     front = "front"
     back = "back"
 
