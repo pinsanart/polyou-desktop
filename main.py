@@ -3,7 +3,29 @@ from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+from app.dependencies.http.requests_client import RequestsHTTPClient
+from app.dependencies.flashcards.flashcard_http_gateway import FlashcardsHTTPGateway
+from app.dependencies.config.config import settings
+from app.dependencies.auth.auth_http_gateway import AuthHTTPGateway
+
 if __name__ == "__main__":
+    http_client = RequestsHTTPClient(settings.POLYOU_URL)
+
+    auth_gateway = AuthHTTPGateway(http_client)
+    
+    access_token = auth_gateway.login("test@test.com", "test")['access_token']
+    http_client.token = access_token
+
+
+    flashcard_gateway = FlashcardsHTTPGateway(http_client)
+
+    flashcards_ids = flashcard_gateway.get_flashcards_ids()
+    flashcards_info = flashcard_gateway.get_flashcard_info(flashcards_ids)
+
+    print(flashcards_info) 
+
+
+    '''
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
 
@@ -18,3 +40,4 @@ if __name__ == "__main__":
         sys.exit(-1)
     
     sys.exit(app.exec())
+    '''

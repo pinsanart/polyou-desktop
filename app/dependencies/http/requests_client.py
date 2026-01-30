@@ -9,10 +9,10 @@ class RequestsHTTPClient(HTTPClient):
     def _headers(self):
         return {"Authorization": f"Bearer {self.token}"} if self.token else {}
     
-    def get(self, url:str, querry = None):
+    def get(self, url:str, query = None):
         response = requests.get(
             self.base_url + url, 
-            params=querry, 
+            params=query, 
             headers=self._headers()
         )
         response.raise_for_status()
