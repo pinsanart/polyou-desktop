@@ -1,25 +1,32 @@
-from sqlalchemy import select, insert
+from sqlalchemy import select, update
 from typing import List
+
+from ..db.session import SessionLocal
+from ..services.flashcards import build_flashcard_model, build_flashcard_info
+from ..dependencies.time.utc_safe import utcnow
 
 from ..db.models import (
     FlashcardModel, 
-    FlashcardContentModel,
     FlashcardFSRSModel,
-    FlashcardReviewModel,
-    FlashcardImagesModel,
-    FlashcardAudiosModel
-)
-from ..db.session import SessionLocal
-from ..core.shemas.flashcards import (
-    FlashcardInfo, 
-    FlashcardAudio, 
-    FlashcardImage, 
-    FlashcardReview, 
-    FlashcardContent, 
-    FlashcardFSRS,
-    FlashcardUpdate
+    FlashcardImageModel,
+    FlashcardAudioModel,
+    FlashcardReviewModel
 )
 
+from ..core.shemas.flashcards import (
+    FlashcardInfo, 
+    FlashcardFSRS,
+    FlashcardUpdate,
+    FlashcardImage,
+    FlashcardAudio,
+    FlashcardContent,
+    FlashcardReview
+)
+
+def mark_flashcard_as_updated(flashcard_id: int):
+    stmt = update(FlashcardModel).where(FlashcardModel.flashcard_id == flashcard_id).values(updated_at = utcnow())
+    with SessionLocal.begin() as session:
+        session.execute(stmt)
 
 def get_flashcards_ids() -> List[int]:
     stmt = select(FlashcardModel.flashcard_id)
@@ -33,130 +40,138 @@ def get_flashcard_info(flashcard_id: int)->FlashcardInfo | None:
     with SessionLocal() as session:
         flashcard = session.execute(stmt).scalar_one_or_none()
 
-    if not flashcard:
-        return None
-    
-    images = [FlashcardImage(field=image.field, image_url=image.image_url) for image in flashcard.images]
-    audios = [FlashcardAudio(field=audio.field, audio_url=audio.audio_url) for audio in flashcard.audios]
-    reviews = [FlashcardReview(
-        reviewd_at=review.reviewed_at,
-        rating=review.rating, 
-        response_time_ms=review.response_time_ms, 
-        scheduled_days=review.scheduled_days, 
-        actual_days=review.actual_days, 
-        prev_stability=review.prev_stability, 
-        prev_difficulty=review.prev_difficulty,
-        new_stability=review.new_stability,
-        new_difficulty=review.new_difficulty,
-        state_before=review.state_before,
-        state_after=review.state_after
-        ) 
-        for review in flashcard.reviews
-    ]
-    
+        if not flashcard:
+            return None
 
-    content = FlashcardContent(front_field=flashcard.content.front_field_content, back_field=flashcard.content.back_field_content)
-    fsrs = FlashcardFSRS(
-        stability=flashcard.fsrs.stability, 
-        difficulty=flashcard.fsrs.difficulty, 
-        due=flashcard.fsrs.due,
-        last_review=flashcard.fsrs.last_review,
-        state=flashcard.fsrs.state
-    )
-
-    return FlashcardInfo(
-        flashcard_id=flashcard.flashcard_id,
-        
-        language_id= flashcard.language_id,
-        flashcard_type_id= flashcard.flashcard_type_id,
-        created_at= flashcard.created_at,
-        updated_at= flashcard.updated_at,
-
-        content=content,
-        fsrs = fsrs,
-
-        reviews=reviews,
-        images= images,
-        audios= audios
-    )
+        return build_flashcard_info(flashcard)
 
 def get_flashcard_updated_at(flashcard_id: int) -> FlashcardUpdate | None:
     stmt = select(FlashcardModel).where(FlashcardModel.flashcard_id == flashcard_id)
     with SessionLocal() as session:
         flashcard = session.execute(stmt).scalar_one_or_none()
     
-    if not flashcard:
-        return None
-    
-    return FlashcardUpdate(
-        flashcard_id=flashcard.flashcard_id,
-        updated_at=flashcard.updated_at
-    )
+        if not flashcard:
+            return None
+        
+        return FlashcardUpdate(
+            flashcard_id=flashcard.flashcard_id,
+            updated_at=flashcard.updated_at
+        )
 
-def insert_flashcard(new_flashcard: FlashcardInfo):
-    content = FlashcardContentModel(
-        front_field_content= new_flashcard.content.front_field,
-        back_field_content=new_flashcard.content.back_field
-    )
+def insert_flashcard(new_flashcard: FlashcardInfo) -> FlashcardModel:
+    flashcard = build_flashcard_model(new_flashcard)
 
-    fsrs = FlashcardFSRSModel(
-        stability = new_flashcard.fsrs.stability,
-        difficulty = new_flashcard.fsrs.difficulty,
-        due= new_flashcard.fsrs.due,
-        last_review = new_flashcard.fsrs.last_review,
-        state=new_flashcard.fsrs.state
-    )
-
-    flashcard = FlashcardModel(
-        flashcard_id = new_flashcard.flashcard_id,
-        language_id = new_flashcard.language_id,
-        flashcard_type_id = new_flashcard.flashcard_type_id,
-        created_at = new_flashcard.created_at,
-        updated_at = new_flashcard.updated_at,
-
-        content = content,
-        fsrs = fsrs
-    )
-
-    if new_flashcard.reviews:
-        for review_shema in new_flashcard.reviews:
-            flashcard.reviews.append(
-                FlashcardReviewModel(
-                    reviewed_at= review_shema.reviewd_at,
-                    rating = review_shema.rating,
-                    response_time_ms = review_shema.response_time_ms,
-                    scheduled_days = review_shema.scheduled_days,
-                    actual_days = review_shema.actual_days,
-                    prev_stability = review_shema.prev_stability,
-                    prev_difficulty = review_shema.prev_difficulty,
-                    new_stability = review_shema.new_stability,
-                    new_difficulty = review_shema.new_difficulty,
-                    state_before = review_shema.state_before,
-                    state_after = review_shema.state_after
-                )
-            )
-
-    if new_flashcard.images:
-        for image_schema in new_flashcard.images:
-            flashcard.images.append(
-                FlashcardImagesModel(
-                    field=image_schema.field,
-                    image_url=image_schema.image_url,
-                )
-            )
-
-    if new_flashcard.audios:
-        for audio_schema in new_flashcard.audios:
-            flashcard.audios.append(
-                FlashcardAudiosModel(
-                    field=audio_schema.field,
-                    audio_url=audio_schema.audio_url,
-                )
-            )
-    
     with SessionLocal.begin() as session:
         session.add(flashcard)
-        session.flush()
         session.refresh(flashcard)
     
     return flashcard
+
+def update_flashcard_fsrs(flashcard_id: int, fsrs: FlashcardFSRS):
+    stmt = update(FlashcardFSRSModel).where(FlashcardFSRSModel.flashcard_id == flashcard_id).values(      
+        stability = fsrs.stability,
+        difficulty = fsrs.difficulty,
+        due = fsrs.due,
+        last_review = fsrs.last_review,
+        state = fsrs.state
+    )
+
+    with SessionLocal.begin() as session:
+        session.execute(stmt)
+
+    return fsrs
+
+def update_flashcard_images(flashcard_id: int, images: List[FlashcardImage]) -> bool:
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.images.clear()
+        
+        for image in images:
+            flashcard.images.append(
+                FlashcardImageModel(
+                    field = image.field,
+                    image_url = image.image_url
+                )
+            )
+    return True
+
+def update_flashcard_audios(flashcard_id: int, audios: List[FlashcardAudio]) -> bool:
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.audios.clear()
+        
+        for audio in audios:
+            flashcard.audios.append(
+                FlashcardAudioModel(
+                    field = audio.field,
+                    audio_url = audio.audio_url
+                )
+            )
+    return True
+
+def update_flashcard_content(flashcard_id: int, content: FlashcardContent) -> bool:
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.content.front_field_content = content.front_field
+        flashcard.content.back_field_content = content.back_field
+    return True
+
+def update_flashcard_reviews(flashcard_id: int, reviews: List[FlashcardReview]):
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.reviews.clear()
+
+        for review in reviews:
+            flashcard.reviews.append(
+                FlashcardReviewModel(
+                    reviewed_at = review.reviewd_at,
+                    rating= review.rating,
+                    response_time_ms=review.response_time_ms,
+                    scheduled_days= review.scheduled_days,
+                    actual_days= review.actual_days,
+                    prev_stability= review.prev_stability,
+                    prev_difficulty= review.prev_difficulty,
+                    new_stability= review.new_stability,
+                    new_difficulty= review.new_difficulty,
+                    state_before=review.state_before,
+                    state_after=review.state_after
+                )
+            )
+
+    return True
+
+def update_flashcard_language_id(flashcard_id: int, new_language_id: int):
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.language_id = new_language_id
+    return True   
+
+def update_flashcard_type_id(flashcard_id: int, new_flashcard_type_id: int):
+    with SessionLocal.begin() as session:
+        flashcard: FlashcardModel | None = session.query(FlashcardModel).filter(FlashcardModel.flashcard_id == flashcard_id).one_or_none()
+
+        if not flashcard:
+            return False
+        
+        flashcard.flashcard_type_id = new_flashcard_type_id
+    return True

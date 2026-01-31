@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import List
 from enum import Enum
 
+from ...dependencies.time.utc_safe import utcnow
+
 class FieldsEnum(str, Enum):
     front = "front"
     back = "back"

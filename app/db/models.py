@@ -74,7 +74,7 @@ class FlashcardModel(PolyouDB):
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.language_id"), nullable=False)
     flashcard_type_id: Mapped[int] = mapped_column(ForeignKey("flashcard_types.flashcard_type_id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
 
     language: Mapped["LanguageModel"] = relationship(back_populates="flashcards")
     flashcard_type: Mapped["FlashcardTypeModel"] = relationship(back_populates="flashcards")
@@ -99,13 +99,13 @@ class FlashcardModel(PolyouDB):
         passive_deletes=True
     )
 
-    images: Mapped[List["FlashcardImagesModel"]] = relationship(
+    images: Mapped[List["FlashcardImageModel"]] = relationship(
         back_populates="flashcard",
         cascade="all, delete-orphan",
         passive_deletes=True
     )
 
-    audios: Mapped[List["FlashcardAudiosModel"]] = relationship(
+    audios: Mapped[List["FlashcardAudioModel"]] = relationship(
         back_populates="flashcard",
         cascade="all, delete-orphan",
         passive_deletes=True
@@ -184,7 +184,7 @@ class FlashcardReviewModel(PolyouDB):
     flashcard: Mapped["FlashcardModel"] = relationship(back_populates="reviews")
 
 
-class FlashcardImagesModel(PolyouDB):
+class FlashcardImageModel(PolyouDB):
     __tablename__ = "flashcards_images"
 
     image_id: Mapped[int] = mapped_column(primary_key=True)
@@ -200,7 +200,7 @@ class FlashcardImagesModel(PolyouDB):
         passive_deletes=True
     )
 
-class FlashcardAudiosModel(PolyouDB):
+class FlashcardAudioModel(PolyouDB):
     __tablename__ = "flashcards_audios"
 
     audio_id: Mapped[int] = mapped_column(primary_key=True)
