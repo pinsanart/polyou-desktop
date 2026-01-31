@@ -1,4 +1,4 @@
-from ..core.shemas.flashcards import (
+from ..core.schemas.flashcards import (
     FlashcardInfo,
     FlashcardImage,
     FlashcardAudio,
@@ -6,7 +6,7 @@ from ..core.shemas.flashcards import (
     FlashcardReview,
     FlashcardContent
 )
-from ..db.models import (
+from ..infrastructure.db.models import (
     FlashcardModel,
     FlashcardContentModel,
     FlashcardFSRSModel,

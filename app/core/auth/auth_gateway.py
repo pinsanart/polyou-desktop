@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pydantic import EmailStr
-from ..shemas.tokens import Token
+from ..schemas.tokens import Token
 
 class AuthGateway(ABC):
     @abstractmethod

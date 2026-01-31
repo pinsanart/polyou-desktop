@@ -10,7 +10,7 @@ from typing import List, Optional
 from enum import Enum
 from datetime import datetime
 
-from ..dependencies.time.utc_safe import utcnow
+from ...dependencies.time.utc_safe import utcnow
 
 # =========================================================
 # Base
