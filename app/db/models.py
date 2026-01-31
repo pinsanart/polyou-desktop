@@ -47,6 +47,12 @@ class LanguageModel(PolyouDB):
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     iso_639_1: Mapped[str] = mapped_column(String(2), nullable=False, unique=True)
 
+    flashcards: Mapped[List["FlashcardModel"]] = relationship(
+        "FlashcardModel",
+        back_populates="language",
+        cascade="all, delete-orphan"
+    )
+
 
 # =========================================================
 # Flashcards

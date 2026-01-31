@@ -23,9 +23,9 @@ class FlashcardContent(BaseModel):
 
 class FlashcardFSRS(BaseModel):
     stability: float
-    difficult: float
+    difficulty: float
     due: datetime
-    last_review: datetime
+    last_review: datetime | None
     state: StateEnum
     
 class FlashcardReview(BaseModel):
@@ -66,3 +66,7 @@ class FlashcardInfo(BaseModel):
     reviews: List[FlashcardReview] | None
     images: List[FlashcardImage] | None
     audios: List[FlashcardAudio] | None
+
+class FlashcardUpdate(BaseModel):
+    flashcard_id: int
+    updated_at: datetime
