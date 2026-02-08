@@ -72,3 +72,11 @@ class FlashcardInfo(BaseModel):
 class FlashcardUpdate(BaseModel):
     flashcard_id: int
     updated_at: datetime
+
+class FlashcardCreate(BaseModel):
+    language_iso_639_1: str
+    flashcard_type_name: str
+
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None
+    content: FlashcardContent

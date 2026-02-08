@@ -9,6 +9,9 @@ from sqlalchemy import (
 from typing import List, Optional
 from enum import Enum
 from datetime import datetime
+from uuid import UUID, uuid4
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+
 
 from ...dependencies.time.utc_safe import utcnow
 
@@ -61,23 +64,58 @@ class FlashcardTypeModel(PolyouDB):
     __tablename__ = "flashcard_types"
 
     flashcard_type_id: Mapped[int] = mapped_column(primary_key=True)
+    
     type: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String)
 
     flashcards: Mapped[List["FlashcardModel"]] = relationship(back_populates="flashcard_type")
 
 
+class FlashcardLocalInformationModel(PolyouDB):
+    __tablename__ = "flashcards_local_information"
+    
+    flashcard_id: Mapped[int] = mapped_column(
+        ForeignKey("flashcards.flashcard_id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    
+    has_been_synced: Mapped[bool] = mapped_column(default=False, nullable=False)
+    locally_deleted: Mapped[bool] = mapped_column(default=False, nullable=False)
+    locally_updatated: Mapped[bool] = mapped_column(default=False, nullable=False)
+    locally_reviewed: Mapped[bool] = mapped_column(default=False, nullable=False)
+
+    flashcard: Mapped["FlashcardModel"] = relationship(
+        back_populates="local_information",
+        passive_deletes=True
+
+    )
 class FlashcardModel(PolyouDB):
     __tablename__ = "flashcards"
 
     flashcard_id: Mapped[int] = mapped_column(primary_key=True)
+    
+    public_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        default=uuid4,
+        unique=True,
+        nullable=False,
+        index=True      
+    )
+    
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.language_id"), nullable=False)
     flashcard_type_id: Mapped[int] = mapped_column(ForeignKey("flashcard_types.flashcard_type_id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
-
+    
     language: Mapped["LanguageModel"] = relationship(back_populates="flashcards")
     flashcard_type: Mapped["FlashcardTypeModel"] = relationship(back_populates="flashcards")
+
+    local_information: Mapped["FlashcardLocalInformationModel"] = relationship(
+        back_populates="flashcard",
+        uselist=False,
+        cascade="all, delete-orphan",
+        passive_deletes=True 
+    )
 
     content: Mapped["FlashcardContentModel"] = relationship(
         back_populates="flashcard",

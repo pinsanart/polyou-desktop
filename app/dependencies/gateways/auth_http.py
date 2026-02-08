@@ -1,4 +1,4 @@
-from ...core.auth.auth_gateway import AuthGateway
+from ...core.http.gateways.auth import AuthGateway
 from ..http.requests_client import RequestsHTTPClient
 from ...core.schemas.tokens import Token
 from pydantic import EmailStr

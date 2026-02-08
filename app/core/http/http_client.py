@@ -19,3 +19,11 @@ class HTTPClient(ABC):
         query: Dict[str, Any] | None = None
     ):
         pass
+
+    @abstractmethod
+    def delete(
+        self,
+        url: str, 
+        query: Dict[str, Any] | None = None
+    ):
+        pass
