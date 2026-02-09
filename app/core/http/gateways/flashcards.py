@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ...schemas.flashcards import FlashcardInfo, FlashcardCreate
+from ...schemas.flashcards import FlashcardServerCreateInfo, FlashcardServerInfo
 from typing import List
 
 class FlashcardGateway(ABC):
@@ -8,11 +8,11 @@ class FlashcardGateway(ABC):
         pass
 
     @abstractmethod
-    def get_info(self, public_ids: List[int]) -> List[FlashcardInfo]:
+    def get_info(self, public_ids: List[int]) -> List[FlashcardServerInfo]:
         pass
 
     @abstractmethod
-    def create_flashcards(self, flashcards: list[FlashcardCreate]) -> List[int]:
+    def create_flashcards(self, flashcards: list[FlashcardServerCreateInfo]) -> List[int]:
         pass
 
     @abstractmethod

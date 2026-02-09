@@ -3,7 +3,7 @@ from uuid import UUID
 
 from ..http.requests_client import RequestsHTTPClient
 from ...core.http.gateways.flashcards import FlashcardGateway
-from ...core.schemas.flashcards import FlashcardInfo, FlashcardCreate
+from ...core.schemas.flashcards import FlashcardServerInfo, FlashcardServerCreateInfo
 
 class FlashcardsHTTPGateway(FlashcardGateway):
     def __init__(self, http_client: RequestsHTTPClient):
@@ -12,13 +12,13 @@ class FlashcardsHTTPGateway(FlashcardGateway):
     def list_public_ids(self):
         return self.http_client.get('/flashcards/')
     
-    def get_info(self, public_ids: List[UUID]) -> List[FlashcardInfo]:
+    def get_info(self, public_ids: List[UUID]) -> List[FlashcardServerInfo]:
         return self.http_client.get(
             '/flashcards/info', 
             query={"public_ids": public_ids}
         )
     
-    def create_flashcards(self, flashcards: List[FlashcardCreate]) -> list[int]:
+    def create_flashcards(self, flashcards: List[FlashcardServerCreateInfo]) -> list[int]:
         return self.http_client.post(
             '/flashcards/batch',
             json=[flashcard.model_dump() for flashcard in flashcards]

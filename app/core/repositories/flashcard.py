@@ -2,7 +2,11 @@ from abc import ABC, abstractmethod
 
 class FlashcardRepository(ABC):
     @abstractmethod
-    def create(self, entity):
+    def create_one(self, entity):
+        pass
+
+    @abstractmethod
+    def create_many(self, entitys):
         pass
 
     @abstractmethod
@@ -26,5 +30,9 @@ class FlashcardRepository(ABC):
         pass
 
     @abstractmethod
-    def delete(self, id):
+    def delete_one(self, id):
+        pass
+
+    @abstractmethod
+    def delete_many(self, ids):
         pass

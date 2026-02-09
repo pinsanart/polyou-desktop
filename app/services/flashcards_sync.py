@@ -6,5 +6,9 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
     def __init__(self, flashcard_service: FlashcardServiceSQLAlchemy, flashcards_gateway: FlashcardsHTTPGateway):
         super().__init__(flashcard_service, flashcards_gateway)
 
-    def sync_db(self):
+    def sync(self):
+        #DELETE MARKED FLASHCARDS LOCAL & SYNC
+        #SYNC FLASHCARDS LOCAL & SERVER
+        #UPDATE CONTENT, IMAGES, AUDIO
+        #UPDATE REVIEWS
         pass

@@ -65,7 +65,7 @@ class FlashcardTypeModel(PolyouDB):
 
     flashcard_type_id: Mapped[int] = mapped_column(primary_key=True)
     
-    type: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String)
 
     flashcards: Mapped[List["FlashcardModel"]] = relationship(back_populates="flashcard_type")

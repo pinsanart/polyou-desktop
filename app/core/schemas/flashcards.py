@@ -1,9 +1,12 @@
-from pydantic import BaseModel
-from datetime import datetime
-from typing import List
+from pydantic import BaseModel, Field
 from enum import Enum
+from typing import List
+from datetime import datetime
+from uuid import UUID
 
-from ...dependencies.time.utc_safe import utcnow
+# =============================
+# ENUMS
+# =============================
 
 class FieldsEnum(str, Enum):
     front = "front"
@@ -19,17 +22,22 @@ class RatingEnum(int, Enum):
     HARD = 2
     GOOD = 3
 
+# =============================
+# SCHEMAS
+# =============================
+
 class FlashcardContent(BaseModel):
     front_field: str
     back_field: str | None = None
 
-class FlashcardFSRS(BaseModel):
-    stability: float
-    difficulty: float
-    due: datetime
-    last_review: datetime | None
-    state: StateEnum
-    
+class FlashcardImage(BaseModel):
+    field: FieldsEnum
+    image_url: str
+
+class FlashcardAudio(BaseModel):
+    field: FieldsEnum
+    audio_url: str
+
 class FlashcardReview(BaseModel):
     reviewd_at: datetime
     rating: RatingEnum
@@ -46,19 +54,26 @@ class FlashcardReview(BaseModel):
     state_before: StateEnum
     state_after: StateEnum
 
-class FlashcardImage(BaseModel):
-    field: FieldsEnum
-    image_url: str
+class FlashcardFSRS(BaseModel):
+    stability: float = 0.1
+    difficulty: float = 5.0
+    due: datetime = Field(default_factory=datetime.today)
+    last_review: datetime | None = None
+    state: StateEnum = StateEnum.LEARNING
 
-class FlashcardAudio(BaseModel):
-    field: FieldsEnum
-    audio_url: str
+class FlashcardCreateInfo(BaseModel):
+    language_iso_639_1: str
+    flashcard_type_name: str
 
-class FlashcardInfo(BaseModel):
-    flashcard_id: int
+    content: FlashcardContent
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None
 
-    language_id: int
-    flashcard_type_id: int
+class FlashcardServerInfo(BaseModel):
+    public_id: UUID
+
+    language_iso_639_1: str
+    flashcard_type: str
     created_at: datetime
     updated_at: datetime
 
@@ -69,14 +84,18 @@ class FlashcardInfo(BaseModel):
     images: List[FlashcardImage] | None
     audios: List[FlashcardAudio] | None
 
-class FlashcardUpdate(BaseModel):
-    flashcard_id: int
-    updated_at: datetime
-
-class FlashcardCreate(BaseModel):
+class FlashcardServerCreateInfo(BaseModel):
     language_iso_639_1: str
     flashcard_type_name: str
 
+    content: FlashcardContent
     images: list[FlashcardImage] | None = None
     audios: list[FlashcardAudio] | None = None
+
+class FlashcardLocalCreateInfo(BaseModel):
+    language_iso_639_1: str
+    flashcard_type_name:str
+
     content: FlashcardContent
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None

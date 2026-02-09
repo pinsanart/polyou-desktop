@@ -9,5 +9,5 @@ class FlashcardSyncService(ABC):
         self.flashcard_gateway = flashcard_gateway
 
     @abstractmethod
-    def sync_db(self):
+    def sync(self):
         pass
