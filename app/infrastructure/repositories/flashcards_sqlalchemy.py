@@ -14,7 +14,7 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
         with self.sessionmaker() as session:
             try:
                 session.add(entity)
-                session.flush()  # garante PK gerada
+                session.flush()
                 flashcard_id = entity.flashcard_id
                 session.commit()
                 return flashcard_id

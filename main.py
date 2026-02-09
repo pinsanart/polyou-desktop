@@ -21,6 +21,8 @@ from app.infrastructure.db.session import SessionLocal
 
 from app.core.schemas.flashcards import FlashcardCreateInfo
 
+from app.infrastructure.repositories.flashcard_local_information import FlashcardLocalInformationRepositorySQLAlchemy
+
 if __name__ == "__main__":            
     flashcard = {
         "language_iso_639_1": "en",
@@ -44,19 +46,26 @@ if __name__ == "__main__":
     }
 
     flashcard_repository = FlashcardRepositorySQLAlchemy(SessionLocal)
+
     language_repository = LanguageRepositorySQLAlchemy(SessionLocal)
     flashcard_types_repository = FlashcardTypesRepositorySQLAlchemy(SessionLocal)
-
     language_service = LanguageServiceSQLAlchemy(language_repository)
     flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
 
     flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
 
-    #flashcard_service.create_one(FlashcardCreateInfo(**flashcard))
+    flashcard_service.create_one(FlashcardCreateInfo(**flashcard))
+    
 
     #flashcard_service.create_many([FlashcardCreateInfo(**flashcard),FlashcardCreateInfo(**flashcard)])
-    flashcard_service.delete_many([12])
-    
+    #flashcard_service.delete_many([12])
+
+    flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
+    flashcard_local_information_repository.set_has_been_synced(1, 0)
+    flashcard_local_information_repository.set_has_been_synced(2, 1)
+    print(flashcard_local_information_repository.get_ids_has_been_synced())
+
+    #flashcard_local_information_repository.set_has_been_synced(1, True)
     '''
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()

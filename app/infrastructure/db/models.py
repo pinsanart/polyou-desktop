@@ -81,7 +81,7 @@ class FlashcardLocalInformationModel(PolyouDB):
     
     has_been_synced: Mapped[bool] = mapped_column(default=False, nullable=False)
     locally_deleted: Mapped[bool] = mapped_column(default=False, nullable=False)
-    locally_updatated: Mapped[bool] = mapped_column(default=False, nullable=False)
+    locally_updated: Mapped[bool] = mapped_column(default=False, nullable=False)
     locally_reviewed: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     flashcard: Mapped["FlashcardModel"] = relationship(
