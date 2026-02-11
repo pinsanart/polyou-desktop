@@ -2,13 +2,13 @@ import sys
 from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
+
 from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.dependencies.gateways.flashcard_http import FlashcardsHTTPGateway
 from app.dependencies.config.config import settings
 from app.dependencies.gateways.auth_http import AuthHTTPGateway
 
 from app.infrastructure.db.migrations import create_all, drop_all
-from app.services.flashcards_sync import FlashcardSyncServiceSQLAlchemyHTTP
 from app.services.flashcard import FlashcardServiceSQLAlchemy
 
 from app.infrastructure.repositories.flashcards_sqlalchemy import FlashcardRepositorySQLAlchemy
@@ -22,6 +22,12 @@ from app.infrastructure.db.session import SessionLocal
 from app.core.schemas.flashcards import FlashcardCreateInfo
 
 from app.infrastructure.repositories.flashcard_local_information import FlashcardLocalInformationRepositorySQLAlchemy
+from app.services.flashcards_sync import FlashcardSyncServiceSQLAlchemyHTTP
+from app.services.flashcard_local_information import FlashcardLocalInformationServiceSQLAlchemy
+
+from app.dependencies.gateways.flashcard_http import FlashcardsHTTPGateway
+from app.dependencies.http.requests_client import RequestsHTTPClient
+from app.dependencies.gateways.auth_http import AuthHTTPGateway
 
 if __name__ == "__main__":            
     flashcard = {
@@ -45,24 +51,32 @@ if __name__ == "__main__":
         ]
     }
 
-    flashcard_repository = FlashcardRepositorySQLAlchemy(SessionLocal)
+    http_client = RequestsHTTPClient(settings.POLYOU_URL)
 
-    language_repository = LanguageRepositorySQLAlchemy(SessionLocal)
-    flashcard_types_repository = FlashcardTypesRepositorySQLAlchemy(SessionLocal)
-    language_service = LanguageServiceSQLAlchemy(language_repository)
-    flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
+    auth_gateway = AuthHTTPGateway(http_client)
 
-    flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
+    access_token = auth_gateway.login('test@test.com', 'test')['access_token']
 
-    #flashcard_service.create_one(FlashcardCreateInfo(**flashcard))
-    #flashcard_service.create_many([FlashcardCreateInfo(**flashcard),FlashcardCreateInfo(**flashcard)])
-    #flashcard_service.delete_many([12])
+    http_client.token = access_token
 
-    flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
-    #flashcard_local_information_repository.set_has_been_synced(1, 0)
-    #flashcard_local_information_repository.set_has_been_synced(2, 1)
-    #print(flashcard_local_information_repository.get_ids_has_been_synced())
-    #flashcard_local_information_repository.set_has_been_synced(1, True)
+
+    flashcard_gateway = FlashcardsHTTPGateway(http_client)
+    print(flashcard_gateway.list_public_ids())
+
+    #flashcard_repository = FlashcardRepositorySQLAlchemy(SessionLocal)
+
+    #language_repository = LanguageRepositorySQLAlchemy(SessionLocal)
+    #flashcard_types_repository = FlashcardTypesRepositorySQLAlchemy(SessionLocal)
+    #language_service = LanguageServiceSQLAlchemy(language_repository)
+    #flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
+
+    #flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
+    #flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
+    #lashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
+
+    #flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, None)
+    #flashcard_sync.sync()
+
     '''
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()

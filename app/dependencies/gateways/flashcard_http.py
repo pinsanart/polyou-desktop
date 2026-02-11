@@ -18,13 +18,25 @@ class FlashcardsHTTPGateway(FlashcardGateway):
             query={"public_ids": public_ids}
         )
     
-    def create_flashcards(self, flashcards: List[FlashcardServerCreateInfo]) -> list[int]:
+    def create_one_flashcard(self, flashcard: FlashcardServerCreateInfo):
+        return self.http_client.post(
+            '/flashcards/',
+            json=flashcard.model_dump()
+        )
+    
+    def create_many_flashcards(self, flashcards: List[FlashcardServerCreateInfo]):
         return self.http_client.post(
             '/flashcards/batch',
             json=[flashcard.model_dump() for flashcard in flashcards]
         )
+
+    def delete_one_flashcard(self, public_id:UUID):
+        return self.http_client.delete(
+            '/flashcards/',
+            query={"public_id": public_id}
+        )
     
-    def delete_flashcards(self, public_ids: list[UUID]):
+    def delete_many_flashcards(self, public_ids:List[UUID]):
         return self.http_client.delete(
             '/flashcards/batch',
             query={"public_ids": public_ids}

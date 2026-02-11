@@ -1,20 +1,26 @@
 from abc import ABC, abstractmethod
-from ...schemas.flashcards import FlashcardServerCreateInfo, FlashcardServerInfo
-from typing import List
 
 class FlashcardGateway(ABC):
     @abstractmethod
-    def list_public_ids(self) -> List[int]:
+    def list_public_ids(self):
         pass
 
     @abstractmethod
-    def get_info(self, public_ids: List[int]) -> List[FlashcardServerInfo]:
+    def get_info(self, public_ids):
+        pass
+    
+    @abstractmethod
+    def create_one_flashcard(self, flashcard):
         pass
 
     @abstractmethod
-    def create_flashcards(self, flashcards: list[FlashcardServerCreateInfo]) -> List[int]:
+    def create_many_flashcards(self, flashcards):
         pass
 
     @abstractmethod
-    def delete_flashcards(self, public_ids: List[int]):
+    def delete_one_flashcard(self, public_id):
+        pass
+
+    @abstractmethod
+    def delete_many_flashcards(self, public_ids):
         pass
