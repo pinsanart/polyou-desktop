@@ -9,4 +9,4 @@ class LanguageServiceSQLAlchemy(LanguageService):
         language = self.language_repositoy.get_by_iso_639_1(iso_639_1)
         if language is None:
             raise f"The language ISO 639-1 '{iso_639_1}' is not available in the local database."
-        return language.iso_639_1
+        return language.language_id

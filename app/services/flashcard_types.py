@@ -11,6 +11,6 @@ class FlashcardTypesServiceSQLAlchemy(FlashcardTypesService):
         if not flashcard_type:
             raise f"The flashcard type {name} is not available in the database."
         
-        return flashcard_type.name
+        return flashcard_type.flashcard_type_id
 
         
