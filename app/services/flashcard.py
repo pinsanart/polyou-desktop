@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from ..core.services.flashcard import FlashcardService
 from ..core.schemas.flashcards import FlashcardLocalCreateInfo
@@ -113,3 +114,15 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
 
     def delete_many(self, ids):
         self.flashcard_repository.delete_many(ids)
+    
+    def get_public_id_by_id(self, id: int):
+        flashcard = self.flashcard_repository.get_by_id(id)
+        return flashcard.public_id
+    
+    def get_public_ids_by_ids(self, ids: List[int]) -> List[UUID]:
+        public_ids = []
+        for id in ids:
+            public_id = self.flashcard_repository.get_by_id(id)
+            public_ids.append(public_id)
+        return public_ids
+        

@@ -63,19 +63,21 @@ if __name__ == "__main__":
     flashcard_gateway = FlashcardsHTTPGateway(http_client)
     print(flashcard_gateway.list_public_ids())
 
-    #flashcard_repository = FlashcardRepositorySQLAlchemy(SessionLocal)
+    flashcard_repository = FlashcardRepositorySQLAlchemy(SessionLocal)
 
-    #language_repository = LanguageRepositorySQLAlchemy(SessionLocal)
-    #flashcard_types_repository = FlashcardTypesRepositorySQLAlchemy(SessionLocal)
-    #language_service = LanguageServiceSQLAlchemy(language_repository)
-    #flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
+    language_repository = LanguageRepositorySQLAlchemy(SessionLocal)
+    flashcard_types_repository = FlashcardTypesRepositorySQLAlchemy(SessionLocal)
+    language_service = LanguageServiceSQLAlchemy(language_repository)
+    flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
 
-    #flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
-    #flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
-    #lashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
+    flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
+    flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
+    flashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
 
-    #flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, None)
-    #flashcard_sync.sync()
+
+
+    flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, flashcard_gateway)
+    flashcard_sync.sync()
 
     '''
     app = QApplication(sys.argv)
