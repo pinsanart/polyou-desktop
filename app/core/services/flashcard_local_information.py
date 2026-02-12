@@ -12,3 +12,7 @@ class FlashcardLocalInformationService(ABC):
     @abstractmethod
     def get_new_locally_created_flashcards_ids(self):
         pass
+
+    @abstractmethod
+    def mark_as_sync_by_ids(self, ids):
+        pass

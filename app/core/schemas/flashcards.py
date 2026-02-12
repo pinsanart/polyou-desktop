@@ -62,7 +62,7 @@ class FlashcardFSRS(BaseModel):
     state: StateEnum = StateEnum.LEARNING
 
 class FlashcardServerInfo(BaseModel):
-    public_id: UUID
+    public_id: str
 
     language_iso_639_1: str
     flashcard_type: str
@@ -77,12 +77,19 @@ class FlashcardServerInfo(BaseModel):
     audios: List[FlashcardAudio] | None
 
 class FlashcardServerCreateInfo(BaseModel):
+    public_id: str
+
     language_iso_639_1: str
     flashcard_type_name: str
 
+    created_at: datetime
+    updated_at: datetime
+
     content: FlashcardContent
-    images: list[FlashcardImage] | None = None
-    audios: list[FlashcardAudio] | None = None
+    fsrs: FlashcardFSRS
+    reviews: List[FlashcardReview] | None = None
+    images: List[FlashcardImage] | None = None
+    audios: List[FlashcardAudio] | None = None
 
 class FlashcardLocalCreateInfo(BaseModel):
     language_iso_639_1: str

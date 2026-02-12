@@ -30,6 +30,8 @@ from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.dependencies.gateways.auth_http import AuthHTTPGateway
 
 if __name__ == "__main__":            
+    
+
     flashcard = {
         "language_iso_639_1": "en",
         "flashcard_type_name": "vocabulary",
@@ -70,9 +72,10 @@ if __name__ == "__main__":
     flashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
 
     #flashcard_service.create_one(FlashcardLocalCreateInfo(**flashcard))
+    
     flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, flashcard_gateway)
     
-    #flashcard_sync.sync()
+    flashcard_sync.sync()
 
     '''
     print(flashcard_gateway.list_public_ids())
