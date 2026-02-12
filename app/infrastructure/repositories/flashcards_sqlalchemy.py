@@ -1,4 +1,4 @@
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, selectinload, joinedload
 from sqlalchemy import select, update, delete
 from typing import List
 from uuid import UUID
@@ -46,8 +46,21 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
 
     def get_by_id(self, id: int) -> FlashcardModel | None:
         with self.sessionmaker() as session:
-            stmt = select(FlashcardModel).where(
-                FlashcardModel.flashcard_id == id
+            stmt = (
+                select(FlashcardModel).where(
+                    FlashcardModel.flashcard_id == id
+                )
+                .options(
+                    joinedload(FlashcardModel.content),
+                    joinedload(FlashcardModel.fsrs),
+                    joinedload(FlashcardModel.local_information),
+                    joinedload(FlashcardModel.language),
+                    joinedload(FlashcardModel.flashcard_type),
+
+                    selectinload(FlashcardModel.reviews),
+                    selectinload(FlashcardModel.images),
+                    selectinload(FlashcardModel.audios),
+                )
             )
             return session.scalar(stmt)
 

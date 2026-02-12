@@ -70,11 +70,9 @@ if __name__ == "__main__":
     flashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
 
     #flashcard_service.create_one(FlashcardLocalCreateInfo(**flashcard))
-    flashcard_local_information_repository.set_has_been_synced(1,1)
-    flashcard_local_information_repository.set_locally_deleted(1,1)
-
     flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, flashcard_gateway)
-    flashcard_sync.sync()
+    
+    #flashcard_sync.sync()
 
     '''
     print(flashcard_gateway.list_public_ids())

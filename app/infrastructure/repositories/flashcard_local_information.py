@@ -49,22 +49,27 @@ class FlashcardLocalInformationRepositorySQLAlchemy(FlashcardLocalInformationRep
                 session.rollback()
                 raise        
     
-    def get_ids_has_been_synced(self) -> bool:
+    def get_ids_not_synced(self) -> list[int]:
+        with self.sessionmaker() as session:
+            stmt = select(FlashcardLocalInformationModel.flashcard_id).where(FlashcardLocalInformationModel.has_been_synced == False)
+            return session.execute(stmt).scalars().all()
+    
+    def get_ids_has_been_synced(self) -> list[int]:
         with self.sessionmaker() as session:
             stmt = select(FlashcardLocalInformationModel.flashcard_id).where(FlashcardLocalInformationModel.has_been_synced == True)
             return session.execute(stmt).scalars().all()
     
-    def get_ids_locally_deleted(self) -> bool:
+    def get_ids_locally_deleted(self) -> list[int]:
         with self.sessionmaker() as session:
             stmt = select(FlashcardLocalInformationModel.flashcard_id).where(FlashcardLocalInformationModel.locally_deleted == True)
             return session.execute(stmt).scalars().all()
     
-    def get_ids_locally_reviewed(self) -> bool:
+    def get_ids_locally_reviewed(self) -> list[int]:
         with self.sessionmaker() as session:
             stmt = select(FlashcardLocalInformationModel.flashcard_id).where(FlashcardLocalInformationModel.locally_reviewed == True)
             return session.execute(stmt).scalars().all()
     
-    def get_ids_locally_updated(self) -> bool:
+    def get_ids_locally_updated(self) -> list[int]:
         with self.sessionmaker() as session:
             stmt = select(FlashcardLocalInformationModel.flashcard_id).where(FlashcardLocalInformationModel.locally_updated == True)
             return session.execute(stmt).scalars().all()

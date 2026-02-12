@@ -14,3 +14,7 @@ class FlashcardLocalInformationServiceSQLAlchemy(FlashcardLocalInformationServic
         locally_deleted = set(self.flashcard_local_information_repository.get_ids_locally_deleted())
         synced = set(self.flashcard_local_information_repository.get_ids_has_been_synced())
         return list(locally_deleted.intersection(synced))
+    
+    def get_new_locally_created_flashcards_ids(self):
+        new_locally_created_ids = self.flashcard_local_information_repository.get_ids_not_synced()
+        return new_locally_created_ids

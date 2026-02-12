@@ -17,11 +17,22 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
     
     def delete_locally_deleted_and_synced_marked(self):
         locally_deleted_and_synced = self.flashcard_local_information_service.get_ids_locally_deleted_and_synced()
-        public_ids = self.flashcard_service.get_public_ids_by_ids(locally_deleted_and_synced)
         
-        if len(public_ids) > 0:
+        if len(locally_deleted_and_synced) > 0:
+            public_ids = self.flashcard_service.get_public_ids_by_ids(locally_deleted_and_synced)
             self.flashcard_gateway.delete_many_flashcards(public_ids)
+
+            self.flashcard_service.delete_many(locally_deleted_and_synced)
+
+    def create_new_servers_flashcards(self):
+        new_locally_created_ids = self.flashcard_local_information_service.get_new_locally_created_flashcards_ids()
+        # -------------------------------------------
+        # CONTINUE
+        # -------------------------------------------
+        # flashcards_info = self.flashcard_service
         
     def sync(self):
         self.delete_locally_deleted_and_not_synced_marked()
         self.delete_locally_deleted_and_synced_marked()
+
+        self.create_new_servers_flashcards()

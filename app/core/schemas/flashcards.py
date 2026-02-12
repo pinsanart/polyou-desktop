@@ -39,7 +39,7 @@ class FlashcardAudio(BaseModel):
     audio_url: str
 
 class FlashcardReview(BaseModel):
-    reviewd_at: datetime
+    reviewed_at: datetime
     rating: RatingEnum
     response_time_ms: int
     
@@ -89,5 +89,29 @@ class FlashcardLocalCreateInfo(BaseModel):
     flashcard_type_name:str
 
     content: FlashcardContent
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None
+
+class FlashcardLocalInformation(BaseModel):
+    has_been_synced: bool
+    locally_deleted: bool
+    locally_updated: bool
+    locally_reviewed: bool
+
+class FlashcardInfo(BaseModel):
+    flashcard_id: int
+    public_id: str
+    
+    language_iso_639_1: str
+    flashcard_type_name:str
+    created_at: datetime
+    updated_at: datetime
+
+    local_information: FlashcardLocalInformation
+    fsrs: FlashcardFSRS
+    
+    content: FlashcardContent
+
+    reviews: list[FlashcardReview] | None = None
     images: list[FlashcardImage] | None = None
     audios: list[FlashcardAudio] | None = None

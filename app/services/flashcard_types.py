@@ -9,8 +9,15 @@ class FlashcardTypesServiceSQLAlchemy(FlashcardTypesService):
         flashcard_type = self.flashcard_type_repository.get_by_name(name)
 
         if not flashcard_type:
-            raise f"The flashcard type {name} is not available in the database."
+            raise f"The flashcard type '{name}' is not available in the database."
         
         return flashcard_type.flashcard_type_id
 
+    def get_name_by_id_or_fail(self, id: int) -> str:
+        flashcard_type = self.flashcard_type_repository.get_by_id(id)
+
+        if not flashcard_type:
+            raise f"The flashcard type id '{id}' is not available in the database."
+        
+        return flashcard_type.name
         

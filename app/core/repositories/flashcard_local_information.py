@@ -18,6 +18,10 @@ class FlashcardLocalInformationRepository(ABC):
         pass
     
     @abstractmethod
+    def get_ids_not_synced(self):
+        pass
+
+    @abstractmethod
     def get_ids_has_been_synced(self):
         pass
 

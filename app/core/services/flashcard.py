@@ -24,3 +24,11 @@ class FlashcardService(ABC):
     @abstractmethod
     def get_public_ids_by_ids(self):
         pass
+
+    @abstractmethod
+    def get_info_one(self, id):
+        pass
+
+    @abstractmethod
+    def get_info_many(self, ids):
+        pass
