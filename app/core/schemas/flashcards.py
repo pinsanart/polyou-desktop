@@ -61,14 +61,6 @@ class FlashcardFSRS(BaseModel):
     last_review: datetime | None = None
     state: StateEnum = StateEnum.LEARNING
 
-class FlashcardCreateInfo(BaseModel):
-    language_iso_639_1: str
-    flashcard_type_name: str
-
-    content: FlashcardContent
-    images: list[FlashcardImage] | None = None
-    audios: list[FlashcardAudio] | None = None
-
 class FlashcardServerInfo(BaseModel):
     public_id: UUID
 

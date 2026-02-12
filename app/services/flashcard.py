@@ -122,7 +122,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
     def get_public_ids_by_ids(self, ids: List[int]) -> List[UUID]:
         public_ids = []
         for id in ids:
-            public_id = self.flashcard_repository.get_by_id(id)
-            public_ids.append(public_id)
+            flashcard = self.flashcard_repository.get_by_id(id)
+            public_ids.append(flashcard.public_id)
         return public_ids
         

@@ -10,8 +10,6 @@ from typing import List, Optional
 from enum import Enum
 from datetime import datetime
 from uuid import UUID, uuid4
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
-
 
 from ...dependencies.time.utc_safe import utcnow
 
@@ -95,11 +93,11 @@ class FlashcardModel(PolyouDB):
     flashcard_id: Mapped[int] = mapped_column(primary_key=True)
     
     public_id: Mapped[UUID] = mapped_column(
-        PGUUID(as_uuid=True),
-        default=uuid4,
+        String(36),
+        default=lambda: str(uuid4()),
         unique=True,
         nullable=False,
-        index=True      
+        index=True
     )
     
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.language_id"), nullable=False)
