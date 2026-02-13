@@ -10,7 +10,7 @@ class FlashcardRepository(ABC):
         pass
 
     @abstractmethod
-    def list_ids(self, user_id):
+    def list_ids(self):
         pass
     
     @abstractmethod

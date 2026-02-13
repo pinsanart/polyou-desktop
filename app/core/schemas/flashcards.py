@@ -100,10 +100,10 @@ class FlashcardLocalCreateInfo(BaseModel):
     audios: list[FlashcardAudio] | None = None
 
 class FlashcardLocalInformation(BaseModel):
-    has_been_synced: bool
-    locally_deleted: bool
-    locally_updated: bool
-    locally_reviewed: bool
+    has_been_synced: bool = False
+    locally_deleted: bool = False
+    locally_updated: bool = False
+    locally_reviewed: bool = False
 
 class FlashcardInfo(BaseModel):
     flashcard_id: int
@@ -117,6 +117,22 @@ class FlashcardInfo(BaseModel):
     local_information: FlashcardLocalInformation
     fsrs: FlashcardFSRS
     
+    content: FlashcardContent
+
+    reviews: list[FlashcardReview] | None = None
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None
+
+class FlashcardInsertInfo(BaseModel):
+    public_id: str
+
+    language_iso_639_1: str
+    flashcard_type_name:str
+    created_at: datetime
+    updated_at: datetime
+
+    fsrs: FlashcardFSRS
+
     content: FlashcardContent
 
     reviews: list[FlashcardReview] | None = None

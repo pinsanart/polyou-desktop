@@ -10,7 +10,7 @@ class FlashcardsHTTPGateway(FlashcardGateway):
         self.http_client = http_client
 
     def list_public_ids(self):
-        return self.http_client.get('/flashcards/')
+        return self.http_client.get('/flashcards/')['public_ids']
     
     def get_info(self, public_ids: List[UUID]) -> List[FlashcardServerInfo]:
         return self.http_client.get(

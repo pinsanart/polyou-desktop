@@ -16,6 +16,14 @@ class FlashcardService(ABC):
     @abstractmethod
     def delete_many(self, ids):
         pass
+    
+    @abstractmethod
+    def get_id_by_public_id(self, public_id):
+        pass
+
+    @abstractmethod
+    def get_ids_by_public_ids(self, public_ids):
+        pass
 
     @abstractmethod
     def get_public_id_by_id(self, id):
@@ -31,4 +39,16 @@ class FlashcardService(ABC):
 
     @abstractmethod
     def get_info_many(self, ids):
+        pass
+
+    @abstractmethod
+    def list_public_ids(self):
+        pass
+
+    @abstractmethod
+    def insert_one(self, flashcard):
+        pass
+
+    @abstractmethod
+    def insert_many(self, flashcards):
         pass

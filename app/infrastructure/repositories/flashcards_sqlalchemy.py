@@ -37,11 +37,9 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
                 session.rollback()
                 raise
 
-    def list_ids(self, user_id: int) -> List[int]:
+    def list_ids(self) -> List[int]:
         with self.sessionmaker() as session:
-            stmt = select(FlashcardModel.flashcard_id).where(
-                FlashcardModel.user_id == user_id
-            )
+            stmt = select(FlashcardModel.flashcard_id)
             return session.scalars(stmt).all()
 
     def get_by_id(self, id: int) -> FlashcardModel | None:

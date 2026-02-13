@@ -22,3 +22,7 @@ class FlashcardLocalInformationServiceSQLAlchemy(FlashcardLocalInformationServic
     def mark_as_sync_by_ids(self, ids: list[int]):
         for id in ids:
             self.flashcard_local_information_repository.set_has_been_synced(id, True)
+
+    def touch_has_been_sync(self, ids: list[int]):
+        for id in ids:
+            self.flashcard_local_information_repository.set_has_been_synced(id, True)

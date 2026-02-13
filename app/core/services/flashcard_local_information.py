@@ -16,3 +16,7 @@ class FlashcardLocalInformationService(ABC):
     @abstractmethod
     def mark_as_sync_by_ids(self, ids):
         pass
+
+    @abstractmethod
+    def touch_has_been_sync(self, ids):
+        pass
