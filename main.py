@@ -125,6 +125,9 @@ if __name__ == "__main__":
     
     flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_metadata_service, flashcard_gateway)
     
+    #flashcard_service.delete_many([4,5,6,7])
+    #flashcard_metadata_repository.set_locally_deleted(1, True)
+    
     flashcard_sync.sync()
 
     '''

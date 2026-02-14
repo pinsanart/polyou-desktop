@@ -24,3 +24,11 @@ class FlashcardGateway(ABC):
     @abstractmethod
     def delete_many_flashcards(self, public_ids):
         pass
+
+    @abstractmethod
+    def get_all_metadata(self):
+        pass
+
+    @abstractmethod
+    def get_one_metadata(self, public_id):
+        pass

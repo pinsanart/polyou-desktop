@@ -88,9 +88,8 @@ class FlashcardServerInfo(BaseModel):
     public_id: str
 
     language_iso_639_1: str
-    flashcard_type: str
-    created_at: datetime
-    updated_at: datetime
+    flashcard_type_name: str
+    metadata: FlashcardServerMetadata
 
     content: FlashcardContent
     fsrs: FlashcardFSRS
@@ -148,3 +147,22 @@ class FlashcardInsertInfo(BaseModel):
     reviews: list[FlashcardReview] | None = None
     images: list[FlashcardImage] | None = None
     audios: list[FlashcardAudio] | None = None
+
+# ==================================
+# RESPONSES
+# ==================================
+
+class FlashcardCreateResponse(BaseModel):
+    public_id: UUID
+
+class FlashcardMetadataResponse(BaseModel):
+    public_id: UUID
+    created_at: datetime
+    last_review_at: datetime | None = None
+    last_content_updated_at: datetime | None = None
+
+class FlashcardDeleteResponse(BaseModel):
+    deleted_public_id: UUID
+
+class FlashcardDeleteBatchResponse(BaseModel):
+    deleted_public_ids: list[UUID]

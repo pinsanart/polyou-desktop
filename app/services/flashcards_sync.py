@@ -75,63 +75,63 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
     
     def _flashcard_server_info_to_flashcard_insert_info(self, flashcards_server_info: FlashcardServerInfo) -> FlashcardInsertInfo:
         return FlashcardInsertInfo (
-            public_id= flashcards_server_info['public_id'],
+            public_id= flashcards_server_info.public_id,
             
-            language_iso_639_1= flashcards_server_info['language_iso_639_1'],
-            flashcard_type_name= flashcards_server_info['flashcard_type_name'],
+            language_iso_639_1= flashcards_server_info.language_iso_639_1,
+            flashcard_type_name= flashcards_server_info.flashcard_type_name,
             
             metadata= FlashcardLocalMetadata(
-                created_at= flashcards_server_info['metadata']['created_at'],
+                created_at= flashcards_server_info.metadata.created_at,
                 locally_deleted= False,
                 has_been_synced= True, 
-                last_content_updated_at= flashcards_server_info['metadata']['last_content_updated_at'], 
-                last_review_at= flashcards_server_info['metadata']['last_review_at']
+                last_content_updated_at= flashcards_server_info.metadata.last_content_updated_at, 
+                last_review_at= flashcards_server_info.metadata.last_review_at
             ),
             
             fsrs= FlashcardFSRS(
-                stability= flashcards_server_info['fsrs']['stability'],
-                difficulty= flashcards_server_info['fsrs']['difficulty'],
-                due= flashcards_server_info['fsrs']['due'],
-                last_review= flashcards_server_info['fsrs']['last_review'],
-                state= flashcards_server_info['fsrs']['state']
+                stability= flashcards_server_info.fsrs.stability,
+                difficulty= flashcards_server_info.fsrs.difficulty,
+                due= flashcards_server_info.fsrs.due,
+                last_review= flashcards_server_info.fsrs.last_review,
+                state= flashcards_server_info.fsrs.state
             ),
             
             content= FlashcardContent(
-                front_field= flashcards_server_info['content']['front_field'],
-                back_field= flashcards_server_info['content']['back_field']
+                front_field= flashcards_server_info.content.front_field,
+                back_field= flashcards_server_info.content.back_field
             ),
 
             reviews= [
                 FlashcardReview(
-                    reviewed_at = review['reviewed_at'],
-                    rating = review['rating'],
-                    response_time_ms = review['response_time_ms'],
-                    scheduled_days = review['scheduled_days'],
-                    actual_days=  review['actual_days'],
-                    prev_stability = review['prev_stability'],
-                    prev_difficulty = review['prev_difficulty'],
-                    new_stability = review['new_stability'],
-                    new_difficulty = review['new_difficulty'],
-                    state_before = review['state_before'],
-                    state_after = review['state_after']
+                    reviewed_at = review.reviewed_at,
+                    rating = review.rating,
+                    response_time_ms = review.response_time_ms,
+                    scheduled_days = review.scheduled_days,
+                    actual_days=  review.actual_days,
+                    prev_stability = review.prev_stability,
+                    prev_difficulty = review.prev_difficulty,
+                    new_stability = review.new_stability,
+                    new_difficulty = review.new_difficulty,
+                    state_before = review.state_before,
+                    state_after = review.state_after
                 ) 
-                for review in flashcards_server_info['reviews']
+                for review in flashcards_server_info.reviews
             ],
             
             images= [
                 FlashcardImage(
-                    field=image['field'],
-                    image_url=image['image_url']
+                    field=image.field,
+                    image_url=image.image_url
                 ) 
-                for image in flashcards_server_info['images']
+                for image in flashcards_server_info.images
             ],
             
             audios= [
                 FlashcardAudio(
-                    field=audio['field'],
-                    audio_url=audio['audio_url']
+                    field=audio.field,
+                    audio_url=audio.audio_url
                 ) 
-                for audio in flashcards_server_info['audios']
+                for audio in flashcards_server_info.audios
             ]
         )
     
@@ -153,6 +153,9 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
 
             missing_ids = self.flashcard_service.get_ids_by_public_ids(missing_public_ids)
             self.flashcard_metadata_service.touch_has_been_sync(missing_ids)
+
+    def update_server_flashcards_content(self):
+        pass
 
     def sync(self):
         self.delete_locally_deleted_and_not_synced_marked()
