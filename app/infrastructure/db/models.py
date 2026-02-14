@@ -69,21 +69,23 @@ class FlashcardTypeModel(PolyouDB):
     flashcards: Mapped[List["FlashcardModel"]] = relationship(back_populates="flashcard_type")
 
 
-class FlashcardLocalInformationModel(PolyouDB):
-    __tablename__ = "flashcards_local_information"
+class FlashcardMetadataModel(PolyouDB):
+    __tablename__ = "flashcards_metadata"
     
     flashcard_id: Mapped[int] = mapped_column(
         ForeignKey("flashcards.flashcard_id", ondelete="CASCADE"),
         primary_key=True
     )
     
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+    
     has_been_synced: Mapped[bool] = mapped_column(default=False, nullable=False)
     locally_deleted: Mapped[bool] = mapped_column(default=False, nullable=False)
-    locally_updated: Mapped[bool] = mapped_column(default=False, nullable=False)
-    locally_reviewed: Mapped[bool] = mapped_column(default=False, nullable=False)
+    last_review_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_content_updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     flashcard: Mapped["FlashcardModel"] = relationship(
-        back_populates="local_information",
+        back_populates="local_metadata",
         passive_deletes=True
 
     )
@@ -102,13 +104,11 @@ class FlashcardModel(PolyouDB):
     
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.language_id"), nullable=False)
     flashcard_type_id: Mapped[int] = mapped_column(ForeignKey("flashcard_types.flashcard_type_id"), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     
     language: Mapped["LanguageModel"] = relationship(back_populates="flashcards")
     flashcard_type: Mapped["FlashcardTypeModel"] = relationship(back_populates="flashcards")
 
-    local_information: Mapped["FlashcardLocalInformationModel"] = relationship(
+    local_metadata: Mapped["FlashcardMetadataModel"] = relationship(
         back_populates="flashcard",
         uselist=False,
         cascade="all, delete-orphan",

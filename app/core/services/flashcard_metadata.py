@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class FlashcardLocalInformationService(ABC):
+class FlashcardMetadataService(ABC):
     @abstractmethod
     def get_ids_locally_deleted_and_not_synced(self):
         pass

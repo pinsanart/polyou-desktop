@@ -19,22 +19,73 @@ from app.infrastructure.repositories.flashcard_types_sqlalchemy import Flashcard
 from app.services.flashcard_types import FlashcardTypesServiceSQLAlchemy
 from app.infrastructure.db.session import SessionLocal
 
-from app.core.schemas.flashcards import FlashcardLocalCreateInfo
+from app.core.schemas.flashcards import FlashcardLocalCreateInfo, FlashcardInsertInfo
 
-from app.infrastructure.repositories.flashcard_local_information import FlashcardLocalInformationRepositorySQLAlchemy
+from app.infrastructure.repositories.flashcard_metadata import FlashcardMetadataRepositorySQLAlchemy
 from app.services.flashcards_sync import FlashcardSyncServiceSQLAlchemyHTTP
-from app.services.flashcard_local_information import FlashcardLocalInformationServiceSQLAlchemy
+from app.services.flashcard_metadata import FlashcardMetadataServiceSQLAlchemy
 
 from app.dependencies.gateways.flashcard_http import FlashcardsHTTPGateway
 from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.dependencies.gateways.auth_http import AuthHTTPGateway
 
 if __name__ == "__main__":            
-    
+
+    flashcard_insert = {
+        "public_id": "550e8400-e29b-41d4-a716-446655440000",
+        "language_iso_639_1": "en",
+        "flashcard_type_name": "vocabulary",
+        "metadata": {
+            "created_at": "2026-02-14T10:30:00Z",
+            "has_been_synced": False,
+            "locally_deleted": False,
+            "last_review_at": "2026-02-13T09:00:00Z",
+            "last_content_updated_at": "2026-02-14T10:00:00Z"
+        },
+        "fsrs": {
+            "stability": 2.4,
+            "difficulty": 4.8,
+            "due": "2026-02-20T10:30:00Z",
+            "last_review": "2026-02-13T09:00:00Z",
+            "state": 2
+        },
+        "content": {
+            "front_field": "What is the capital of France?",
+            "back_field": "Paris"
+        },
+        "reviews": [
+            {
+            "reviewed_at": "2026-02-13T09:00:00Z",
+            "rating": 3,
+            "response_time_ms": 4200,
+            "scheduled_days": 3,
+            "actual_days": 3,
+            "prev_stability": 1.8,
+            "prev_difficulty": 5.1,
+            "new_stability": 2.4,
+            "new_difficulty": 4.8,
+            "state_before": 1,
+            "state_after": 2
+            }
+        ],
+        "images": [
+            {
+            "field": "front",
+            "image_url": "https://example.com/images/paris.jpg"
+            }
+        ],
+        "audios": [
+            {
+            "field": "back",
+            "audio_url": "https://example.com/audio/paris-pronunciation.mp3"
+            }
+        ]
+    }
 
     flashcard = {
         "language_iso_639_1": "en",
         "flashcard_type_name": "vocabulary",
+        
         "content": {
             "front_field": "O que é uma closure?",
             "back_field": "Uma função que captura o escopo onde foi criada."
@@ -68,12 +119,11 @@ if __name__ == "__main__":
     flashcard_types_service = FlashcardTypesServiceSQLAlchemy(flashcard_types_repository)
 
     flashcard_service = FlashcardServiceSQLAlchemy(flashcard_repository, language_service, flashcard_types_service)
-    flashcard_local_information_repository = FlashcardLocalInformationRepositorySQLAlchemy(SessionLocal)
-    flashcard_local_information_service = FlashcardLocalInformationServiceSQLAlchemy(flashcard_local_information_repository)
-
-    #flashcard_service.create_one(FlashcardLocalCreateInfo(**flashcard))
     
-    flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_local_information_service, flashcard_gateway)
+    flashcard_metadata_repository = FlashcardMetadataRepositorySQLAlchemy(SessionLocal)
+    flashcard_metadata_service = FlashcardMetadataServiceSQLAlchemy(flashcard_metadata_repository)
+    
+    flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_metadata_service, flashcard_gateway)
     
     flashcard_sync.sync()
 

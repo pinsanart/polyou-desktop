@@ -51,7 +51,7 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
                 .options(
                     joinedload(FlashcardModel.content),
                     joinedload(FlashcardModel.fsrs),
-                    joinedload(FlashcardModel.local_information),
+                    joinedload(FlashcardModel.local_metadata),
                     joinedload(FlashcardModel.language),
                     joinedload(FlashcardModel.flashcard_type),
 

@@ -24,8 +24,11 @@ class FlashcardsHTTPGateway(FlashcardGateway):
             "language_iso_639_1": flashcard.language_iso_639_1,
             "flashcard_type_name": flashcard.flashcard_type_name,
 
-            "created_at": flashcard.created_at.isoformat(),
-            "updated_at": flashcard.updated_at.isoformat(),
+            "metadata": {
+                "created_at": flashcard.metadata.created_at.isoformat(),
+                "last_review_at": (flashcard.metadata.last_review_at.isoformat() if flashcard.metadata.last_review_at else None),
+                "last_content_updated_at": (flashcard.metadata.last_content_updated_at.isoformat() if flashcard.metadata.last_content_updated_at else None)
+            },
 
             "content": flashcard.content.model_dump(mode='json'),
             "fsrs": flashcard.fsrs.model_dump(mode='json'),

@@ -61,6 +61,29 @@ class FlashcardFSRS(BaseModel):
     last_review: datetime | None = None
     state: StateEnum = StateEnum.LEARNING
 
+class FlashcardLocalMetadata(BaseModel):
+    created_at: datetime
+    
+    has_been_synced: bool
+    locally_deleted: bool
+    last_review_at: datetime | None
+    last_content_updated_at: datetime | None
+
+class FlashcardServerMetadata(BaseModel):
+    created_at: datetime
+    
+    last_review_at: datetime | None
+    last_content_updated_at: datetime | None
+
+
+class FlashcardLocalCreateInfo(BaseModel):
+    language_iso_639_1: str
+    flashcard_type_name:str
+
+    content: FlashcardContent
+    images: list[FlashcardImage] | None = None
+    audios: list[FlashcardAudio] | None = None
+
 class FlashcardServerInfo(BaseModel):
     public_id: str
 
@@ -82,9 +105,7 @@ class FlashcardServerCreateInfo(BaseModel):
     language_iso_639_1: str
     flashcard_type_name: str
 
-    created_at: datetime
-    updated_at: datetime
-
+    metadata: FlashcardServerMetadata
     content: FlashcardContent
     fsrs: FlashcardFSRS
     reviews: List[FlashcardReview] | None = None
@@ -99,22 +120,14 @@ class FlashcardLocalCreateInfo(BaseModel):
     images: list[FlashcardImage] | None = None
     audios: list[FlashcardAudio] | None = None
 
-class FlashcardLocalInformation(BaseModel):
-    has_been_synced: bool = False
-    locally_deleted: bool = False
-    locally_updated: bool = False
-    locally_reviewed: bool = False
-
 class FlashcardInfo(BaseModel):
     flashcard_id: int
     public_id: str
     
     language_iso_639_1: str
     flashcard_type_name:str
-    created_at: datetime
-    updated_at: datetime
-
-    local_information: FlashcardLocalInformation
+    
+    metadata: FlashcardLocalMetadata
     fsrs: FlashcardFSRS
     
     content: FlashcardContent
@@ -128,13 +141,10 @@ class FlashcardInsertInfo(BaseModel):
 
     language_iso_639_1: str
     flashcard_type_name:str
-    created_at: datetime
-    updated_at: datetime
-
+    
+    metadata: FlashcardLocalMetadata
     fsrs: FlashcardFSRS
-
     content: FlashcardContent
-
     reviews: list[FlashcardReview] | None = None
     images: list[FlashcardImage] | None = None
     audios: list[FlashcardAudio] | None = None
