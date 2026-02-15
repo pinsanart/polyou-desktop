@@ -30,9 +30,11 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
             flashcard_type_name= flashcard_info.flashcard_type_name,
             
             metadata = FlashcardServerMetadata(
-                created_at= flashcard_info.metadata.created_at,
-                last_review_at=flashcard_info.metadata.last_review_at,
-                last_content_updated_at=flashcard_info.metadata.last_content_updated_at
+                created_at=                 flashcard_info.metadata.created_at,
+                last_review_at=             flashcard_info.metadata.last_review_at,
+                last_content_updated_at=    flashcard_info.metadata.last_content_updated_at,
+                last_image_updated_at=      flashcard_info.metadata.last_image_updated_at,
+                last_audio_updated_at=      flashcard_info.metadata.last_audio_updated_at
             ),
 
             content= flashcard_info.content,
@@ -46,13 +48,12 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
 
     def delete_locally_deleted_and_not_synced_marked(self):
         locally_deleted_and_not_synced_ids = self.flashcard_metadata_service.get_ids_locally_deleted_and_not_synced()
-        
         if len(locally_deleted_and_not_synced_ids) > 0:
             self.flashcard_service.delete_many(locally_deleted_and_not_synced_ids)
     
     def delete_locally_deleted_and_synced_marked(self):
         locally_deleted_and_synced = self.flashcard_metadata_service.get_ids_locally_deleted_and_synced()
-        
+                
         if len(locally_deleted_and_synced) > 0:
             public_ids = self.flashcard_service.get_public_ids_by_ids(locally_deleted_and_synced)
             self.flashcard_gateway.delete_many_flashcards(public_ids)
@@ -61,7 +62,7 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
 
     def send_new_flashcards_to_server(self):
         new_locally_created_ids = self.flashcard_metadata_service.get_new_locally_created_flashcards_ids()
-        
+
         if len(new_locally_created_ids) > 0:
             flashcards_info = self.flashcard_service.get_info_many(new_locally_created_ids)
 
@@ -71,7 +72,7 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
             ]
 
             self.flashcard_gateway.create_many_flashcards(flashcard_server_create_info)
-            self.flashcard_metadata_service.mark_as_sync_by_ids(new_locally_created_ids)
+            self.flashcard_metadata_service.touch_has_been_synced(new_locally_created_ids)
     
     def _flashcard_server_info_to_flashcard_insert_info(self, flashcards_server_info: FlashcardServerInfo) -> FlashcardInsertInfo:
         return FlashcardInsertInfo (
@@ -84,8 +85,10 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
                 created_at= flashcards_server_info.metadata.created_at,
                 locally_deleted= False,
                 has_been_synced= True, 
-                last_content_updated_at= flashcards_server_info.metadata.last_content_updated_at, 
-                last_review_at= flashcards_server_info.metadata.last_review_at
+                last_review_at= flashcards_server_info.metadata.last_review_at,
+                last_image_updated_at= flashcards_server_info.metadata.last_image_updated_at,
+                last_audio_updated_at= flashcards_server_info.metadata.last_audio_updated_at,
+                last_content_updated_at= flashcards_server_info.metadata.last_content_updated_at
             ),
             
             fsrs= FlashcardFSRS(
@@ -152,14 +155,19 @@ class FlashcardSyncServiceSQLAlchemyHTTP(FlashcardSyncService):
             self.flashcard_service.insert_many(insert_infos)
 
             missing_ids = self.flashcard_service.get_ids_by_public_ids(missing_public_ids)
-            self.flashcard_metadata_service.touch_has_been_sync(missing_ids)
+            self.flashcard_metadata_service.touch_has_been_synced(missing_ids)
 
     def update_server_flashcards_content(self):
-        pass
+        public_ids = [metadata.public_id for metadata in self.flashcards_metadata]
 
+        for public_id in public_ids:
+            pass
+    
     def sync(self):
         self.delete_locally_deleted_and_not_synced_marked()
         self.delete_locally_deleted_and_synced_marked()
 
         self.send_new_flashcards_to_server()
         self.bring_missing_server_flashcards()
+
+        self.flashcards_metadata = self.flashcard_gateway.get_all_metadata()

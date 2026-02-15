@@ -82,7 +82,9 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
             has_been_synced         = flashcard_model.local_metadata.has_been_synced,
             locally_deleted         = flashcard_model.local_metadata.locally_deleted,
             last_review_at          = flashcard_model.local_metadata.last_review_at,
-            last_content_updated_at = flashcard_model.local_metadata.last_content_updated_at
+            last_content_updated_at = flashcard_model.local_metadata.last_content_updated_at,
+            last_image_updated_at   = flashcard_model.local_metadata.last_image_updated_at,
+            last_audio_updated_at   = flashcard_model.local_metadata.last_audio_updated_at
         )
 
         content = FlashcardContent(
@@ -157,7 +159,9 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
             has_been_synced = flashcard_insert_info.metadata.has_been_synced,
             locally_deleted = flashcard_insert_info.metadata.locally_deleted,
             last_review_at = flashcard_insert_info.metadata.last_review_at,
-            last_content_updated_at = flashcard_insert_info.metadata.last_content_updated_at
+            last_content_updated_at = flashcard_insert_info.metadata.last_content_updated_at,
+            last_image_updated_at =  flashcard_insert_info.metadata.last_image_updated_at,
+            last_audio_updated_at = flashcard_insert_info.metadata.last_audio_updated_at
         )
 
         fsrs = FlashcardFSRSModel(

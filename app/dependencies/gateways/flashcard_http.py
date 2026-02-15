@@ -9,7 +9,8 @@ from ...core.schemas.flashcards import (
     FlashcardCreateResponse,
     FlashcardMetadataResponse,
     FlashcardDeleteResponse,
-    FlashcardDeleteBatchResponse
+    FlashcardDeleteBatchResponse,
+    FlashcardCreateBatchResponse
 )
 
 class FlashcardsHTTPGateway(FlashcardGateway):
@@ -23,16 +24,18 @@ class FlashcardsHTTPGateway(FlashcardGateway):
             "flashcard_type_name": flashcard.flashcard_type_name,
 
             "metadata": {
-                "created_at": flashcard.metadata.created_at.isoformat(),
-                "last_review_at": (flashcard.metadata.last_review_at.isoformat() if flashcard.metadata.last_review_at else None),
-                "last_content_updated_at": (flashcard.metadata.last_content_updated_at.isoformat() if flashcard.metadata.last_content_updated_at else None)
+                "created_at":               flashcard.metadata.created_at.isoformat(),
+                "last_review_at":           (flashcard.metadata.last_review_at.isoformat() if flashcard.metadata.last_review_at else None),
+                "last_content_updated_at":  (flashcard.metadata.last_content_updated_at.isoformat() if flashcard.metadata.last_content_updated_at else None),
+                "last_image_updated_at":    (flashcard.metadata.last_image_updated_at.isoformat() if flashcard.metadata.last_image_updated_at else None),
+                "last_audio_updated_at":    (flashcard.metadata.last_audio_updated_at.isoformat() if flashcard.metadata.last_audio_updated_at else None)
             },
 
-            "content": flashcard.content.model_dump(mode='json'),
-            "fsrs": flashcard.fsrs.model_dump(mode='json'),
-            "reviews": [review.model_dump(mode='json') for review in flashcard.reviews],
-            "images": [image.model_dump(mode = 'json') for image in flashcard.images],
-            "audios": [audio.model_dump(mode = 'json') for audio in flashcard.audios]
+            "content":  flashcard.content.model_dump(mode='json'),
+            "fsrs":     flashcard.fsrs.model_dump(mode='json'),
+            "reviews":  [review.model_dump(mode='json') for review in flashcard.reviews],
+            "images":   [image.model_dump(mode = 'json') for image in flashcard.images],
+            "audios":   [audio.model_dump(mode = 'json') for audio in flashcard.audios]
         }
 
         return payload
@@ -57,13 +60,13 @@ class FlashcardsHTTPGateway(FlashcardGateway):
 
         return FlashcardCreateResponse(public_id=response['public_id'])
     
-    def create_many_flashcards(self, flashcards: List[FlashcardServerCreateInfo]) -> List[FlashcardCreateResponse]:
+    def create_many_flashcards(self, flashcards: List[FlashcardServerCreateInfo]) -> FlashcardCreateBatchResponse:
         response = self.http_client.post(
             '/flashcards/batch',
-            json=[self.get_create_one_flashcard_payload(flashcard) for flashcard in flashcards]
+            json=[self._get_create_one_flashcard_payload(flashcard) for flashcard in flashcards]
         )
 
-        return [FlashcardCreateResponse(public_id=r.public_id) for r in response]
+        return FlashcardCreateBatchResponse(public_ids= response['public_ids'])
 
     def delete_one_flashcard(self, public_id:UUID) -> FlashcardDeleteResponse:
         response = self.http_client.delete(

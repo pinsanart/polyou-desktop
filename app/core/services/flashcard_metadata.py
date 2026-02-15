@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 
 class FlashcardMetadataService(ABC):
     @abstractmethod
+    def info(self, public_id):
+        pass
+
     def get_ids_locally_deleted_and_not_synced(self):
         pass
 
@@ -14,9 +17,5 @@ class FlashcardMetadataService(ABC):
         pass
 
     @abstractmethod
-    def mark_as_sync_by_ids(self, ids):
-        pass
-
-    @abstractmethod
-    def touch_has_been_sync(self, ids):
+    def touch_has_been_synced(self, ids):
         pass

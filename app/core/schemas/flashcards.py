@@ -68,12 +68,17 @@ class FlashcardLocalMetadata(BaseModel):
     locally_deleted: bool
     last_review_at: datetime | None
     last_content_updated_at: datetime | None
+    last_image_updated_at: datetime | None
+    last_audio_updated_at: datetime | None
+
 
 class FlashcardServerMetadata(BaseModel):
     created_at: datetime
     
     last_review_at: datetime | None
     last_content_updated_at: datetime | None
+    last_image_updated_at: datetime | None
+    last_audio_updated_at: datetime | None
 
 
 class FlashcardLocalCreateInfo(BaseModel):
@@ -154,6 +159,9 @@ class FlashcardInsertInfo(BaseModel):
 
 class FlashcardCreateResponse(BaseModel):
     public_id: UUID
+
+class FlashcardCreateBatchResponse(BaseModel):
+    public_ids: list[UUID]
 
 class FlashcardMetadataResponse(BaseModel):
     public_id: UUID

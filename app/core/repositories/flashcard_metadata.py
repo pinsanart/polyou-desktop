@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 class FlashcardMetadataRepository(ABC):
     @abstractmethod
-    def set_has_been_synced(self, id, has_been_synced: bool):
+    def get(self, id):
         pass
 
     @abstractmethod
-    def set_locally_deleted(self, id, locally_deleted: bool):
+    def touch_has_been_synced(self, ids):
         pass
 
     @abstractmethod

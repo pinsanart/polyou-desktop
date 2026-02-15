@@ -9,25 +9,25 @@ class FlashcardMetadataRepositorySQLAlchemy(FlashcardMetadataRepository):
     def __init__(self, sessionmaker: sessionmaker):
         self.sessionmaker = sessionmaker
 
-    def set_has_been_synced(self, id: int, has_been_synced: bool):
+    def get(self, id: int):
+        with self.sessionmaker() as session:
+            stmt = select(FlashcardMetadataModel).where(FlashcardMetadataModel.flashcard_id == id)
+            return session.scalar(stmt)
+
+    def touch_has_been_synced(self, ids: list[int]):
         with self.sessionmaker() as session:
             try:
-                stmt = update(FlashcardMetadataModel).where(FlashcardMetadataModel.flashcard_id == id).values(has_been_synced = has_been_synced)
+                stmt = (
+                    update(FlashcardMetadataModel)
+                    .where(FlashcardMetadataModel.flashcard_id.in_(ids))
+                    .values(has_been_synced=True)
+                )
                 session.execute(stmt)
                 session.commit()
             except Exception:
                 session.rollback()
-                raise        
-    
-    def set_locally_deleted(self, id: int, locally_deleted: bool):
-        with self.sessionmaker() as session:
-            try:
-                stmt = update(FlashcardMetadataModel).where(FlashcardMetadataModel.flashcard_id == id).values(locally_deleted = locally_deleted)
-                session.execute(stmt)
-                session.commit()
-            except Exception:
-                session.rollback()
-                raise        
+                raise
+
     
     def get_ids_not_synced(self) -> list[int]:
         with self.sessionmaker() as session:

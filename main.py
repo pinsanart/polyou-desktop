@@ -29,8 +29,7 @@ from app.dependencies.gateways.flashcard_http import FlashcardsHTTPGateway
 from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.dependencies.gateways.auth_http import AuthHTTPGateway
 
-if __name__ == "__main__":            
-
+if __name__ == "__main__":
     flashcard_insert = {
         "public_id": "550e8400-e29b-41d4-a716-446655440000",
         "language_iso_639_1": "en",
@@ -125,11 +124,10 @@ if __name__ == "__main__":
     
     flashcard_sync = FlashcardSyncServiceSQLAlchemyHTTP(flashcard_service, flashcard_metadata_service, flashcard_gateway)
     
-    #flashcard_service.delete_many([4,5,6,7])
-    #flashcard_metadata_repository.set_locally_deleted(1, True)
-    
+    #flashcard_service.create_one(FlashcardLocalCreateInfo(**flashcard))
+    #print(flashcard_gateway.get_info(['3fa85064-5717-5562-b3fc-2c963f66afa6']))
     flashcard_sync.sync()
-
+    
     '''
     print(flashcard_gateway.list_public_ids())
     
