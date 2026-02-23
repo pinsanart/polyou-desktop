@@ -9,6 +9,7 @@ from ....core.exceptions.auth import (
 )
 
 from ....dependencies.http.requests_client import RequestsHTTPClient
+from ....core.config import settings
 
 class AuthGatewayHTTP(AuthGateway):
     def __init__(self, request_http_client: RequestsHTTPClient):
@@ -20,7 +21,9 @@ class AuthGatewayHTTP(AuthGateway):
                 url = '/auth/token',
                 body= {
                     'username': request.email, 
-                    'password': request.password
+                    'password': request.password,
+                    'device_id': 
+                    'device_name': settings.DEVICE_NAME
                 },
                 form=True
             )

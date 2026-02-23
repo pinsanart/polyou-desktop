@@ -7,10 +7,12 @@ from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.dependencies.gateways.http.auth import AuthGatewayHTTP
 from app.core.schemas.auth.requests import TokenRequest
 
-if __name__ == "__main__":    
-    http = RequestsHTTPClient(
-        base_url= 'http://127.0.0.1:8000/'
-    )
+from app.core.config import settings
+from app.services.token_vault import AuthTokensVault
+
+if __name__ == "__main__":
+    pass    
+
 '''
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
