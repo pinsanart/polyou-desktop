@@ -4,9 +4,9 @@ import platform
 
 class AppSettings(BaseSettings):
     APP_NAME: str = "Polyou Desktop"
-    BASE_URL: HttpUrl = "http://127.0.0.1:8000/"
+    BASE_URL: str = "http://127.0.0.1:8000/"
     
-    USER_NAME: str = platform.node()
+    USERNAME: str = platform.node()
     
     OS: str = platform.system()
     DESKTOP_NAME: str = platform.node()

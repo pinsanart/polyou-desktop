@@ -1,15 +1,14 @@
 import requests
 
 from ....core.gateways.auth import AuthGateway
-from ....core.schemas.auth.requests import TokenRequest
-from ....core.schemas.auth.response import TokenResponse
+from ....core.schemas.auth.requests import TokenRequest, RefreshRequest
+from ....core.schemas.auth.response import TokenResponse, RefreshResponse
 from ....core.exceptions.auth import (
     AuthenticationServiceError, 
     InvalidCredentialsError
 )
 
 from ....dependencies.http.requests_client import RequestsHTTPClient
-from ....core.config import settings
 
 class AuthGatewayHTTP(AuthGateway):
     def __init__(self, request_http_client: RequestsHTTPClient):
@@ -22,8 +21,8 @@ class AuthGatewayHTTP(AuthGateway):
                 body= {
                     'username': request.email, 
                     'password': request.password,
-                    'device_id': 
-                    'device_name': settings.DEVICE_NAME
+                    'device_id': request.device_id,
+                    'device_name': request.device_name
                 },
                 form=True
             )
@@ -35,3 +34,11 @@ class AuthGatewayHTTP(AuthGateway):
             raise AuthenticationServiceError() from error
         
         return TokenResponse(**response)
+    
+    def refresh(self, request:RefreshRequest) -> RefreshResponse:
+        response = self._http.post(
+            url= 'auth/refresh',
+            body= request.refresh_token
+        )
+
+        return RefreshResponse(**response)

@@ -7,3 +7,6 @@ class TokenRequest(BaseModel):
 
     device_id: UUID
     device_name: str
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
