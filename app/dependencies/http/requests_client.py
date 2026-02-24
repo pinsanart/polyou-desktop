@@ -43,11 +43,16 @@ class RequestsHTTPClient(HTTPClient):
     def _handle_response(self, response: Response) -> Any:
         try:
             response.raise_for_status()
-        except HTTPError:
+        except HTTPError as exc:
+            try:
+                detail = response.json()
+            except ValueError:
+                detail = response.text
+
             raise HTTPStatusError(
                 status_code=response.status_code,
-                detail=response.text
-            )
+                detail=detail
+            ) from exc
 
         if not response.content:
             return None
@@ -82,17 +87,17 @@ class RequestsHTTPClient(HTTPClient):
             **kwargs
         }
 
-        if body:
+        if body is not None:
             request_kwargs["data" if form else "json"] = body
 
         try:
             response = self.session.request(**request_kwargs)
             return self._handle_response(response)
 
-        except Timeout:
+        except Timeout as exc:
             raise RequestTimeoutError(
                 f"Request to {full_url} timed out."
-            )
+            ) from exc
 
         except ConnectionError:
             raise ServiceUnavailableError(

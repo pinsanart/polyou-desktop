@@ -1,44 +1,136 @@
-import requests
+from typing import Type
 
 from ....core.gateways.auth import AuthGateway
-from ....core.schemas.auth.requests import TokenRequest, RefreshRequest
-from ....core.schemas.auth.response import TokenResponse, RefreshResponse
+from ....core.schemas.auth.requests import (
+    TokenRequest,
+    RefreshRequest,
+    LogoutRequest,
+)
+from ....core.schemas.auth.response import (
+    TokenResponse,
+    RefreshResponse,
+    LogoutResponse,
+)
+
 from ....core.exceptions.auth import (
-    AuthenticationServiceError, 
-    InvalidCredentialsError
+    AuthErrorCode,
+    AuthGatewayError,
+    AuthenticationServiceError,
+    InvalidCredentialsError,
+    RefreshTokenError,
+    LogoutError,
+)
+
+from ....core.exceptions.requests import (
+    HTTPStatusError,
+    RequestTimeoutError,
+    ServiceUnavailableError,
 )
 
 from ....dependencies.http.requests_client import RequestsHTTPClient
 
+
 class AuthGatewayHTTP(AuthGateway):
+
     def __init__(self, request_http_client: RequestsHTTPClient):
         self._http = request_http_client
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+
+    def _map_http_error(
+        self,
+        error: HTTPStatusError,
+        error_map: dict[int, Type[AuthGatewayError]],
+        default_error: Type[AuthGatewayError],
+        default_code: AuthErrorCode,
+    ) -> None:
+
+        exception_class = error_map.get(error.status_code, default_error)
+
+        raise exception_class(
+            message="Authentication request failed.",
+            status_code=error.status_code,
+            error_code=default_code,
+            details=error.detail,
+        ) from error
+
+    # ------------------------------------------------------------------
+    # Public methods
+    # ------------------------------------------------------------------
 
     def token(self, request: TokenRequest) -> TokenResponse:
         try:
             response = self._http.post(
-                url = '/auth/token',
-                body= {
-                    'username': request.email, 
-                    'password': request.password,
-                    'device_id': request.device_id,
-                    'device_name': request.device_name
-                },
-                form=True
+                url="/auth/token",
+                body=request.model_dump(),
+                form=True,
             )
-        except requests.exceptions.HTTPError as error:
-            status = error.response.status_code
+            return TokenResponse(**response)
 
-            if status == 401:
-                raise InvalidCredentialsError()
-            raise AuthenticationServiceError() from error
-        
-        return TokenResponse(**response)
-    
-    def refresh(self, request:RefreshRequest) -> RefreshResponse:
-        response = self._http.post(
-            url= 'auth/refresh',
-            body= request.refresh_token
-        )
+        except HTTPStatusError as error:
+            self._map_http_error(
+                error=error,
+                error_map={
+                    401: InvalidCredentialsError,
+                },
+                default_error=AuthenticationServiceError,
+                default_code=AuthErrorCode.INVALID_CREDENTIALS,
+            )
 
-        return RefreshResponse(**response)
+        except (RequestTimeoutError, ServiceUnavailableError) as error:
+            raise AuthenticationServiceError(
+                message="Authentication service unavailable.",
+                error_code=AuthErrorCode.SERVICE_ERROR,
+            ) from error
+
+    # ------------------------------------------------------------------
+
+    def refresh(self, request: RefreshRequest) -> RefreshResponse:
+        try:
+            response = self._http.post(
+                url="/auth/refresh",
+                body=request.model_dump(),
+            )
+            return RefreshResponse(**response)
+
+        except HTTPStatusError as error:
+            self._map_http_error(
+                error=error,
+                error_map={
+                    401: RefreshTokenError,
+                },
+                default_error=AuthenticationServiceError,
+                default_code=AuthErrorCode.INVALID_REFRESH_TOKEN,
+            )
+
+        except (RequestTimeoutError, ServiceUnavailableError) as error:
+            raise AuthenticationServiceError(
+                message="Authentication refresh service unavailable.",
+                error_code=AuthErrorCode.SERVICE_ERROR,
+            ) from error
+
+    # ------------------------------------------------------------------
+
+    def logout(self, request: LogoutRequest) -> LogoutResponse:
+        try:
+            response = self._http.post(
+                url="/auth/logout",
+                body=request.model_dump(),
+            )
+            return LogoutResponse(**response)
+
+        except HTTPStatusError as error:
+            self._map_http_error(
+                error=error,
+                error_map={},
+                default_error=LogoutError,
+                default_code=AuthErrorCode.LOGOUT_FAILED,
+            )
+
+        except (RequestTimeoutError, ServiceUnavailableError) as error:
+            raise LogoutError(
+                message="Logout service unavailable.",
+                error_code=AuthErrorCode.LOGOUT_FAILED,
+            ) from error
