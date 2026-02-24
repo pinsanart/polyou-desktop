@@ -1,7 +1,5 @@
-class Bootstrap:
-    def _init_db(self):
-        pass
+from ..core.config import settings
 
-    def inicialize(self):
-        self._init_db()
-    
+class Bootstrap:
+    def run(self):
+        pass
