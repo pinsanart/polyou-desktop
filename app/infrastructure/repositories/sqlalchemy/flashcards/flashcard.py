@@ -23,12 +23,16 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
             )
         )
     
-    def list_public_ids(self):
-        stmt = select(FlashcardModel.public_id)
+    def list_public_ids(self, user_id: int):
+        stmt = select(FlashcardModel.public_id).where(
+            FlashcardModel.user_id == user_id
+        )
         return self.db_session.scalars(stmt).all()
 
-    def list_ids(self) -> List[int]:
-        stmt = select(FlashcardModel.flashcard_id)
+    def list_ids(self, user_id: int) -> List[int]:
+        stmt = select(FlashcardModel.flashcard_id).where(
+            FlashcardModel.user_id == user_id
+        )
         return self.db_session.scalars(stmt).all()
 
     def get_by_id(self, id: int) -> FlashcardModel | None:
@@ -37,15 +41,21 @@ class FlashcardRepositorySQLAlchemy(FlashcardRepository):
         )
         return self.db_session.execute(stmt).scalar_one_or_none()
 
+    def get_by_ids(self, ids: List[int]) -> List[FlashcardModel]:
+        stmt = self._base_query_with_relations().where(
+            FlashcardModel.flashcard_id.in_(ids)
+        )
+        return self.db_session.scalars(stmt).all()
+
     def get_by_public_id(self, public_id: UUID) -> FlashcardModel | None:
         stmt = self._base_query_with_relations().where(
             FlashcardModel.public_id == public_id
         )
         return self.db_session.execute(stmt).scalar_one_or_none()
 
-    def list_by_ids(self, ids: List[int]) -> List[FlashcardModel]:
+    def get_by_public_ids(self, public_ids: List[UUID]) -> List[FlashcardModel]:
         stmt = self._base_query_with_relations().where(
-            FlashcardModel.flashcard_id.in_(ids)
+            FlashcardModel.public_id.in_(public_ids)
         )
         return self.db_session.scalars(stmt).all()
 
