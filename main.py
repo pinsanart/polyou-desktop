@@ -7,7 +7,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
 
-    qmlRoot = Path(__file__).resolve().parent / 'app' / 'qml'
+    qmlRoot = Path(__file__).resolve().parent / 'app' / 'ui' / 'qml'
     
     engine.addImportPath(qmlRoot)
    

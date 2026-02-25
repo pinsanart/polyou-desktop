@@ -12,7 +12,7 @@ from ....core.schemas.auth.response import (
     LogoutResponse,
 )
 
-from ....core.exceptions.auth import (
+from ....core.exceptions.gateways.auth import (
     AuthErrorCode,
     AuthGatewayError,
     AuthenticationServiceError,
@@ -21,19 +21,17 @@ from ....core.exceptions.auth import (
     LogoutError,
 )
 
-from ....core.exceptions.requests import (
+from ....core.exceptions.http.requests import (
     HTTPStatusError,
     RequestTimeoutError,
     ServiceUnavailableError,
 )
 
-from ....dependencies.http.requests_client import RequestsHTTPClient
-
+from ....dependencies.http.authenticated_client import AuthenticatedHTTPClient
 
 class AuthGatewayHTTP(AuthGateway):
-
-    def __init__(self, request_http_client: RequestsHTTPClient):
-        self._http = request_http_client
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient):
+        self._http = authenticated_http_client
 
     # ------------------------------------------------------------------
     # Internal helpers

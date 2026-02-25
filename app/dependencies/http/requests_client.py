@@ -7,35 +7,25 @@ from requests.exceptions import (
     ConnectionError,
     RequestException
 )
-from ...core.exceptions.requests import (
+from ...core.exceptions.http.requests import (
     HTTPClientError,
     HTTPStatusError,
     RequestTimeoutError,
     ServiceUnavailableError
-
 )
+
 from ...core.http.http_client import HTTPClient
 from ...core.config import settings
 
 class RequestsHTTPClient(HTTPClient):
-    def __init__(self, base_url: str, token: Optional[str] = None):
+    def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
-        self.token = token
         self.session = requests.Session()
 
-    def _build_headers(
-        self,
-        headers: Optional[Dict[str, str]] = None
-    ) -> Dict[str, str]:
-
+    def _build_headers(self, headers: Optional[Dict[str, str]] = None) -> Dict[str, str]:
         default_headers: Dict[str, str] = {}
-
-        if self.token:
-            default_headers["Authorization"] = f"Bearer {self.token}"
-
         if headers:
             default_headers.update(headers)
-
         return default_headers
 
     # ----------------------------------
