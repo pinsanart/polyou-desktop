@@ -15,7 +15,7 @@ from ...core.exceptions.http.requests import (
 )
 
 from ...core.http.http_client import HTTPClient
-from ...core.config import settings
+from ...core.config.http import http_settings
 
 class RequestsHTTPClient(HTTPClient):
     def __init__(self, base_url: str):
@@ -73,7 +73,7 @@ class RequestsHTTPClient(HTTPClient):
             "url": full_url,
             "params": query,
             "headers": self._build_headers(headers),
-            "timeout": timeout or settings.DEFAULT_TIMEOUT_SECONDS,
+            "timeout": timeout or http_settings.DEFAULT_TIMEOUT_SECONDS,
             **kwargs
         }
 
