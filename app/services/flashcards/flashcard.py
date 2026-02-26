@@ -1,4 +1,3 @@
-from uuid import UUID
 from typing import List
 
 from ...core.services.flashcards.flashcard import FlashcardService 
@@ -13,7 +12,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
         self.flashcard_repository = flashcard_repository
         self.flashcard_sqlalchemy_mapper = flashcard_sqlalchemy_mapper 
     
-    def get_id_by_public_id_or_fail(self, public_id: UUID) -> int:
+    def get_id_by_public_id_or_fail(self, public_id: str) -> int:
         model = self.flashcard_repository.get_by_public_id(public_id)
 
         if not model:
@@ -21,7 +20,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
         
         return model.flashcard_id
 
-    def get_ids_by_public_ids_or_fail(self, public_ids:List[UUID]) -> List[int]:
+    def get_ids_by_public_ids_or_fail(self, public_ids:List[str]) -> List[int]:
         models = self.flashcard_repository.get_by_public_ids(public_ids)
         
         if len(models) != len(set(public_ids)):
@@ -29,7 +28,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
         
         return [model.flashcard_id for model in models]
         
-    def get_public_id_by_id_or_fail(self, flashcard_id:int) -> UUID:
+    def get_public_id_by_id_or_fail(self, flashcard_id:int) -> str:
         model = self.flashcard_repository.get_by_id(flashcard_id)
 
         if not model:
@@ -37,7 +36,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
 
         return model.public_id
 
-    def get_public_ids_by_ids_or_fail(self,flashcards_ids:List[int]) -> List[UUID]:
+    def get_public_ids_by_ids_or_fail(self,flashcards_ids:List[int]) -> List[str]:
         models = self.flashcard_repository.get_by_ids(flashcards_ids)
         
         if len(models) != len(set(flashcards_ids)):
@@ -45,7 +44,7 @@ class FlashcardServiceSQLAlchemy(FlashcardService):
 
         return [model.public_id for model in models]
         
-    def list_public_ids(self) -> List[UUID]:
+    def list_public_ids(self) -> List[str]:
         return self.flashcard_repository.list_public_ids()
     
     def list_ids(self) -> List[int]:

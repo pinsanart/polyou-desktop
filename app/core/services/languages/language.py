@@ -12,11 +12,3 @@ class LanguageService(ABC):
     @abstractmethod
     def get_iso_639_1_by_id_or_fail(self, id):
         pass
-
-    @abstractmethod
-    def create(self, language_info):
-        pass
-
-    @abstractmethod
-    def delete(self, id):
-        pass

@@ -1,5 +1,4 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy import (
     String,
     Integer,
@@ -87,12 +86,12 @@ class FlashcardModel(PolyouDB):
 
     flashcard_id: Mapped[int] = mapped_column(primary_key=True)
     
-    public_id: Mapped[UUID] = mapped_column(
-        PGUUID(as_uuid=True),
+    public_id: Mapped[str] = mapped_column(
+        String,
         default=uuid4,
         unique=True,
         nullable=False,
-        index=True      
+        index=True
     )
 
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.language_id"), nullable=False)

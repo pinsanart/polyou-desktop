@@ -2,7 +2,6 @@ from typing import List
 
 from ...core.services.languages.language import LanguageService
 from ...infrastructure.repositories.sqlalchemy.languages.language import LanguageRepositorySQLAlchemy
-from ...infrastructure.db.models import LanguageModel
 
 class LanguageServiceSQLAlchemy(LanguageService):
     def __init__(self, language_repository: LanguageRepositorySQLAlchemy):

@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 class FlashcardRepository(ABC):
     @abstractmethod
-    def list_ids(self, user_id):
+    def list_ids(self):
         pass
     
     @abstractmethod
-    def list_public_ids(self, user_id):
+    def list_public_ids(self):
         pass
 
     @abstractmethod

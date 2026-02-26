@@ -3,8 +3,6 @@ from enum import Enum
 from datetime import datetime
 from typing import List
 
-from uuid import UUID
-
 # =============================
 # ENUMS
 # =============================
@@ -89,7 +87,7 @@ class FlashcardSyncMetadataBase(BaseModel):
 class FlashcardBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    public_id: UUID
+    public_id: str
     created_at: datetime
 
     sync_metadata: FlashcardSyncMetadataBase

@@ -15,11 +15,11 @@ class FlashcardService(ABC):
         pass
 
     @abstractmethod
-    def get_public_id_by_id_or_fail(self, flashcard_id:int) -> UUID:
+    def get_public_id_by_id_or_fail(self, flashcard_id:int) -> str:
         pass
 
     @abstractmethod
-    def get_public_ids_by_ids_or_fail(self,flashcards_ids:List[int]) -> List[UUID]:
+    def get_public_ids_by_ids_or_fail(self,flashcards_ids:List[int]) -> List[str]:
         pass
 
     @abstractmethod
