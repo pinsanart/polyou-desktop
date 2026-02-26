@@ -1,8 +1,8 @@
-from ...core.gateways.auth import AuthGateway
-from ...core.security.access_token_provider import AccessTokenProvider
-from ...core.security.refresh_token_vault import RefreshTokenVault
+from app.core.gateways.auth import AuthGateway
+from app.core.security.access_token_provider import AccessTokenProvider
+from app.core.security.refresh_token_vault import RefreshTokenVault
 
-from ...core.schemas.auth.requests import (
+from app.core.schemas.auth.requests import (
     TokenRequest,
     RefreshRequest,
     LogoutRequest 

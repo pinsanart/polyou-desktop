@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from .....core.repositories.flashcards.flashcard_content import FlashcardContentRepository
-from ....db.models import FlashcardContentModel
+from app.core.repositories.flashcards.flashcard_content import FlashcardContentRepository
+from app.infrastructure.db.models import FlashcardContentModel
 
 class FlashcardContentRepositorySQLAlchemy(FlashcardContentRepository):
     def __init__(self, db_session: Session):

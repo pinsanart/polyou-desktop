@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
 
-from .....core.repositories.languages.language import LanguageRepository
-from .....infrastructure.db.models import LanguageModel
+from app.core.repositories.languages.language import LanguageRepository
+from app.infrastructure.db.models import LanguageModel
 
 class LanguageRepositorySQLAlchemy(LanguageRepository):
     def __init__(self, db_session: Session):

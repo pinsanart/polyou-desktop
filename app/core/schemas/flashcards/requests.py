@@ -1,4 +1,4 @@
-from .bases import (
+from app.core.schemas.flashcards.bases import (
     FlashcardBase,
     FlashcardContentBase,
     FlashcardFSRSBase,

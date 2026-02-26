@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
 
-from .....core.repositories.flashcards.flashcard_review import FlashcardReviewRepository
-from .....infrastructure.db.models import FlashcardReviewModel
+from app.core.repositories.flashcards.flashcard_review import FlashcardReviewRepository
+from app.infrastructure.db.models import FlashcardReviewModel
 
 class FlashcardReviewRepositorySQLAlchemy(FlashcardReviewRepository):
     def __init__(self, db_session: Session):

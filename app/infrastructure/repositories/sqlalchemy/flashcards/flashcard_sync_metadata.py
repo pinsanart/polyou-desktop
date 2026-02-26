@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
 
-from .....core.repositories.flashcards.flashcard_sync_metadata import FlashcardSyncMetadataRepository
-from ....db.models import FlashcardSyncMetadataModel
+from app.core.repositories.flashcards.flashcard_sync_metadata import FlashcardSyncMetadataRepository
+from app.infrastructure.db.models import FlashcardSyncMetadataModel
 
 class FlashcardSyncMetadataRepositorySQLAlchemy(FlashcardSyncMetadataRepository):
     def __init__(self, db_session: Session):

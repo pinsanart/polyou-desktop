@@ -1,7 +1,7 @@
-from ...core.services.flashcards.flashcard_type import FlashcardTypeService
-from ...infrastructure.repositories.sqlalchemy.flashcards.flashcard_type import FlashcardTypeRepositorySQLAlchemy
-from ...infrastructure.db.models import FlashcardTypeModel
-from ...core.schemas.flashcards.requests import FlashcardTypeRequest
+from app.core.services.flashcards.flashcard_type import FlashcardTypeService
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type import FlashcardTypeRepositorySQLAlchemy
+from app.infrastructure.db.models import FlashcardTypeModel
+from app.core.schemas.flashcards.requests import FlashcardTypeRequest
 
 class FlashcardTypeServiceSQLAlchemy(FlashcardTypeService):
     def __init__(self, flashcard_type_repository: FlashcardTypeRepositorySQLAlchemy):

@@ -1,4 +1,4 @@
-from .models import PolyouDB
+from app.infrastructure.db.models import PolyouDB
 from sqlalchemy import Engine
 
 def create_all(engine: Engine):

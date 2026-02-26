@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from .....core.repositories.flashcards.flashcard_type import FlashcardTypeRepository
-from .....infrastructure.db.models import FlashcardTypeModel
+from app.core.repositories.flashcards.flashcard_type import FlashcardTypeRepository
+from app.infrastructure.db.models import FlashcardTypeModel
 
 class FlashcardTypeRepositorySQLAlchemy(FlashcardTypeRepository):
     def __init__(self, db_session: Session):

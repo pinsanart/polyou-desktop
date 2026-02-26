@@ -7,15 +7,15 @@ from requests.exceptions import (
     ConnectionError,
     RequestException
 )
-from ...core.exceptions.http.requests import (
+from app.core.exceptions.http.requests import (
     HTTPClientError,
     HTTPStatusError,
     RequestTimeoutError,
     ServiceUnavailableError
 )
 
-from ...core.http.http_client import HTTPClient
-from ...core.config.http import http_settings
+from app.core.http.http_client import HTTPClient
+from app.core.config.http import http_settings
 
 class RequestsHTTPClient(HTTPClient):
     def __init__(self, base_url: str):

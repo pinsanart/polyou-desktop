@@ -1,7 +1,7 @@
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
-from ....infrastructure.db.connections import DBConnection
+from app.infrastructure.db.connections import DBConnection
 
 class DBConnectionFactory:
     @staticmethod

@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 
-from ...core.schemas.auth.requests import (
+from app.core.schemas.auth.requests import (
     TokenRequest,
     RefreshRequest,
     LogoutRequest
 )
 
-from ...core.schemas.auth.response import (
+from app.core.schemas.auth.response import (
     TokenResponse,
     RefreshResponse,
     LogoutResponse

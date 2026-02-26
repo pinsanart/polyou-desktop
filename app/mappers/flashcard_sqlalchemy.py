@@ -1,7 +1,6 @@
-from ..core.schemas.flashcards.responses import FlashcardInfoResponse
-from ..core.schemas.flashcards.creates import FlashcardCreateInfo
+from app.core.schemas.flashcards.creates import FlashcardCreateInfo
 
-from ..infrastructure.db.models import (
+from app.infrastructure.db.models import (
     FlashcardModel,
     FlashcardSyncMetadataModel,
     FlashcardContentModel,
@@ -11,8 +10,8 @@ from ..infrastructure.db.models import (
     FlashcardReviewModel
 )
 
-from ..services.flashcards.flashcard_type import FlashcardTypeServiceSQLAlchemy
-from ..services.languages.language import LanguageServiceSQLAlchemy
+from app.services.flashcards.flashcard_type import FlashcardTypeServiceSQLAlchemy
+from app.services.languages.language import LanguageServiceSQLAlchemy
 
 class FlashcardSQLAlchemyMapper:
     def __init__(self, flashcard_type_service: FlashcardTypeServiceSQLAlchemy, language_service: LanguageServiceSQLAlchemy):

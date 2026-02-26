@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 import platform
 
-from .app import app_settings
+from app.core.config.app import app_settings
 
 class DesktopSettings(BaseSettings):
     USERNAME: str = platform.node()

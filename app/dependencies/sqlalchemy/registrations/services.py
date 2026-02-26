@@ -1,14 +1,14 @@
-from ..factory                                                                          import AppFactory
+from app.dependencies.sqlalchemy.factory                                                import AppFactory
 
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard                    import FlashcardRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_type               import FlashcardTypeRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.languages.language                      import LanguageRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard                    import FlashcardRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type               import FlashcardTypeRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.languages.language                      import LanguageRepositorySQLAlchemy
 
-from ....services.flashcards.flashcard                                                  import FlashcardServiceSQLAlchemy
-from ....services.languages.language                                                    import LanguageServiceSQLAlchemy
-from ....services.flashcards.flashcard_type                                             import FlashcardTypeServiceSQLAlchemy
+from app.services.flashcards.flashcard                                                  import FlashcardServiceSQLAlchemy
+from app.services.languages.language                                                    import LanguageServiceSQLAlchemy
+from app.services.flashcards.flashcard_type                                             import FlashcardTypeServiceSQLAlchemy
 
-from ....mappers.flashcard_sqlalchemy                                                   import FlashcardSQLAlchemyMapper
+from app.mappers.flashcard_sqlalchemy                                                   import FlashcardSQLAlchemyMapper
 
 @AppFactory.register(FlashcardServiceSQLAlchemy)
 def build_flashcard_service(factory: AppFactory):

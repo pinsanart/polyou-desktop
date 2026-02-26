@@ -1,11 +1,10 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
 
-
-from .bases import (
+from app.core.schemas.flashcards.bases import (
     FlashcardBase
 )
 
-from ..languages.bases import ISOCode
+from app.core.schemas.languages.bases import ISOCode
 
 class FlashcardCreateInfo(FlashcardBase):
     model_config = ConfigDict(from_attributes=True)

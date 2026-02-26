@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from .....core.repositories.flashcards.flashcard_fsrs import FlashcardFSRSRepository
-from ....db.models import FlashcardFSRSModel
+from app.core.repositories.flashcards.flashcard_fsrs import FlashcardFSRSRepository
+from app.infrastructure.db.models import FlashcardFSRSModel
 
 class FlashcardFSRSRepositorySQLAlchemy(FlashcardFSRSRepository):
     def __init__(self, db_session: Session):

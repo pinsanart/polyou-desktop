@@ -1,14 +1,14 @@
-from ..factory                                                                        import AppFactory
+from app.dependencies.sqlalchemy.factory                                              import AppFactory
 
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_content          import FlashcardContentRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_fsrs             import FlashcardFSRSRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_image            import FlashcardImageRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard                  import FlashcardRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_type             import FlashcardTypeRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_sync_metadata    import FlashcardSyncMetadataRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_review           import FlashcardReviewRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.flashcards.flashcard_audio            import FlashcardAudioRepositorySQLAlchemy
-from ....infrastructure.repositories.sqlalchemy.languages.language                    import LanguageRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_content          import FlashcardContentRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_fsrs             import FlashcardFSRSRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_image            import FlashcardImageRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard                  import FlashcardRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type             import FlashcardTypeRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_sync_metadata    import FlashcardSyncMetadataRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_review           import FlashcardReviewRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_audio            import FlashcardAudioRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.languages.language                    import LanguageRepositorySQLAlchemy
 
 @AppFactory.register(FlashcardContentRepositorySQLAlchemy)
 def build_flashcard_content_repository(factory: AppFactory):

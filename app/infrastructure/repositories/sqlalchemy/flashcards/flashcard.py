@@ -3,9 +3,8 @@ from sqlalchemy import select, delete
 from uuid import UUID
 from typing import List, Optional
 
-from .....core.repositories.flashcards.flashcard import FlashcardRepository
-from ....db.models import FlashcardModel
-
+from app.core.repositories.flashcards.flashcard import FlashcardRepository
+from app.infrastructure.db.models import FlashcardModel
 
 class FlashcardRepositorySQLAlchemy(FlashcardRepository):
 

@@ -1,7 +1,7 @@
 from typing import List
 
-from ...core.services.languages.language import LanguageService
-from ...infrastructure.repositories.sqlalchemy.languages.language import LanguageRepositorySQLAlchemy
+from app.core.services.languages.language import LanguageService
+from app.infrastructure.repositories.sqlalchemy.languages.language import LanguageRepositorySQLAlchemy
 
 class LanguageServiceSQLAlchemy(LanguageService):
     def __init__(self, language_repository: LanguageRepositorySQLAlchemy):

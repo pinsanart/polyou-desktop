@@ -1,11 +1,11 @@
 from typing import List
 
-from ...core.services.flashcards.flashcard import FlashcardService 
-from ...core.schemas.flashcards.creates import FlashcardCreateInfo
-from ...core.schemas.flashcards.models import Flashcard
+from app.core.services.flashcards.flashcard import FlashcardService 
+from app.core.schemas.flashcards.creates import FlashcardCreateInfo
+from app.core.schemas.flashcards.models import Flashcard
 
-from ...infrastructure.repositories.sqlalchemy.flashcards.flashcard import FlashcardRepositorySQLAlchemy
-from ...mappers.flashcard_sqlalchemy import FlashcardSQLAlchemyMapper
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard import FlashcardRepositorySQLAlchemy
+from app.mappers.flashcard_sqlalchemy import FlashcardSQLAlchemyMapper
 
 class FlashcardServiceSQLAlchemy(FlashcardService):
     def __init__(self, flashcard_repository: FlashcardRepositorySQLAlchemy, flashcard_sqlalchemy_mapper: FlashcardSQLAlchemyMapper):

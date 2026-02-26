@@ -1,6 +1,4 @@
-from pydantic import ConfigDict
-
-from .bases import (
+from app.core.schemas.flashcards.bases import (
     FlashcardBase,
     FlashcardContentBase,
     FlashcardAudioBase,

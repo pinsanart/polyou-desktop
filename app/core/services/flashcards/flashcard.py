@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from typing import List
 
-from ....core.schemas.flashcards.bases import FlashcardBase
-from ....core.schemas.flashcards.models import Flashcard
+from app.core.schemas.flashcards.bases import FlashcardBase
+from app.core.schemas.flashcards.models import Flashcard
 
 class FlashcardService(ABC):
     @abstractmethod

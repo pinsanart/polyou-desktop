@@ -1,18 +1,18 @@
 from typing import Type
 
-from ....core.gateways.auth import AuthGateway
-from ....core.schemas.auth.requests import (
+from app.core.gateways.auth import AuthGateway
+from app.core.schemas.auth.requests import (
     TokenRequest,
     RefreshRequest,
     LogoutRequest,
 )
-from ....core.schemas.auth.response import (
+from app.core.schemas.auth.response import (
     TokenResponse,
     RefreshResponse,
     LogoutResponse,
 )
 
-from ....core.exceptions.gateways.auth import (
+from app.core.exceptions.gateways.auth import (
     AuthErrorCode,
     AuthGatewayError,
     AuthenticationServiceError,
@@ -21,13 +21,13 @@ from ....core.exceptions.gateways.auth import (
     LogoutError,
 )
 
-from ....core.exceptions.http.requests import (
+from app.core.exceptions.http.requests import (
     HTTPStatusError,
     RequestTimeoutError,
     ServiceUnavailableError,
 )
 
-from ....dependencies.http.authenticated_client import AuthenticatedHTTPClient
+from app.dependencies.http.authenticated_client import AuthenticatedHTTPClient
 
 class AuthGatewayHTTP(AuthGateway):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient):

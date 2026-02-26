@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
 
-from .....core.repositories.flashcards.flashcard_audio import FlashcardAudioRepository
-from ....db.models import FlashcardAudioModel
+from app.core.repositories.flashcards.flashcard_audio import FlashcardAudioRepository
+from app.infrastructure.db.models import FlashcardAudioModel
 
 class FlashcardAudioRepositorySQLAlchemy(FlashcardAudioRepository):
     def __init__(self, db_session: Session):

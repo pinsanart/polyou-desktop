@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional
 
-from ...core.http.http_client import HTTPClient
-from ...core.security.access_token_provider import AccessTokenProvider
+from app.core.http.http_client import HTTPClient
+from app.core.security.access_token_provider import AccessTokenProvider
 
 class AuthenticatedHTTPClient(HTTPClient):
     def __init__(self, http_client: HTTPClient, access_token_provider: AccessTokenProvider):

@@ -2,12 +2,12 @@ from pydantic import BaseModel
 from uuid import UUID
 from typing import List
 
-from .bases import (
+from app.core.schemas.flashcards.bases import (
     FlashcardBase,
     FlashcardSyncMetadataBase
 )
 
-from .requests import (
+from app.core.schemas.flashcards.requests import (
     FlashcardContentRequest,
     FlashcardFSRSRequest,
     FlashcardImageRequest,
