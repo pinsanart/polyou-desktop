@@ -1,8 +1,8 @@
 from .models import PolyouDB
-from .connections import engine
+from sqlalchemy import Engine
 
-def create_all():
+def create_all(engine: Engine):
     PolyouDB.metadata.create_all(engine)
 
-def drop_all():
+def drop_all(engine: Engine):
     PolyouDB.metadata.drop_all(engine)

@@ -1,9 +1,9 @@
-from ..infrastructure.db.connections import SessionLocal
+from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 
 @contextmanager
-def get_db():
-    db = SessionLocal()
+def get_db(session_local: sessionmaker):
+    db = session_local()
     try:
         yield db
         db.commit()

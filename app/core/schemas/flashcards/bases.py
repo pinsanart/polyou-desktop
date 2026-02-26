@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field, ConfigDict
-from enum import Enum
 from datetime import datetime
 from typing import List
 
@@ -7,19 +6,11 @@ from typing import List
 # ENUMS
 # =============================
 
-class FieldsEnum(str, Enum):
-    front = "front"
-    back = "back"
-
-class StateEnum(int, Enum):
-    LEARNING = 1
-    REVIEW = 2
-    RELEARNING = 3
-
-class RatingEnum(int, Enum):
-    AGAIN = 1
-    HARD = 2
-    GOOD = 3
+from ....core.enums import (
+    Fields,
+    FSRSRating,
+    FSRSState
+)
 
 # =============================
 # SCHEMAS
@@ -34,13 +25,13 @@ class FlashcardTypeBase(BaseModel):
 class FlashcardImageBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
-    field: FieldsEnum
+    field: Fields
     url: str
 
 class FlashcardAudioBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    field: FieldsEnum
+    field: Fields
     url: str
 
 class FlashcardContentBase(BaseModel):
@@ -56,13 +47,13 @@ class FlashcardFSRSBase(BaseModel):
     difficulty: float = 5.0
     due: datetime = Field(default_factory=datetime.today)
     last_review: datetime | None = None
-    state: StateEnum = StateEnum.LEARNING
+    state: FSRSState = FSRSState.LEARNING
 
 class FlashcardReviewBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     reviewed_at: datetime
-    rating: RatingEnum
+    rating: FSRSRating
     response_time_ms: int
     
     scheduled_days: int
@@ -73,8 +64,8 @@ class FlashcardReviewBase(BaseModel):
     new_stability: float
     new_difficulty: float
 
-    state_before: StateEnum
-    state_after: StateEnum
+    state_before: FSRSState
+    state_after: FSRSState
 
 class FlashcardSyncMetadataBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
