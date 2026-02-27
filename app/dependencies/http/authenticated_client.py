@@ -21,7 +21,7 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Any:
-        self._http.get(
+        return self._http.get(
             url=url,
             query=query,
             headers=self._inject_auth(headers),
@@ -38,7 +38,7 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Any:
-        self._http.post(
+        return self._http.post(
             url=url,
             body=body,
             query=query,
@@ -56,7 +56,7 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Any:
-        self._http.put(
+        return self._http.put(
             url=url, 
             body=body,
             query=query,
@@ -74,7 +74,7 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Any:
-        self._http.patch(
+        return self._http.patch(
             url=url,
             body=body,
             query=query,
@@ -91,7 +91,7 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         **kwargs
     ) -> Any:
-        self._http.delete(
+        return self._http.delete(
             url=url,
             query=query,
             headers=self._inject_auth(headers),

@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import List
-from uuid import UUID
 
 from .bases import (
     FlashcardBase,
@@ -22,41 +21,41 @@ class FlashcardPostRequest(FlashcardBase):
 class FlashcardPostBatchRequest(BaseModel):
     flashcards: List[FlashcardPostRequest]
 
-class FlashcardGetInfoRequest(BaseModel):
-    public_ids: List[UUID]
+class FlashcardGetInfosRequest(BaseModel):
+    public_ids: List[str]
 
 class FlashcardGetSyncMetadataRequest(BaseModel):
-    public_id: UUID
+    public_id: str
 
 class FlashcardPatchContentRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_content: FlashcardContentBase
 
 class FlashcardPatchFSRSRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_fsrs: FlashcardFSRSBase
 
 class FlashcardPatchImagesRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_images: List[FlashcardImageBase]
 
 class FlashcardPatchReviewsRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_reviews: List[FlashcardReviewBase]
 
 class FlashcardPatchAudiosRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_audios: List[FlashcardAudioBase]
     
 class FlashcardPatchSyncMetadataRequest(BaseModel):
-    public_id: UUID
+    public_id: str
     new_sync_metadata: FlashcardSyncMetadataBase
 
 class FlashcardDeleteRequest(BaseModel):
-    public_id: UUID
+    public_id: str
 
 class FlashcardDeleteBatchRequest(BaseModel):
-    public_ids: List[UUID]
+    public_ids: List[str]
 
 class FlashcardTypeRequest(FlashcardTypeBase):
     pass
