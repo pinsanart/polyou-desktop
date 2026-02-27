@@ -8,6 +8,7 @@ from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type       
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_sync_metadata    import FlashcardSyncMetadataRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_review           import FlashcardReviewRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_audio            import FlashcardAudioRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_local_metadata   import FlashcardLocalMetadataRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.languages.language                    import LanguageRepositorySQLAlchemy
 
 @AppFactory.register(FlashcardContentRepositorySQLAlchemy)
@@ -45,3 +46,7 @@ def build_flashcard_sync_metadata_repository(factory: AppFactory):
 @AppFactory.register(LanguageRepositorySQLAlchemy)
 def build_language_repository(factory: AppFactory):
     return LanguageRepositorySQLAlchemy(factory.container.db)
+
+@AppFactory.register(FlashcardLocalMetadataRepositorySQLAlchemy)
+def build_flashcard_local_metadata_repository(factory: AppFactory):
+    return FlashcardLocalMetadataRepositorySQLAlchemy(factory.container.db)

@@ -7,7 +7,8 @@ from app.infrastructure.db.models import (
     FlashcardFSRSModel,
     FlashcardAudioModel,
     FlashcardImageModel,
-    FlashcardReviewModel
+    FlashcardReviewModel,
+    FlashcardLocalMetadataModel
 )
 
 from app.services.flashcards.flashcard_type import FlashcardTypeServiceSQLAlchemy
@@ -26,6 +27,8 @@ class FlashcardSQLAlchemyMapper:
             flashcard_type_id = self.flashcard_type_service.get_id_by_name_or_fail(create_info.flashcard_type_name),
             language_id = self.language_service.get_id_by_iso_639_1_or_fail(create_info.language_iso_639_1)
         )
+
+        model.local_metadata = FlashcardLocalMetadataModel()
 
         model.sync_metadata = FlashcardSyncMetadataModel(
             **create_info.sync_metadata.model_dump()

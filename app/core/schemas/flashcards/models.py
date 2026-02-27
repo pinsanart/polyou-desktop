@@ -15,6 +15,8 @@ class Flashcard(FlashcardBase):
     language_id: int
     flashcard_type_id: int
 
+    local_metadata: FlashcardLocalMetadataBase
+
 class FlashcardContent(FlashcardContentBase):
     flashcard_id: int
 

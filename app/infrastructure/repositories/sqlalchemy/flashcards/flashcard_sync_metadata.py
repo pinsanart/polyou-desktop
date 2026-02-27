@@ -20,7 +20,7 @@ class FlashcardSyncMetadataRepositorySQLAlchemy(FlashcardSyncMetadataRepository)
         flashcard_metadata_model = self.db_session.get(FlashcardSyncMetadataModel, id)
 
         if not flashcard_metadata_model:
-            raise ValueError(f"Flashcard Metadata with id={id} not found.")
+            raise ValueError(f"Flashcard Sync Metadata with id={id} not found.")
 
         for key, value in data.items():
             if hasattr(flashcard_metadata_model, key):
