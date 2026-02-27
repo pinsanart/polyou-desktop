@@ -116,6 +116,13 @@ class FlashcardModel(PolyouDB):
         passive_deletes=True
     )
 
+    local_metadata: Mapped[List["FlashcardLocalMetadataModel"]] = relationship(
+        back_populates="flashcard",
+        uselist=False,
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
+
     content: Mapped["FlashcardContentModel"] = relationship(
         back_populates="flashcard",
         uselist=False,
@@ -143,12 +150,6 @@ class FlashcardModel(PolyouDB):
     )
 
     audios: Mapped[List["FlashcardAudioModel"]] = relationship(
-        back_populates="flashcard",
-        cascade="all, delete-orphan",
-        passive_deletes=True
-    )
-
-    local_metadata: Mapped[List["FlashcardLocalMetadataModel"]] = relationship(
         back_populates="flashcard",
         cascade="all, delete-orphan",
         passive_deletes=True

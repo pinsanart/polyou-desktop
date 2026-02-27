@@ -4,6 +4,7 @@ from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard            
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type               import FlashcardTypeRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_local_metadata     import FlashcardLocalMetadataRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.languages.language                      import LanguageRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_sync_metadata      import FlashcardSyncMetadataRepositorySQLAlchemy
 
 from app.mappers.flashcard_sqlalchemy                                                   import FlashcardSQLAlchemyMapper
 
@@ -11,6 +12,7 @@ from app.services.flashcards.flashcard                                          
 from app.services.languages.language                                                    import LanguageServiceSQLAlchemy
 from app.services.flashcards.flashcard_type                                             import FlashcardTypeServiceSQLAlchemy
 from app.services.flashcards.flashcard_local_metadata                                   import FlashcardLocalMetadataServiceSQLAlchemy
+from app.services.flashcards.flashcard_sync_metadata                                    import FlashcardSyncMetadataServiceSQLAlchemy
 
 @AppFactory.register(FlashcardServiceSQLAlchemy)
 def build_flashcard_service(factory: AppFactory):
@@ -35,4 +37,10 @@ def build_language_service(factory: AppFactory):
 def build_flashcard_local_metadata_service(factory: AppFactory):
     return FlashcardLocalMetadataServiceSQLAlchemy(
         flashcard_local_metadata_repository= factory.create(FlashcardLocalMetadataRepositorySQLAlchemy)
+    )
+
+@AppFactory.register(FlashcardSyncMetadataServiceSQLAlchemy)
+def build_flashcard_sync_metadata_service(factory: AppFactory):
+    return FlashcardSyncMetadataServiceSQLAlchemy(
+        flashcard_sync_metadata_repository= factory.create(FlashcardSyncMetadataRepositorySQLAlchemy)
     )
