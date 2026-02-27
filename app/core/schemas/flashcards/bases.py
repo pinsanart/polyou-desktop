@@ -75,6 +75,12 @@ class FlashcardSyncMetadataBase(BaseModel):
     last_image_updated_at: datetime | None = None
     last_audio_updated_at: datetime | None = None
 
+class FlashcardLocalMetadataBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    locally_deleted: bool
+    has_been_synced: bool
+
 class FlashcardBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

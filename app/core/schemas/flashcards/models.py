@@ -6,7 +6,8 @@ from app.core.schemas.flashcards.bases import (
     FlashcardImageBase,
     FlashcardSyncMetadataBase,
     FlashcardReviewBase,
-    FlashcardTypeBase
+    FlashcardTypeBase,
+    FlashcardLocalMetadataBase
 )
 
 class Flashcard(FlashcardBase):    
@@ -33,6 +34,9 @@ class FlashcardSyncMetadata(FlashcardSyncMetadataBase):
 
 class FlashcardReview(FlashcardReviewBase):
     review_id: int
+    flashcard_id: int
+
+class FlashcardLocalMetadata(FlashcardLocalMetadataBase):
     flashcard_id: int
 
 class FlashcardType(FlashcardTypeBase):
