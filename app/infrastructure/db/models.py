@@ -4,6 +4,7 @@ from sqlalchemy import (
     Integer,
     ForeignKey,
     DateTime,
+    Boolean,
     Enum as SQLEnum,
 )
 from uuid import uuid4
@@ -51,6 +52,22 @@ class FlashcardTypeModel(PolyouDB):
     description: Mapped[Optional[str]] = mapped_column(String)
 
     flashcards: Mapped[List["FlashcardModel"]] = relationship(back_populates="flashcard_type")
+
+class FlashcardLocalMetadataModel(PolyouDB):
+    __tablename__ = 'flashcards_local_metadata'
+
+    flashcard_id: Mapped[int] = mapped_column(
+        ForeignKey("flashcards.flashcard_id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    locally_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    has_been_synced: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    flashcard: Mapped["FlashcardModel"] = relationship(
+        back_populates="local_metadata",
+        passive_deletes=True
+    )
 
 
 class FlashcardSyncMetadataModel(PolyouDB):
@@ -126,6 +143,12 @@ class FlashcardModel(PolyouDB):
     )
 
     audios: Mapped[List["FlashcardAudioModel"]] = relationship(
+        back_populates="flashcard",
+        cascade="all, delete-orphan",
+        passive_deletes=True
+    )
+
+    local_metadata: Mapped[List["FlashcardLocalMetadataModel"]] = relationship(
         back_populates="flashcard",
         cascade="all, delete-orphan",
         passive_deletes=True
