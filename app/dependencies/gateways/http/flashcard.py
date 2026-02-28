@@ -114,7 +114,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/infos',
                 query=request.model_dump()
             )
-            return response
+            return FlashcardGetInfosResponse(**response)
     
     def get_sync_metadata(self, request: FlashcardGetSyncMetadataRequest) -> FlashcardGetSyncMetadataResponse:
         with self._handle_errors(
@@ -129,7 +129,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/sync_metadata',
                 query= request.model_dump()
             )
-            return response
+            return FlashcardGetSyncMetadataResponse(**response)
 
     def get_all_sync_metadata(self) -> FlashcardGetAllSyncMetadataResponse:
         with self._handle_errors(
@@ -142,7 +142,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
             response = self._http.get(
                 url='/flashcards/all_sync_metadata'
             )
-            return response
+            return FlashcardGetAllSyncMetadataResponse(**response)
         
     def create_one(self, request: FlashcardPostRequest) -> FlashcardPostResponse:
         with self._handle_errors(
@@ -155,9 +155,9 @@ class FlashcardGatewayHTTP(FlashcardGateway):
         ):
             response = self._http.post(
                 url='/flashcards/',
-                body=request.model_dump()
+                body=request.model_dump(mode='json')
             )
-            return response
+            return FlashcardPostResponse(**response)
 
     def create_many(self, request: FlashcardPostBatchRequest) -> FlashcardPostBatchResponse:
         with self._handle_errors(
@@ -170,9 +170,9 @@ class FlashcardGatewayHTTP(FlashcardGateway):
         ):
             response = self._http.post(
                 url='/flashcards/batch',
-                body=request.model_dump()
+                body=request.model_dump(mode='json')
             )
-            return response
+            return FlashcardPostBatchResponse(**response)
         
     def change_content(self, request: FlashcardPatchContentRequest) -> FlashcardPatchContentResponse:
         with self._handle_errors(
@@ -187,7 +187,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/content',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchContentResponse(**response)
     
     def change_fsrs(self, request: FlashcardPatchFSRSRequest) -> FlashcardPatchFSRSResponse:
         with self._handle_errors(
@@ -202,7 +202,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/fsrs',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchFSRSResponse(**response)
     
     def change_images(self, request: FlashcardPatchImagesRequest) -> FlashcardPatchImagesResponse:
         with self._handle_errors(
@@ -217,7 +217,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/images',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchImagesResponse(**response)
     
     def change_reviews(self, request: FlashcardPatchReviewsRequest) -> FlashcardPatchReviewsResponse:
         with self._handle_errors(
@@ -232,7 +232,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/reviews',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchReviewsResponse(**response)
     
     def change_audios(self, request: FlashcardPatchAudiosRequest) -> FlashcardPatchAudiosResponse:
         with self._handle_errors(
@@ -247,7 +247,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/audios',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchAudiosResponse(**response)
     
     def change_sync_metadata(self, request: FlashcardPatchSyncMetadataRequest) -> FlashcardPatchSyncMetadataResponse:
         with self._handle_errors(
@@ -262,7 +262,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/sync_metadata',
                 body=request.model_dump()
             )
-            return response
+            return FlashcardPatchSyncMetadataResponse(**response)
     
     def delete_one(self, request: FlashcardDeleteRequest) -> FlashcardDeleteResponse:
         with self._handle_errors(
@@ -276,7 +276,7 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/',
                 query=request.model_dump()
             )
-            return response
+            return FlashcardDeleteResponse(**response)
 
     def delete_many(self, request: FlashcardDeleteBatchRequest) -> FlashcardDeleteBatchResponse:
         with self._handle_errors(
@@ -290,4 +290,4 @@ class FlashcardGatewayHTTP(FlashcardGateway):
                 url='/flashcards/batch',
                 query=request.model_dump()
             )
-            return response
+            return FlashcardDeleteBatchResponse(**response)

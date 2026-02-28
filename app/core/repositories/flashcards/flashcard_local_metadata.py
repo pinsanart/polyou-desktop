@@ -10,6 +10,10 @@ class FlashcardLocalMetadataRepository(ABC):
         pass
 
     @abstractmethod
+    def get_not_synced_ids(self):
+        pass
+
+    @abstractmethod
     def get_locally_deleted_ids(self):
         pass
 

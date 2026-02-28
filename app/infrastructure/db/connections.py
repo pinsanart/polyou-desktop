@@ -8,6 +8,6 @@ class DBConnection:
         self.session_local = sessionmaker(
             bind=self.engine,
             autocommit=False,
-            autoflush=False,
+            autoflush=True,
             future=True
         )   

@@ -39,6 +39,13 @@ class FlashcardLocalMetadataRepositorySQLAlchemy(FlashcardLocalMetadataRepositor
             .where(FlashcardLocalMetadataModel.locally_deleted == True, FlashcardLocalMetadataModel.has_been_synced == False)
         )
         return self.db_session.scalars(stmt).all()
+    
+    def get_not_synced_ids(self) -> List[int]:
+        stmt = (
+            select(FlashcardLocalMetadataModel.flashcard_id)
+            .where(FlashcardLocalMetadataModel.has_been_synced == False)
+        )
+        return self.db_session.scalars(stmt).all()
 
     def update(self, flashcard_id: int, data: dict) -> None:
         model = self.db_session.get(FlashcardLocalMetadataModel, flashcard_id)

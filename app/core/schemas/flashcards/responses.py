@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import List
-from uuid import UUID
 
 from .bases import (
     FlashcardBase,
@@ -19,7 +18,7 @@ from .requests import (
 from ..languages.bases import ISOCode
 
 class FlashcardGetResponse(BaseModel):
-    public_ids: List[UUID]
+    public_ids: List[str]
 
 class FlashcardInfoResponse(FlashcardBase):
     flashcard_type_name: str
@@ -29,18 +28,18 @@ class FlashcardGetInfosResponse(BaseModel):
     infos: List[FlashcardInfoResponse]
 
 class FlashcardGetSyncMetadataResponse(BaseModel):
-    public_id: UUID
+    public_id: str
     sync_metadata: FlashcardSyncMetadataBase
 
 class FlashcardGetAllSyncMetadataResponse(BaseModel):
-    public_ids: List[UUID]
+    public_ids: List[str]
     sync_metadatas: List[FlashcardGetSyncMetadataResponse]
 
 class FlashcardPostResponse(BaseModel):
-    public_id: UUID
+    public_id: str
 
 class FlashcardPostBatchResponse(BaseModel):
-    public_ids: List[UUID]
+    public_ids: List[str]
 
 class FlashcardPatchContentResponse(FlashcardPatchContentRequest):
     pass
@@ -61,7 +60,7 @@ class FlashcardPatchSyncMetadataResponse(FlashcardPatchSyncMetadataRequest):
     pass
 
 class FlashcardDeleteResponse(BaseModel):
-    deleted_public_id: UUID
+    deleted_public_id: str
 
 class FlashcardDeleteBatchResponse(BaseModel):
-    deleted_public_ids: List[UUID]
+    deleted_public_ids: List[str]
