@@ -5,6 +5,7 @@ from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_type       
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_local_metadata     import FlashcardLocalMetadataRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.languages.language                      import LanguageRepositorySQLAlchemy
 from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_sync_metadata      import FlashcardSyncMetadataRepositorySQLAlchemy
+from app.infrastructure.repositories.sqlalchemy.flashcards.flashcard_content            import FlashcardContentRepositorySQLAlchemy
 
 from app.mappers.flashcard_sqlalchemy                                                   import FlashcardSQLAlchemyMapper
 
@@ -13,6 +14,7 @@ from app.services.languages.language                                            
 from app.services.flashcards.flashcard_type                                             import FlashcardTypeServiceSQLAlchemy
 from app.services.flashcards.flashcard_local_metadata                                   import FlashcardLocalMetadataServiceSQLAlchemy
 from app.services.flashcards.flashcard_sync_metadata                                    import FlashcardSyncMetadataServiceSQLAlchemy
+from app.services.flashcards.flashcard_content                                          import FlashcardContentServiceSQLAlchemy
 
 @AppFactory.register(FlashcardServiceSQLAlchemy)
 def build_flashcard_service(factory: AppFactory):
@@ -43,4 +45,10 @@ def build_flashcard_local_metadata_service(factory: AppFactory):
 def build_flashcard_sync_metadata_service(factory: AppFactory):
     return FlashcardSyncMetadataServiceSQLAlchemy(
         flashcard_sync_metadata_repository= factory.create(FlashcardSyncMetadataRepositorySQLAlchemy)
+    )
+
+@AppFactory.register(FlashcardContentServiceSQLAlchemy)
+def build_flashcard_content_service(factory: AppFactory):
+    return FlashcardContentServiceSQLAlchemy(
+        flashcard_content_repository= factory.create(FlashcardContentRepositorySQLAlchemy)
     )
