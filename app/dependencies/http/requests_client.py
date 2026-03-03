@@ -103,11 +103,11 @@ class RequestsHTTPClient(HTTPClient):
     def post(self, url: str, body=None, query=None, headers=None, timeout=None, form=False, **kwargs):
         return self._request("POST", url, body=body, query=query, headers=headers, timeout=timeout, form=form, **kwargs)
 
-    def put(self, url: str, body=None, query=None, headers=None, timeout=None, **kwargs):
-        return self._request("PUT", url, body=body, query=query, headers=headers, timeout=timeout, **kwargs)
+    def put(self, url: str, body=None, query=None, headers=None, timeout=None, form=False, **kwargs):
+        return self._request("PUT", url, body=body, query=query, headers=headers, timeout=timeout, form=form, **kwargs)
 
-    def patch(self, url: str, body=None, query=None, headers=None, timeout=None, **kwargs):
-        return self._request("PATCH", url, body=body, query=query, headers=headers, timeout=timeout, **kwargs)
+    def patch(self, url: str, body=None, query=None, headers=None, timeout=None, form=False, **kwargs):
+        return self._request("PATCH", url, body=body, query=query, headers=headers, timeout=timeout, form=form, **kwargs)
 
     def delete(self, url: str, query=None, headers=None, timeout=None, **kwargs):
         return self._request("DELETE", url, query=query, headers=headers, timeout=timeout, **kwargs)

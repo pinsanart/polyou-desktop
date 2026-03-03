@@ -1,39 +1,41 @@
-from typing import Dict, Any, Optional
+from typing import Optional, Dict, Any
 
 from app.core.http.http_client import HTTPClient
-from app.core.security.access_token_provider import AccessTokenProvider
-from app.core.exceptions.http.requests import HTTPStatusError, TokenExpiredError
+from app.dependencies.http.authenticated_client import AuthenticatedHTTPClient
+from app.services.managers.auth_session import AuthSessionManager
+from app.core.exceptions.http.requests import TokenExpiredError
 
-class AuthenticatedHTTPClient(HTTPClient):
-    def __init__(self, http_client: HTTPClient, access_token_provider: AccessTokenProvider):
-        self._http = http_client
-        self._access_token_provider = access_token_provider
-    
-    def _inject_auth(self, headers):
-        headers = headers or {}
-        headers['Authorization'] = f"Bearer {self._access_token_provider.get()}"
-        return headers
-    
-    def _call(self, method, **kwargs) -> Any:
+
+class RefreshOnExpiredClient(HTTPClient):
+    def __init__(
+        self,
+        authenticated_http_client: AuthenticatedHTTPClient,
+        auth_session_manager: AuthSessionManager,
+        username: str,
+    ):
+        self._authenticated_http_client = authenticated_http_client
+        self._auth_session_manager = auth_session_manager
+        self._username = username
+
+    def _call(self, method, **kwargs):
         try:
             return method(**kwargs)
-        except HTTPStatusError as error:
-            if error.status_code == 401:
-                raise TokenExpiredError(detail=error.detail) from error
-            raise
+        except TokenExpiredError:
+            self._auth_session_manager.refresh(self._username)
+            return method(**kwargs)
 
     def get(
-        self,
+        self, 
         url: str,
         query: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
-        **kwargs
-    ) -> Any:
+        **kwargs):
         return self._call(
-            self._http.get,
-            url=url, query=query,
-            headers=self._inject_auth(headers),
+            self._authenticated_http_client.get,
+            url=url, 
+            query=query, 
+            headers=headers, 
             timeout=timeout, 
             **kwargs
         )
@@ -47,15 +49,15 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         form: bool = False,
         **kwargs
-    ) -> Any:
+    ):
         return self._call(
-            self._http.post,
+            self._authenticated_http_client.post,
             url=url, 
             body=body, 
-            query=query,
-            headers=self._inject_auth(headers),
+            query=query, 
+            headers=headers, 
             timeout=timeout,
-            form=form, 
+            form=form,
             **kwargs
         )
 
@@ -68,13 +70,13 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         form: bool = False,
         **kwargs
-    ) -> Any:
+    ):
         return self._call(
-            self._http.put,
+            self._authenticated_http_client.put,
             url=url, 
-            body=body,
+            body=body, 
             query=query,
-            headers=self._inject_auth(headers),
+            headers=headers, 
             timeout=timeout, 
             form=form,
             **kwargs
@@ -89,15 +91,15 @@ class AuthenticatedHTTPClient(HTTPClient):
         timeout: Optional[float] = None,
         form: bool = False,
         **kwargs
-    ) -> Any:
+    ):
         return self._call(
-            self._http.patch,
+            self._authenticated_http_client.patch,
             url=url, 
             body=body, 
-            query=query,
-            headers=self._inject_auth(headers),
-            timeout=timeout,
-            form=form, 
+            query=query, 
+            headers=headers, 
+            timeout=timeout, 
+            form=form,
             **kwargs
         )
 
@@ -108,12 +110,12 @@ class AuthenticatedHTTPClient(HTTPClient):
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
         **kwargs
-    ) -> Any:
+        ):
         return self._call(
-            self._http.delete,
+            self._authenticated_http_client.delete,
             url=url, 
-            query=query,
-            headers=self._inject_auth(headers),
+            query=query, 
+            headers=headers, 
             timeout=timeout, 
             **kwargs
         )

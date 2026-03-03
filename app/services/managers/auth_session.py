@@ -8,6 +8,8 @@ from app.core.schemas.auth.requests import (
     LogoutRequest 
 )
 
+from app.core.exceptions.gateways.auth import RefreshTokenError, AuthErrorCode
+
 class AuthSessionManager:
     def __init__(self, auth_gateway: AuthGateway, access_token_provider:AccessTokenProvider, refresh_token_vault:RefreshTokenVault):
         self._auth_gateway = auth_gateway
@@ -15,14 +17,18 @@ class AuthSessionManager:
         self._refresh_token_vault = refresh_token_vault
     
     def login(self, request: TokenRequest, username: str) -> None:
-        response = self._auth_gateway.token(request)    
+        response = self._auth_gateway.token(request)
         self._refresh_token_vault.save(username, response.refresh_token)
         self._access_token_provider.set(response.access_token)
 
     def refresh(self, username: str) -> None:
         refresh_token = self._refresh_token_vault.get(username)
         
-        #INSERT ERROR HERE
+        if not refresh_token:
+            raise RefreshTokenError(
+                message="No refresh token found for user. Session may have expired.",
+                error_code=AuthErrorCode.REFRESH_FAILED,
+            )
 
         request = RefreshRequest(refresh_token=refresh_token)
         

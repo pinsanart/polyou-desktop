@@ -21,6 +21,7 @@ class HTTPClient(ABC):
         query: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
+        form: bool = False,
         **kwargs
     ) -> Any:
         pass
@@ -33,6 +34,7 @@ class HTTPClient(ABC):
         query: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
+        form: bool = False,
         **kwargs
     ) -> Any:
         pass
@@ -45,6 +47,7 @@ class HTTPClient(ABC):
         query: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
+        form: bool = False,
         **kwargs
     ) -> Any:
         pass
