@@ -3,18 +3,32 @@ from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+from uuid import uuid4
+
 import app.dependencies.sqlalchemy.registrations.mappers 
 import app.dependencies.sqlalchemy.registrations.repositories
 import app.dependencies.sqlalchemy.registrations.services
 
 from app.core.bootstrap import Bootstrap
+
+from app.core.config.http import http_settings
 from app.core.config.paths import path_settings
 from app.core.config.db import db_settings
 from app.core.config.app import app_settings
+from app.core.config.desktop import desktop_settings
 
 
 from app.dependencies.sqlalchemy.db.factory import DBConnectionFactory
 
+from app.ui.viewmodels.auth import AuthViewModel
+
+from app.services.managers.auth_session import AuthSessionManager
+from app.dependencies.gateways.http.auth import AuthGatewayHTTP
+from app.dependencies.http.authenticated_client import AuthenticatedHTTPClient
+from app.dependencies.http.requests_client import RequestsHTTPClient
+
+from app.core.security.access_token_provider import AccessTokenProvider
+from app.core.security.refresh_token_vault import RefreshTokenVault
 
 if __name__ == "__main__":
     db_connection = DBConnectionFactory.create(
@@ -30,19 +44,50 @@ if __name__ == "__main__":
 
     bootstrap.run()
 
-    '''
-    app = QApplication(sys.argv)
-    engine = QQmlApplicationEngine()
+    access_token_provider = AccessTokenProvider()
+    refresh_token_vault = RefreshTokenVault(
+        service_name=app_settings.APP_NAME
+    )
+
+    raw_http = RequestsHTTPClient(
+        base_url= http_settings.BASE_URL
+    )
+
+    authenticated_http = AuthenticatedHTTPClient(
+        http_client= raw_http,
+        access_token_provider= access_token_provider
+    )
+
+    auth_gateway = AuthGatewayHTTP(
+        authenticated_http_client= authenticated_http
+    )
+
+    auth_manager = AuthSessionManager(
+        auth_gateway= auth_gateway,
+        access_token_provider= access_token_provider,
+        refresh_token_vault= refresh_token_vault
+    )
+
+
+    auth_vm = AuthViewModel(
+        auth_manager= auth_manager,
+        device_id= uuid4(),
+        device_name= desktop_settings.DESKTOP_NAME,
+        username= desktop_settings.USERNAME
+    )
+
+'''
+    ui_app = QApplication(sys.argv)
+    ui_engine = QQmlApplicationEngine()
 
     qmlRoot = Path(__file__).resolve().parent / 'app' / 'ui' / 'qml'
     
-    engine.addImportPath(qmlRoot)
-   
-    engine.load(str(qmlRoot / 'MainWindow.qml'))
+    ui_engine.addImportPath(qmlRoot)
+    ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
 
-    if not engine.rootObjects():
+    if not ui_engine.rootObjects():
         print("'MainWindow.qml' was not found.")
         sys.exit(-1)
     
-    sys.exit(app.exec())
-    '''
+    sys.exit(ui_app.exec())
+'''

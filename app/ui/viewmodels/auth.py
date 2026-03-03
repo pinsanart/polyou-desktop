@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, Signal, Property
+from PySide6.QtCore import QObject, Signal, Property, Slot
 from uuid import UUID
 
 from app.services.managers.auth_session import AuthSessionManager
@@ -38,6 +38,7 @@ class AuthViewModel(QObject):
     isAuthenticated = Property(bool, get_is_authenticated, notify=authStateChanged)
     currentUser = Property(str, get_current_user, notify=authStateChanged)
 
+    @Slot(str, str)
     def login(self, email: str, password: str):
         try:
             self._set_loading(True)
