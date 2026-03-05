@@ -2,6 +2,9 @@ import sys
 from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtCore import QTranslator
+
+import resources_rc
 
 from uuid import uuid4
 
@@ -76,18 +79,22 @@ if __name__ == "__main__":
         username= desktop_settings.USERNAME
     )
 
-'''
     ui_app = QApplication(sys.argv)
     ui_engine = QQmlApplicationEngine()
+
+    translator = QTranslator()
+    translator.load("app/translations/en.qm")    
+    ui_app.installTranslator(translator)
 
     qmlRoot = Path(__file__).resolve().parent / 'app' / 'ui' / 'qml'
     
     ui_engine.addImportPath(qmlRoot)
     ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
+    
+    ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
 
     if not ui_engine.rootObjects():
         print("'MainWindow.qml' was not found.")
         sys.exit(-1)
     
     sys.exit(ui_app.exec())
-'''
