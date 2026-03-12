@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import "./pages/"
+import "./pages/home"
 
 //MAIN WINDOW
 Window {
@@ -17,7 +17,7 @@ Window {
     visible: true
     title: app_name
     
-    property color backgroundColor:     '#292b31'
+    property color backgroundColor:     "#292b31"
     property color buttonLighterColor:  "#187DF0"
     property color buttonDarkerColor:   "#0C3F78"
     property color borderColor:         "#4A4F5A"

@@ -6,15 +6,14 @@ Rectangle {
     property string iconURL
     property string floatText
     
-    property var pageID
-    property var currentPageID
+    property var workspaceID
+    property var currentWorkspaceID
 
     property color backgroundColor
     property color selectBorderColor
     property color bottomBorderColor
 
-
-    signal clicked(var pageID)
+    signal clicked(var workspaceID)
 
     width: parent.width
     color: root.backgroundColor
@@ -28,7 +27,7 @@ Rectangle {
         anchors.bottom: parent.bottom
 
         width: 2
-        visible: root.currentPageID === root.pageID
+        visible: root.currentWorkspaceID === root.workspaceID
         color: root.selectBorderColor
     }
 
@@ -44,6 +43,7 @@ Rectangle {
         color: root.bottomBorderColor
     }
 
+    //Icon
     Image {
         id: icon
 
@@ -62,7 +62,7 @@ Rectangle {
         hoverEnabled: true
 
         onClicked: {
-            root.clicked(root.pageID)
+            root.clicked(root.workspaceID)
         }
     }
 }

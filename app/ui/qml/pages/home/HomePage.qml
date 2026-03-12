@@ -3,6 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "./components"
+import "./workspaces/home"
+import "./workspaces/review"
+import "./workspaces/create"
 
 Page {
     id: root
@@ -98,49 +101,35 @@ Page {
             id: workspaceLoader
 
             anchors.fill: parent
-            sourceComponent: homePage
+            sourceComponent: createWorkspace
             
             Component {
-                id: homePage
+                id: homeWorkspace
 
-                Page {
+                HomeWorkspace {
                     anchors.fill: workspace
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: qsTr("HOME PAGE")
-                        font.pixelSize: 50
-                    }
-                    
                 }
             }
 
             Component {
-                id: reviewPage
+                id: reviewWorkspace
 
-                Page {
+                ReviewWorkspace {
                     anchors.fill: workspace
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: qsTr("REVIEW PAGE")
-                        font.pixelSize: 50
-                    }
                 }
-                   
             }
             
             Component {
-                id: createPage
-
-                Page {
-                    anchors.fill: workspace
+                id: createWorkspace
                 
-                    Text {
-                        anchors.centerIn: parent
-                        text: qsTr("CREATE PAGE")
-                        font.pixelSize: 50
-                    }   
+                CreateWorkspace {
+                    backgroundColor:     root.backgroundColor
+                    buttonLighterColor:  root.buttonLighterColor
+                    buttonDarkerColor:   root.buttonDarkerColor
+                    borderColor:         root.borderColor
+                    fieldColor:          root.fieldColor
+                    fontColor:           root.fontColor
+                    fontFamily:          root.fontFamily
                 }
             }
 
@@ -165,9 +154,9 @@ Page {
 
             Repeater {
                 model: [
-                    {"iconURL": "qrc:/images/home_icon.svg", "floatText": qsTr("Home Page"),             "pageID": homePage},
-                    {"iconURL": "qrc:/images/book_icon.svg", "floatText": qsTr("Review Flashcards"),     "pageID": reviewPage},
-                    {"iconURL": "qrc:/images/plus_icon.svg", "floatText": qsTr("Create New Flashcards"), "pageID": createPage}
+                    {"iconURL": "qrc:/images/home_icon.svg", "floatText": qsTr("Home Page"),             "workspaceID": homeWorkspace},
+                    {"iconURL": "qrc:/images/book_icon.svg", "floatText": qsTr("Review Flashcards"),     "workspaceID": reviewWorkspace},
+                    {"iconURL": "qrc:/images/plus_icon.svg", "floatText": qsTr("Create New Flashcards"), "workspaceID": createWorkspace}
                 ]
 
                 SideButton {
@@ -175,8 +164,8 @@ Page {
                     
                     iconURL: modelData.iconURL
                     floatText: modelData.floatText
-                    pageID: modelData.pageID
-                    currentPageID: workspaceLoader.sourceComponent
+                    workspaceID: modelData.workspaceID
+                    currentWorkspaceID: workspaceLoader.sourceComponent
 
                     height: sideBar.width
 
