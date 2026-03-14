@@ -33,6 +33,8 @@ from app.dependencies.http.requests_client import RequestsHTTPClient
 from app.core.security.access_token_provider import AccessTokenProvider
 from app.core.security.refresh_token_vault import RefreshTokenVault
 
+from app.ui.viewmodels.flashcards import FlashcardViewModel
+
 if __name__ == "__main__":
     db_connection = DBConnectionFactory.create(
         DATABASE_URL= db_settings.DATABASE_URL,
@@ -89,9 +91,15 @@ if __name__ == "__main__":
     qmlRoot = Path(__file__).resolve().parent / 'app' / 'ui' / 'qml'
     
     ui_engine.addImportPath(qmlRoot)
-    ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
+    
+    #VIEWMODELS
+    flashcard_viewmodel = FlashcardViewModel()
     
     ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
+    ui_engine.rootContext().setContextProperty("flashcardViewModel", flashcard_viewmodel)
+
+    #LOAD
+    ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
 
     if not ui_engine.rootObjects():
         print("'MainWindow.qml' was not found.")

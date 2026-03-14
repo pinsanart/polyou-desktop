@@ -17,6 +17,9 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        webchan.registerObjects({
+            "flashcardViewModel": flashcardViewModel
+        })
         webview.url = Qt.resolvedUrl("./index.html")
     }
 }
