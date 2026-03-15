@@ -27,16 +27,18 @@ from app.ui.viewmodels.auth import AuthViewModel
 
 from app.services.managers.auth_session import AuthSessionManager
 from app.services.managers.editor_state import EditorStateManager
+from app.services.managers.media import MediaManager
 
 from app.dependencies.gateways.http.auth import AuthGatewayHTTP
 from app.dependencies.http.authenticated_client import AuthenticatedHTTPClient
 from app.dependencies.http.requests_client import RequestsHTTPClient
-from app.dependencies.storage.local import LocalStorage
+from app.dependencies.storages.local import LocalStorage
 
 from app.core.security.access_token_provider import AccessTokenProvider
 from app.core.security.refresh_token_vault import RefreshTokenVault
 
 from app.ui.viewmodels.flashcards import FlashcardViewModel
+from app.ui.viewmodels.media import MediaViewModel
 from app.ui.states.editor import EditorState
 
 if __name__ == "__main__":
@@ -98,7 +100,12 @@ if __name__ == "__main__":
     
     #VIEWMODELS
     flashcard_viewmodel = FlashcardViewModel()
-    
+    media_viewmodel = MediaViewModel(
+        media_manager= MediaManager(
+            local_storage= LocalStorage(path_settings.MEDIA_PATH)
+        )
+    )
+
     #STATES
     editor_state = EditorState(
         editor_state_manager= EditorStateManager(
@@ -110,6 +117,7 @@ if __name__ == "__main__":
     #SET VIEWMODELS AND STATES
     ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
     ui_engine.rootContext().setContextProperty("flashcardViewModel", flashcard_viewmodel)
+    ui_engine.rootContext().setContextProperty("mediaViewModel", media_viewmodel)
     ui_engine.rootContext().setContextProperty("editorState", editor_state)
 
     #LOAD

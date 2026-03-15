@@ -1,4 +1,4 @@
-from app.dependencies.storage.local import LocalStorage
+from app.dependencies.storages.local import LocalStorage
 import json
 from io import BytesIO
 

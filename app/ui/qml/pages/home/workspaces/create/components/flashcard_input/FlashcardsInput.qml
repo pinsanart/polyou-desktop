@@ -23,7 +23,8 @@ Rectangle {
     Component.onCompleted: {
         webchan.registerObjects({
             "flashcardViewModel": flashcardViewModel,
-            "editorState": editorState
+            "editorState": editorState,
+            "mediaViewModel": mediaViewModel
         })
         webview.url = Qt.resolvedUrl("./index.html")
     }
