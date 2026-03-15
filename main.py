@@ -34,6 +34,7 @@ from app.core.security.access_token_provider import AccessTokenProvider
 from app.core.security.refresh_token_vault import RefreshTokenVault
 
 from app.ui.viewmodels.flashcards import FlashcardViewModel
+from app.ui.states.editor import EditorState
 
 if __name__ == "__main__":
     db_connection = DBConnectionFactory.create(
@@ -95,8 +96,13 @@ if __name__ == "__main__":
     #VIEWMODELS
     flashcard_viewmodel = FlashcardViewModel()
     
+    #STATES
+    editor_state = EditorState()
+
+    #SET VIEWMODELS AND STATES
     ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
     ui_engine.rootContext().setContextProperty("flashcardViewModel", flashcard_viewmodel)
+    ui_engine.rootContext().setContextProperty("editorState", editor_state)
 
     #LOAD
     ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
