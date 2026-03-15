@@ -4,12 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script src="scripts/viewmodels/flashcard.js"></script>
-    <script src="scripts/states/editor.js"></script>
     
     <script src="scripts/flashcard.js"></script>
+    <script src="scripts/flashcard_collection.js"></script>
+
+    <script src="scripts/states/editor.js"></script>
+    <script src="scripts/viewmodels/flashcard.js"></script>
+
+    
 </head>
 <body>    
+    <div id="editor"></div>
+
     <script>
         async function main() {
             flashcardViewModel = new FlashcardViewModel()
@@ -18,11 +24,11 @@
             editorState = new EditorState()
             await editorState.isReady()
 
-            flashcard = new Flashcard('sucess', 'sucess')
+            initialData = await editorState.getFlashcards()
 
-            data = await editorState.getFlashcards()
+            flashcardCollection = new FlashcardCollection(initialData)
 
-            await editorState.saveFlashcards(flashcard.toJSON())
+            await editorState.saveFlashcards(flashcardCollection.toJSON())
         }
 
         main()

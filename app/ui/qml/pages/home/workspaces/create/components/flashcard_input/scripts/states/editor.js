@@ -24,7 +24,7 @@ class EditorState {
             } else {
                setTimeout(tryInit, 100);
             }
-        } 
+        }
 
         tryInit()
     }

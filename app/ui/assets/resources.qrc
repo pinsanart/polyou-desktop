@@ -4,10 +4,12 @@
         <file>images/book_icon.svg</file>
         <file>images/cell_insert_below_icon.svg</file>
         <file>images/cell_insert_above_icon.svg</file>
-        <file>images/home_icon.svg</file>
         <file>images/copy_icon.svg</file>
         <file>images/plus_icon.svg</file>
         <file>images/trash_icon.svg</file>
         <file>images/arrow_up_icon.svg</file>
+        <file>images/grey_home_icon.svg</file>
+        <file>images/white_home_icon.svg</file>
+        <file>images/home_icon.svg</file>
     </qresource>
 </RCC>

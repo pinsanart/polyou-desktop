@@ -14,6 +14,10 @@ Rectangle {
 
         objectName: "webview"
         webChannel: webchan
+
+        onJavaScriptConsoleMessage: function(level, message, lineNumber, sourceID) {
+            console.log(`[JS ${level}] ${message} (${sourceID}:${lineNumber})`)
+        }
     }
 
     Component.onCompleted: {
