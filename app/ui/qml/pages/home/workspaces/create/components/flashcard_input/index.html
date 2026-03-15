@@ -18,11 +18,11 @@
             editorState = new EditorState()
             await editorState.isReady()
 
+            flashcard = new Flashcard('sucess', 'sucess')
+
             data = await editorState.getFlashcards()
 
-            editorState.saveFlashcards(
-                data
-            )
+            await editorState.saveFlashcards(flashcard.toJSON())
         }
 
         main()

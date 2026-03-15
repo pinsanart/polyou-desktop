@@ -26,9 +26,12 @@ from app.dependencies.sqlalchemy.db.factory import DBConnectionFactory
 from app.ui.viewmodels.auth import AuthViewModel
 
 from app.services.managers.auth_session import AuthSessionManager
+from app.services.managers.editor_state import EditorStateManager
+
 from app.dependencies.gateways.http.auth import AuthGatewayHTTP
 from app.dependencies.http.authenticated_client import AuthenticatedHTTPClient
 from app.dependencies.http.requests_client import RequestsHTTPClient
+from app.dependencies.storage.local import LocalStorage
 
 from app.core.security.access_token_provider import AccessTokenProvider
 from app.core.security.refresh_token_vault import RefreshTokenVault
@@ -97,7 +100,12 @@ if __name__ == "__main__":
     flashcard_viewmodel = FlashcardViewModel()
     
     #STATES
-    editor_state = EditorState()
+    editor_state = EditorState(
+        editor_state_manager= EditorStateManager(
+            local_storage= LocalStorage(path_settings.STATES_PATH),
+            filename= 'editor.json'
+        )
+    )
 
     #SET VIEWMODELS AND STATES
     ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
