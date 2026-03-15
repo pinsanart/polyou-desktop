@@ -5,17 +5,29 @@
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <script src="scripts/flashcard_viewmodel.js"></script>
+    <script src="scripts/flashcard.js"></script>
 </head>
-<body>
-    
+<body>    
     <script>
-        async function init() {
+        async function main() {
             flashcardViewModel = new FlashcardViewModel()
             await flashcardViewModel.isReady()
-            flashcardViewModel.create_one({sucess: "sucess"})            
+            
+            flashcard = new Flashcard()
+
+            flashcard.setByJSON(
+                {
+                    frontHTML: "sucess",
+                    backHTML: "sucess",
+                    imagesFilenames: ['sucess'],
+                    audiosFilenames: ["sucess"]
+                }
+            )
+            
+            flashcardViewModel.create_one(flashcard.toJSON())            
         }
 
-        init()
+        main()
     </script>
 </body>
 </html>

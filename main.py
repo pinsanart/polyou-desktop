@@ -44,7 +44,7 @@ if __name__ == "__main__":
     bootstrap = Bootstrap(
         db_connection= db_connection,
         app_path= path_settings.APP_PATH,
-        db_path= path_settings.DATABASE_PATH
+        db_file_path= path_settings.DATABASE_FILE_PATH
     )
 
     bootstrap.run()
