@@ -1,12 +1,9 @@
 class Flashcard {
     #id
-
     #frontHTML
     #backHTML
-    
     #language
     #type
-
     #audiosFilenames
     #imagesFilenames
 
@@ -63,6 +60,7 @@ class Flashcard {
 
     toJSON() {
         return {
+            id: this.#id,
             frontHTML: this.#frontHTML,
             backHTML: this.#backHTML,
             type: this.#type,
@@ -73,6 +71,7 @@ class Flashcard {
     }
 
     setByJSON(jsonData) {
+        this.#id = jsonData.id ?? crypto.randomUUID()
         this.#frontHTML = jsonData.frontHTML ?? ""
         this.#backHTML = jsonData.backHTML ?? ""
         this.#language = jsonData.language ?? ""

@@ -5,8 +5,12 @@
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     
+    <link rel="stylesheet" href="style.css">
+
     <script src="scripts/flashcard.js"></script>
     <script src="scripts/flashcard_collection.js"></script>
+    <script src="scripts/views/flashcard.js"></script>
+    <script src="scripts/views/vocabulary.js"></script>
 
     <script src="scripts/states/editor.js"></script>
     <script src="scripts/viewmodels/flashcard.js"></script>
@@ -24,6 +28,7 @@
 
     <script>
         async function main() {
+            /*
             flashcardViewModel = new FlashcardViewModel()
             await flashcardViewModel.isReady()
 
@@ -35,6 +40,15 @@
             flashcardCollection = new FlashcardCollection(initialData)
 
             await editorState.saveFlashcards(flashcardCollection.toJSON())
+            */
+            
+            flashcard = new Flashcard()
+            flashcard.frontHTML = 'front'
+            flashcard.backHTML = 'back'
+
+            vocabularyView = new VocabularyView(flashcard.toJSON())
+
+            document.getElementById('editor').appendChild(vocabularyView.create())
         }
 
         main()

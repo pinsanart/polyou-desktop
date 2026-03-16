@@ -1,0 +1,3 @@
+class PronounceView extends FlashcardView {
+
+}
