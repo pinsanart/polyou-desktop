@@ -5,7 +5,8 @@ class VocabularyView extends FlashcardView {
 
     static Events = {
         FIELD_CHANGE: 'fieldChange',
-        MEDIA_ADD: 'mediaAdd'
+        MEDIA_ADD: 'mediaAdd',
+        MEDIA_REMOVE: 'mediaRemove'
     }
 
     #dispatchFieldChange(side, html) {
@@ -109,7 +110,6 @@ class VocabularyView extends FlashcardView {
         inputImage.classList.add('input-image')
         inputImage.type = 'file'
         inputImage.accept = 'image/*'
-        inputImage.multiple = true
 
         imageRow.appendChild(inputImage)
 
@@ -119,6 +119,34 @@ class VocabularyView extends FlashcardView {
         const imagesPreviewLabel = document.createElement('span')
         imagesPreviewLabel.classList.add('images-preview-label')
         imagesPreviewLabel.textContent = 'preview'
+
+        inputImage.addEventListener('change', () => {
+            const files = Array.from(inputImage.files)
+
+            files.forEach((file) => {
+                const url = URL.createObjectURL(file) 
+
+                const wrapper = document.createElement('div')
+                wrapper.classList.add('image-wrapper')
+
+                const image = document.createElement('img')
+                image.classList.add('image-preview')
+                image.src = url
+
+                const button = document.createElement('button')
+                button.classList.add('remove-image-button')
+                button.text = 'X'
+
+                wrapper.appendChild(button)
+                wrapper.appendChild(image)
+
+                button.addEventListener('click', () => {
+                    wrapper.remove()
+                })
+
+                imagesPreview.appendChild(wrapper)
+            })
+        })
 
         imagesPreview.appendChild(imagesPreviewLabel)
         imageRow.appendChild(imagesPreview)
@@ -140,7 +168,6 @@ class VocabularyView extends FlashcardView {
         inputAudio.classList.add('input-audio')
         inputAudio.type = 'file'
         inputAudio.accept = 'audio/*'
-        inputAudio.multiple = true
 
         audioRow.appendChild(inputAudio)
 
@@ -150,6 +177,35 @@ class VocabularyView extends FlashcardView {
         const audiosPreviewLabel = document.createElement('span')
         audiosPreviewLabel.classList.add('audios-preview-label')
         audiosPreviewLabel.textContent = 'preview'
+
+        inputAudio.addEventListener('change', () => {
+            const files = Array.from(inputAudio.files)
+
+            files.forEach((file) => {
+                const url = URL.createObjectURL(file) 
+
+                const wrapper = document.createElement('div')
+                wrapper.classList.add('audio-wrapper')
+
+                const audio = document.createElement('audio')
+                audio.classList.add('audio-preview')
+                audio.src = url
+                audio.controls = true
+
+                const button = document.createElement('button')
+                button.classList.add('remove-audio-button')
+                button.innerHTML = 'X'
+
+                wrapper.appendChild(button)
+                wrapper.appendChild(audio)
+
+                button.addEventListener('click', () => {
+                    wrapper.remove()
+                })
+
+                audiosPreview.appendChild(wrapper)
+            })
+        })
 
         audiosPreview.appendChild(audiosPreviewLabel)
         audioRow.appendChild(audiosPreview)

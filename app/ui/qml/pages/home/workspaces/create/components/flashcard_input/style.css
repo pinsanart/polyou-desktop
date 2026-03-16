@@ -1,110 +1,273 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+/* ─────────────────────────────────────────
+   Vocabulary View — Minimalist CSS
+   Typography: DM Sans (labels) + DM Mono (html area)
+───────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Card principal */
+:root {
+  --bg:           #f9f9f8;
+  --surface:      #ffffff;
+  --border:       #e4e4e0;
+  --border-focus: #b0b0a8;
+  --text:         #1a1a18;
+  --text-muted:   #8a8a84;
+  --accent:       #2d2d2a;
+  --remove:       #c0392b;
+  --remove-hover: #e74c3c;
+  --radius:       6px;
+  --font-sans:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --transition:   140ms ease;
+}
+
+/* ── Card editor wrapper ── */
 .card-editor {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    max-width: 700px;
-    margin: 20px auto;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
-/* Corpo */
+/* ── Card body: stack front/back ── */
 .card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 680px;
 }
 
-/* Linha de campo */
+/* ── Field row ── */
 .field-row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-/* Header */
+.field-row:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(45, 45, 42, 0.06);
+}
+
+/* ── Field header ── */
 .field-header {
-    display: flex;
-    align-items: center;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
 }
 
 .field-label {
-    font-weight: bold;
-    font-size: 14px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-/* Editor + HTML */
+/* ── Field modes (editor + html area) ── */
 .field-modes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Área visual */
+/* Rich text editor */
 .editor-area {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    min-height: 120px;
-    padding: 8px;
-    background: white;
-    overflow: auto;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--text);
+  padding: 0.9rem 1rem;
+  min-height: 80px;
+  outline: none;
+  border-bottom: 1px dashed var(--border);
 }
 
-/* Área HTML */
+.editor-area:empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Raw HTML textarea */
 .html-area {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    min-height: 120px;
-    padding: 8px;
-    font-family: monospace;
-    resize: vertical;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  background: #fafaf9;
+  border: none;
+  outline: none;
+  resize: vertical;
+  padding: 0.75rem 1rem;
+  min-height: 56px;
+  width: 100%;
+  transition: color var(--transition);
 }
 
-/* Media */
+.html-area:focus {
+  color: var(--text);
+  background: var(--surface);
+}
+
+/* ── Field media ── */
 .field-media {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-/* Image / Audio rows */
+/* ── Image row & Audio row shared styles ── */
 .image-row,
 .audio-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.image-row {
+  border-bottom: 1px solid var(--border);
 }
 
 .image-label,
 .audio-label {
-    width: 60px;
-    font-size: 13px;
-    color: #444;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-/* Inputs */
+/* File inputs */
 .input-image,
 .input-audio {
-    flex: 1;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  width: fit-content;
 }
 
-/* Preview containers */
+.input-image::file-selector-button,
+.input-audio::file-selector-button {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.3rem 0.75rem;
+  margin-right: 0.6rem;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.input-image::file-selector-button:hover,
+.input-audio::file-selector-button:hover {
+  background: var(--border);
+  border-color: var(--border-focus);
+}
+
+/* ── Preview areas ── */
 .images-preview,
 .audios-preview {
-    border: 1px dashed #ccc;
-    border-radius: 6px;
-    padding: 6px;
-    min-width: 120px;
-    min-height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
 }
 
 .images-preview-label,
 .audios-preview-label {
-    font-size: 12px;
-    color: #777;
+  display: none; /* hide redundant label when items exist; kept in DOM */
+}
+
+/* Image wrapper */
+.image-wrapper {
+  position: relative;
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.image-preview {
+  display: block;
+  max-width: 120px;
+  max-height: 90px;
+  object-fit: cover;
+}
+
+/* Audio wrapper */
+.audio-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+}
+
+.audio-preview {
+  height: 28px;
+  width: 200px;
+}
+
+/* ── Remove buttons ── */
+.remove-image-button,
+.remove-audio-button {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.85);
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition);
+  padding: 0;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+}
+
+.remove-image-button:hover,
+.remove-audio-button:hover {
+  color: var(--remove-hover);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .card-editor {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .audio-preview {
+    width: 140px;
+  }
 }
