@@ -31,7 +31,7 @@ class EditorState {
 
     async saveFlashcards(data) {
         const editorState = await this.#ready
-        editorState.saveFlashcards(data) 
+        return await editorState.saveFlashcards(data)
     }
 
     async getFlashcards() {

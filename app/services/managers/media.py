@@ -10,7 +10,18 @@ class MediaManager:
         self._local_storage = local_storage
     
     def save(self, base64_data: str, mime_type: str) -> str:
+        if not base64_data:
+            raise ValueError("base64_data is empty.")
+
+        if "," in base64_data:
+            header, base64_data = base64_data.split(",", 1)
+
+        missing_padding = len(base64_data) % 4
+        if missing_padding:
+            base64_data += "=" * (4 - missing_padding)
+
         raw = base64.b64decode(base64_data)
+
         stream = io.BytesIO(raw)
 
         ext = mimetypes.guess_extension(mime_type) or '.bin'

@@ -7,7 +7,7 @@
     
     <link rel="stylesheet" href="style.css">
 
-    <script src="scripts/flashcard.js"></script>
+    <script src="scripts/shemas/flashcard.js"></script>
     <script src="scripts/flashcard_collection.js"></script>
     <script src="scripts/views/flashcard.js"></script>
     <script src="scripts/views/vocabulary.js"></script>
@@ -15,40 +15,48 @@
     <script src="scripts/states/editor.js"></script>
     <script src="scripts/viewmodels/flashcard.js"></script>
     <script src="scripts/viewmodels/media.js"></script>
-</head>
-<body>    
-    <div id="editor">
-        <div id = 'add-bar'>
-            <button>Stack</button>
-            <button>Vocabulary</button>
-            <button>Pronounce</button>
-            <button>Ortographic</button>
-        </div>
-    </div>
 
+    <script src="scripts/services/media.js"></script>
+</head>
+<body>
+    <div id = 'editor'></div>
     <script>
         async function main() {
-            /*
             flashcardViewModel = new FlashcardViewModel()
             await flashcardViewModel.isReady()
-
+            
             editorState = new EditorState()
             await editorState.isReady()
-
+            
             initialData = await editorState.getFlashcards()
-
+            
             flashcardCollection = new FlashcardCollection(initialData)
-
+            
             await editorState.saveFlashcards(flashcardCollection.toJSON())
-            */
             
             flashcard = new Flashcard()
             flashcard.frontHTML = 'front'
             flashcard.backHTML = 'back'
+            flashcard.addImage('certificado.png')
 
-            vocabularyView = new VocabularyView(flashcard.toJSON())
+            mediaViewmodel = new MediaViewModel()
+            mediaService = new MediaService(mediaViewmodel)
 
+            await mediaViewmodel.isReady()
+            
+            const medias = await Promise.all(
+                flashcard.imagesFilenames.map(async (filename) => ({
+                    id: crypto.randomUUID(),
+                    filename,
+                    url: await mediaService.getMediaURL(filename)
+                }))
+            )
+            
+            vocabularyView = new VocabularyView(flashcard.toJSON(), medias)
+            
             document.getElementById('editor').appendChild(vocabularyView.create())
+            /*
+            */
         }
 
         main()

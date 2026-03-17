@@ -3,18 +3,6 @@ class VocabularyView extends FlashcardView {
         super(flashcardInitialData)
     }
 
-    static Events = {
-        FIELD_CHANGE: 'fieldChange',
-        MEDIA_ADD: 'mediaAdd',
-        MEDIA_REMOVE: 'mediaRemove'
-    }
-
-    #dispatchFieldChange(side, html) {
-        this.dispatchEvent(new CustomEvent(VocabularyView.Events.FIELD_CHANGE, {
-            detail: { id: this.initialData.id, side, html }
-        }))
-    }
-
     create(frontLabel = 'Front', backLabel = 'Back') {
         const cardEditor = document.createElement('div')
         cardEditor.classList.add('card-editor')
@@ -72,13 +60,13 @@ class VocabularyView extends FlashcardView {
 
         editor.addEventListener('input', () => {
             HTMLArea.value = editor.innerHTML
-            this.#dispatchFieldChange(side, editor.innerHTML)
+            this.dispatchFieldChange(side, editor.innerHTML)
         })
 
 
         HTMLArea.addEventListener('input', () => {
             editor.innerHTML = HTMLArea.value
-            this.#dispatchFieldChange(side, HTMLArea.value)
+            this.dispatchFieldChange(side, HTMLArea.value)
         })
 
         fieldMode.appendChild(HTMLArea)
@@ -90,126 +78,69 @@ class VocabularyView extends FlashcardView {
         const fieldMedia = document.createElement('div')
         fieldMedia.classList.add('field-media')
 
-        fieldMedia.appendChild(this.#createFieldMediaImage())
-        fieldMedia.appendChild(this.#createFieldMediaAudio())
+        fieldMedia.appendChild(this.#createMediaRow('image', 'image/*'))
+        fieldMedia.appendChild(this.#createMediaRow('audio', 'audio/*'))
 
         return fieldMedia
     }
 
-    #createFieldMediaImage() {
-        const imageRow = document.createElement('div')
-        imageRow.classList.add('image-row')
+    #createMediaRow(type, accept) {
+        const row = document.createElement('div')
+        row.classList.add(`${type}-row`)
 
-        const imageLabel = document.createElement('span')
-        imageLabel.classList.add('image-label')
-        imageLabel.textContent = 'images'
+        const label = document.createElement('span')
+        label.classList.add(`${type}-label`)
+        label.textContent = `${type}s`
 
-        imageRow.appendChild(imageLabel)
+        row.appendChild(label)
+        const input = document.createElement('input')
+        input.classList.add(`input-${type}`)
+        input.type = 'file'
+        input.accept = accept
 
-        const inputImage = document.createElement('input')
-        inputImage.classList.add('input-image')
-        inputImage.type = 'file'
-        inputImage.accept = 'image/*'
+        const preview = document.createElement('div')
+        preview.classList.add(`${type}s-preview`)
 
-        imageRow.appendChild(inputImage)
+        const previewLabel = document.createElement('span')
+        previewLabel.classList.add(`${type}s-preview-label`)
+        previewLabel.textContent = 'preview'
+        preview.appendChild(previewLabel)
 
-        const imagesPreview = document.createElement('div')
-        imagesPreview.classList.add('images-preview')
-
-        const imagesPreviewLabel = document.createElement('span')
-        imagesPreviewLabel.classList.add('images-preview-label')
-        imagesPreviewLabel.textContent = 'preview'
-
-        inputImage.addEventListener('change', () => {
-            const files = Array.from(inputImage.files)
-
-            files.forEach((file) => {
-                const url = URL.createObjectURL(file) 
-
-                const wrapper = document.createElement('div')
-                wrapper.classList.add('image-wrapper')
-
-                const image = document.createElement('img')
-                image.classList.add('image-preview')
-                image.src = url
-
-                const button = document.createElement('button')
-                button.classList.add('remove-image-button')
-                button.text = 'X'
-
-                wrapper.appendChild(button)
-                wrapper.appendChild(image)
-
-                button.addEventListener('click', () => {
-                    wrapper.remove()
-                })
-
-                imagesPreview.appendChild(wrapper)
+        input.addEventListener('change', () => {
+            Array.from(input.files).forEach((file) => {
+                preview.appendChild(this.#createPreviewItem(type, file))
             })
         })
 
-        imagesPreview.appendChild(imagesPreviewLabel)
-        imageRow.appendChild(imagesPreview)
-        
-        return imageRow
+        row.appendChild(input)
+        row.appendChild(preview)
+
+        return row
     }
 
-    #createFieldMediaAudio() {
-        const audioRow = document.createElement('div')
-        audioRow.classList.add('audio-row')
+    #createPreviewItem(type, file) {
+        const mediaId = crypto.randomUUID()
 
-        const audioLabel = document.createElement('span')
-        audioLabel.classList.add('audio-label')
-        audioLabel.textContent = 'audios'
+        const url = URL.createObjectURL(file)
+        const tag = type === 'image' ? 'img' : type
 
-        audioRow.appendChild(audioLabel)
+        const wrapper = document.createElement('div')
+        wrapper.classList.add(`${type}-wrapper`)
+        wrapper.dataset.mediaId = mediaId
 
-        const inputAudio = document.createElement('input')
-        inputAudio.classList.add('input-audio')
-        inputAudio.type = 'file'
-        inputAudio.accept = 'audio/*'
+        const media = document.createElement(tag)
+        media.classList.add(`${type}-preview`)
+        media.src = url
+        if (type === 'audio') media.controls = true
 
-        audioRow.appendChild(inputAudio)
+        const button = document.createElement('button')
+        button.classList.add(`remove-${type}-button`)
+        button.innerHTML = 'X'
+        button.addEventListener('click', () => wrapper.remove())
+    
+        wrapper.appendChild(button)
+        wrapper.appendChild(media)
 
-        const audiosPreview = document.createElement('div')
-        audiosPreview.classList.add('audios-preview')
-
-        const audiosPreviewLabel = document.createElement('span')
-        audiosPreviewLabel.classList.add('audios-preview-label')
-        audiosPreviewLabel.textContent = 'preview'
-
-        inputAudio.addEventListener('change', () => {
-            const files = Array.from(inputAudio.files)
-
-            files.forEach((file) => {
-                const url = URL.createObjectURL(file) 
-
-                const wrapper = document.createElement('div')
-                wrapper.classList.add('audio-wrapper')
-
-                const audio = document.createElement('audio')
-                audio.classList.add('audio-preview')
-                audio.src = url
-                audio.controls = true
-
-                const button = document.createElement('button')
-                button.classList.add('remove-audio-button')
-                button.innerHTML = 'X'
-
-                wrapper.appendChild(button)
-                wrapper.appendChild(audio)
-
-                button.addEventListener('click', () => {
-                    wrapper.remove()
-                })
-
-                audiosPreview.appendChild(wrapper)
-            })
-        })
-
-        audiosPreview.appendChild(audiosPreviewLabel)
-        audioRow.appendChild(audiosPreview)
-
-        return audioRow
+        return wrapper
     }
 }
