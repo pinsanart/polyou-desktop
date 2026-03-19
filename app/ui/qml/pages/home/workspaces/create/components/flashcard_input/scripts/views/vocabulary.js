@@ -1,4 +1,5 @@
 class VocabularyView extends FlashcardView {
+    #flashcardId
     #initialFrontHTML
     #initialBackHTML
     #initialFrontImagesMedia
@@ -34,8 +35,9 @@ class VocabularyView extends FlashcardView {
         }
     }
 
-    constructor(initialFrontHTML = '', initialBackHTML = '', initialFrontImagesMedia = [], initialFrontAudiosMedia = [], initialBackImagesMedia = [], initialBackAudiosMedia = []) {
+    constructor(flashcardId, initialFrontHTML = '', initialBackHTML = '', initialFrontImagesMedia = [], initialFrontAudiosMedia = [], initialBackImagesMedia = [], initialBackAudiosMedia = []) {
         super()
+        this.#flashcardId = flashcardId
         this.#initialFrontHTML = initialFrontHTML
         this.#initialBackHTML = initialBackHTML
         this.#initialFrontImagesMedia = initialFrontImagesMedia
@@ -141,13 +143,14 @@ class VocabularyView extends FlashcardView {
 
         for (const initialMedium of media.value) {
             const url = initialMedium.url
-            preview.appendChild(this.#createPreviewItem(media.type, url))
+            preview.appendChild(this.#createPreviewItem(media.type, url, initialMedium.mediaId))
         }
 
         input.addEventListener('change', () => {
             Array.from(input.files).forEach((file) => {
+                const mediaId = crypto.randomUUID()
                 const url = URL.createObjectURL(file)
-                preview.appendChild(this.#createPreviewItem(media.type, url))
+                preview.appendChild(this.#createPreviewItem(media.type, url, mediaId))
             })
         })
 
@@ -157,8 +160,7 @@ class VocabularyView extends FlashcardView {
         return row
     }
 
-    #createPreviewItem(mediaType, url) {
-        const mediaId = crypto.randomUUID()
+    #createPreviewItem(mediaType, url, mediaId) {
         const tag = mediaType.HTMLTag
 
         const wrapper = document.createElement('div')

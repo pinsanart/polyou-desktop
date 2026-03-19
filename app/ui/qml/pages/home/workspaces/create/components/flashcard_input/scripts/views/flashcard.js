@@ -9,6 +9,10 @@ class FlashcardView extends EventTarget {
         super()
     }
 
+    create() {
+        throw new Error('create() must be implemented by subclass')
+    }
+
     dispatchFieldChange(fieldName, html) {
         this.dispatchEvent(new CustomEvent(FlashcardView.Events.FIELD_CHANGE, {
             detail: { flashcardId: this.initialData.id, fieldName, html }

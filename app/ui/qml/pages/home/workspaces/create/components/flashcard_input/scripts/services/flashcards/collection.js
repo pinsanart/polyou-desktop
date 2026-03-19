@@ -1,5 +1,4 @@
-class FlashcardCollection {
-
+class FlashcardCollectionService {
     #flashcards = []
     #flashcardsById = new Map()
 

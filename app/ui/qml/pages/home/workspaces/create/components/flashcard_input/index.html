@@ -8,32 +8,21 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="scripts/shemas/flashcard.js"></script>
-    <script src="scripts/flashcard_collection.js"></script>
     <script src="scripts/views/flashcard.js"></script>
     <script src="scripts/views/vocabulary.js"></script>
-
+    <script src="scripts/views/controls.js"></script>
+    
     <script src="scripts/states/editor.js"></script>
     <script src="scripts/viewmodels/flashcard.js"></script>
     <script src="scripts/viewmodels/media.js"></script>
-
-    <script src="scripts/services/media.js"></script>
+    
+    <script src="scripts/services/media/media.js"></script>
+    <script src="scripts/services/flashcards/collection.js"></script>
 </head>
 <body>
     <div id = 'editor'></div>
     <script>
-        async function main() {
-            flashcardViewModel = new FlashcardViewModel()
-            await flashcardViewModel.isReady()
-            
-            editorState = new EditorState()
-            await editorState.isReady()
-            
-            initialData = await editorState.getFlashcards()
-            
-            flashcardCollection = new FlashcardCollection(initialData)
-            
-            await editorState.saveFlashcards(flashcardCollection.toJSON())
-            
+        async function main() {           
             flashcard = new Flashcard()
             flashcard.frontHTML = 'front'
             flashcard.backHTML = 'back'
@@ -62,13 +51,14 @@
             )
             
             vocabularyView = new VocabularyView(
+                crypto.randomUUID(),
                 "front_test",
                 "back_test",
                 initialFrontImages,
                 initialFrontAudios
             )
             
-            document.getElementById('editor').appendChild(vocabularyView.create())
+            document.getElementById('editor').appendChild(FlaschardViewControls.create(vocabularyView))
         }
 
         main()
