@@ -37,26 +37,38 @@
             flashcard = new Flashcard()
             flashcard.frontHTML = 'front'
             flashcard.backHTML = 'back'
-            flashcard.addImage('certificado.png')
+            flashcard.addFrontImage('certificado.png')
+            flashcard.addFrontAudio('WhatsApp Audio 2026-03-06 at 21.54.43.ogg')
 
             mediaViewmodel = new MediaViewModel()
             mediaService = new MediaService(mediaViewmodel)
 
             await mediaViewmodel.isReady()
             
-            const medias = await Promise.all(
-                flashcard.imagesFilenames.map(async (filename) => ({
-                    id: crypto.randomUUID(),
+            const initialFrontImages = await Promise.all(
+                flashcard.frontImagesFilenames.map(async (filename) => ({
+                    mediaId: crypto.randomUUID(),
+                    filename,
+                    url: await mediaService.getMediaURL(filename)
+                }))
+            )
+
+            const initialFrontAudios = await Promise.all(
+                flashcard.frontAudiosFilenames.map(async (filename) => ({
+                    mediaId: crypto.randomUUID(),
                     filename,
                     url: await mediaService.getMediaURL(filename)
                 }))
             )
             
-            vocabularyView = new VocabularyView(flashcard.toJSON(), medias)
+            vocabularyView = new VocabularyView(
+                "front_test",
+                "back_test",
+                initialFrontImages,
+                initialFrontAudios
+            )
             
             document.getElementById('editor').appendChild(vocabularyView.create())
-            /*
-            */
         }
 
         main()

@@ -4,16 +4,23 @@ class Flashcard {
     #backHTML
     #language
     #type
-    #audiosFilenames
-    #imagesFilenames
+
+    #frontAudiosFilenames
+    #frontImagesFilenames
+
+    #backAudiosFilenames
+    #backImagesFilenames
 
     constructor(
         frontHTML = '',
         backHTML = '',
         language = '',
         type = '',
-        audiosFilenames = [],
-        imagesFilenames = []
+        frontImagesFilenames = [],
+        frontAudiosFilenames = [],
+        backImagesFilenames = [],
+        backAudiosFilenames = []
+
     ) {
         this.#id = crypto.randomUUID()
 
@@ -22,8 +29,10 @@ class Flashcard {
         this.#language = language
         this.#type = type
 
-        this.#audiosFilenames = [...audiosFilenames]
-        this.#imagesFilenames = [...imagesFilenames]
+        this.#frontImagesFilenames = [...frontImagesFilenames]
+        this.#frontAudiosFilenames = [...frontAudiosFilenames]
+        this.#backAudiosFilenames = [...backAudiosFilenames]
+        this.#backImagesFilenames = [...backImagesFilenames]
     }
 
     get id() { return this.#id }
@@ -32,30 +41,50 @@ class Flashcard {
     get language() { return this.#language }
     get type() { return this.#type }
 
-    get audioFilenames() { return [...this.#audiosFilenames] }
-    get imagesFilenames() { return [...this.#imagesFilenames] }
+    get frontImagesFilenames() { return [...this.#frontImagesFilenames] }
+    get frontAudiosFilenames() { return [...this.#frontAudiosFilenames] }
+    get backAudiosFilenames() { return [...this.#backAudiosFilenames] }
+    get backImagesFilenames() { return [...this.#backImagesFilenames] }
 
     set frontHTML(value) { this.#frontHTML = value }
     set backHTML(value) { this.#backHTML = value }
     set language(value) { this.#language = value }
     set type(value) { this.#type = value }
 
-    addImage(filename) {
-        this.#imagesFilenames.push(filename)
+    addFrontImage(filename) {
+        this.#frontImagesFilenames.push(filename)
     }
 
-    addAudio(filename) {
-        this.#audiosFilenames.push(filename)
+    addFrontAudio(filename) {
+        this.#frontAudiosFilenames.push(filename)
     }
 
-    removeImage(filename) {
-        this.#imagesFilenames =
-            this.#imagesFilenames.filter(f => f !== filename)
+    removeFrontImage(filename) {
+        this.#frontImagesFilenames =
+            this.#frontImagesFilenames.filter(f => f !== filename)
     }
 
-    removeAudio(filename) {
-        this.#audiosFilenames =
-            this.#audiosFilenames.filter(f => f !== filename)
+    removeFrontAudio(filename) {
+        this.#frontAudiosFilenames =
+            this.#frontAudiosFilenames.filter(f => f !== filename)
+    }
+
+    addBackImage(filename) {
+        this.#backImagesFilenames.push(filename)
+    }
+
+    addBackAudio(filename) {
+        this.#backAudiosFilenames.push(filename)
+    }
+
+    removeBackImage(filename) {
+        this.#backImagesFilenames =
+            this.#backImagesFilenames.filter(f => f !== filename)
+    }
+
+    removeBackAudio(filename) {
+        this.#backAudiosFilenames =
+            this.#backAudiosFilenames.filter(f => f !== filename)
     }
 
     toJSON() {
@@ -65,8 +94,11 @@ class Flashcard {
             backHTML: this.#backHTML,
             type: this.#type,
             language: this.#language,
-            imagesFilenames: [...this.#imagesFilenames],
-            audiosFilenames: [...this.#audiosFilenames]
+            
+            frontImagesFilenames: [...this.#frontImagesFilenames],
+            frontAudiosFilenames: [...this.#frontAudiosFilenames],
+            backImagesFilenames: [...this.#backImagesFilenames],
+            backAudiosFilenames: [...this.#backAudiosFilenames]
         }
     }
 
@@ -76,7 +108,10 @@ class Flashcard {
         this.#backHTML = jsonData.backHTML ?? ""
         this.#language = jsonData.language ?? ""
         this.#type = jsonData.type ?? ""
-        this.#imagesFilenames = [...(jsonData.imagesFilenames ?? [])]
-        this.#audiosFilenames = [...(jsonData.audiosFilenames ?? [])]
+
+        this.#frontImagesFilenames = [...(jsonData.frontImagesFilenames ?? [])]
+        this.#frontAudiosFilenames = [...(jsonData.frontAudiosFilenames ?? [])]
+        this.#backImagesFilenames = [...(jsonData.backImagesFilenames ?? [])]
+        this.#backAudiosFilenames = [...(jsonData.backAudiosFilenames ?? [])]
     }
 }
