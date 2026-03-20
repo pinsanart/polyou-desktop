@@ -13,6 +13,20 @@ class FlashcardView extends EventTarget {
         DELETE: 'delete'
     }
 
+    static FieldNames = {
+        FRONT: "front",
+        BACK: "back"
+    }
+
+    static MediaTypes = {
+        IMAGE: { name: "image", HTMLTag: "img" },
+        AUDIO: { name: "audio", HTMLTag: "audio"}
+    }
+
+    constructor() {
+        super()
+    }
+
     dispatchFieldChange({flashcardId, field, html}) {
         this.dispatchEvent(new CustomEvent(FlashcardView.Events.FIELD_CHANGE, {
             detail: {
@@ -21,10 +35,68 @@ class FlashcardView extends EventTarget {
         }))
     }
 
-    constructor() {
-        super()
+    dispatchMediaAdd({flashcardId, mediaId, field, type, file}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.MEDIA_ADD, {
+            detail: {
+                flashcardId, mediaId, field, type, file
+            }
+        }))    
     }
 
+    dispatchMediaRemove({flashcardId, mediaId, field, type}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.MEDIA_REMOVE, {
+            detail: { flashcardId, mediaId, field, type }
+        }))
+    }
+
+    dispatchCopy({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.COPY, {
+            detail: {
+                flashcardId
+            }
+        }))
+    }
+
+    dispatchMoveUp({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.MOVE_UP), {
+            detail: {
+                flashcardId
+            }
+        })
+    }
+
+    dispatchMoveDown({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.MOVE_DOWN), {
+            detail: {
+                flashcardId
+            }
+        })
+    }
+
+    dispatchAddUp({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.ADD_UP), {
+            detail: {
+                flashcardId
+            }
+        })
+    }
+
+    dispatchAddDown({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.ADD_DOWN), {
+            detail: {
+                flashcardId
+            }
+        })
+    }
+    
+    dispatchDelete({flashcardId}) {
+        this.dispatchEvent(new CustomEvent(FlashcardView.Events.DELETE), {
+            detail: {
+                flashcardId
+            }
+        })
+    }
+ 
     create() {
         throw new Error('create() must be implemented by subclass')
     }

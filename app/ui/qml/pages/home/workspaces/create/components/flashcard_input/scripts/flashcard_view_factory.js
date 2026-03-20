@@ -6,22 +6,11 @@ class FlashcardViewFactory {
     }
 
     async #resolveMedia(filenames) {
-        return Promise.all(
-            filenames.map(async (filename) => ({
-                mediaId: crypto.randomUUID(),
-                filename,
-                url: await this.#mediaService.getMediaURL(filename)
-            }))
-        )
+        return Promise.all(filenames.map(filename => this.#mediaService.registerExisting(filename)))
     }
 
     async #buildMediaArgs(flashcard) {
-        const [
-            frontImages,
-            frontAudios,
-            backImages,
-            backAudios
-        ] = await Promise.all([
+        const [frontImages, frontAudios, backImages, backAudios] = await Promise.all([
             this.#resolveMedia(flashcard.frontImagesFilenames),
             this.#resolveMedia(flashcard.frontAudiosFilenames),
             this.#resolveMedia(flashcard.backImagesFilenames),
@@ -33,7 +22,7 @@ class FlashcardViewFactory {
 
     #builders = {
         vocabulary: async (flashcard) => {
-            const {frontImages, frontAudios, backImages, backAudios } = 
+            const { frontImages, frontAudios, backImages, backAudios } =
                 await this.#buildMediaArgs(flashcard)
 
             return new VocabularyView(
@@ -50,11 +39,7 @@ class FlashcardViewFactory {
 
     async create(flashcard) {
         const builder = this.#builders[flashcard.type]
-
-        if (!builder) {
-            throw new Error(`Unknown flashcard type: "${flashcard.type}"`)
-        }
-
+        if (!builder) throw new Error(`Unknown flashcard type: "${flashcard.type}"`)
         return builder(flashcard)
     }
 }

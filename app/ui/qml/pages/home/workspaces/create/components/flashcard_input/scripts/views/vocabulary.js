@@ -7,25 +7,20 @@ class VocabularyView extends FlashcardView {
     #initialBackImagesMedia
     #initialBackAudiosMedia
 
-    static MediaTypes = {
-        IMAGE: { name: "image", HTMLTag: "img" },
-        AUDIO: { name: "audio", HTMLTag: "audio"}
-    }
-
     static Fields = {
         FRONT: {
-            name: "front",
+            name: FlashcardView.FieldNames.FRONT,
             label: "Front",
             getHTML: (ctx) => ctx.#initialFrontHTML,
-            getImageMedia: (ctx) => ({type: VocabularyView.MediaTypes.IMAGE, value: ctx.#initialFrontImagesMedia}),
-            getAudioMedia: (ctx) => ({type: VocabularyView.MediaTypes.AUDIO, value: ctx.#initialFrontAudiosMedia})
+            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialFrontImagesMedia}),
+            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialFrontAudiosMedia})
         },
         BACK: {
-            name: "back", 
+            name: FlashcardView.FieldNames.BACK, 
             label: "Back",
             getHTML: (ctx) => ctx.#initialBackHTML,
-            getImageMedia: (ctx) => ({type: VocabularyView.MediaTypes.IMAGE, value: ctx.#initialBackImagesMedia}),
-            getAudioMedia: (ctx) => ({type: VocabularyView.MediaTypes.AUDIO, value: ctx.#initialBackAudiosMedia})
+            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialBackImagesMedia}),
+            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialBackAudiosMedia})
         }
     }
 
@@ -135,13 +130,13 @@ class VocabularyView extends FlashcardView {
         const fieldMedia = document.createElement('div')
         fieldMedia.classList.add('field-media')
 
-        fieldMedia.appendChild(this.#createMediaRow(field.getImageMedia(this)))
-        fieldMedia.appendChild(this.#createMediaRow(field.getAudioMedia(this)))
+        fieldMedia.appendChild(this.#createMediaRow(field.name, field.getImageMedia(this)))
+        fieldMedia.appendChild(this.#createMediaRow(field.name, field.getAudioMedia(this)))
 
         return fieldMedia
     }
 
-    #createMediaRow(media) {
+    #createMediaRow(fieldName, media) {
         const row = document.createElement('div')
         row.classList.add(`${media.type.name}-row`)
 
@@ -159,15 +154,17 @@ class VocabularyView extends FlashcardView {
         preview.classList.add(`${media.type.name}s-preview`)
 
         for (const initialMedium of media.value) {
-            const url = initialMedium.url
-            preview.appendChild(this.#createPreviewItem(media.type, url, initialMedium.mediaId))
+            const dataURL = initialMedium.dataURL
+            preview.appendChild(this.#createPreviewItem(media.type, dataURL, initialMedium.mediaId, fieldName))
         }
 
         input.addEventListener('change', () => {
             Array.from(input.files).forEach((file) => {
                 const mediaId = crypto.randomUUID()
-                const url = URL.createObjectURL(file)
-                preview.appendChild(this.#createPreviewItem(media.type, url, mediaId))
+                const dataURL = URL.createObjectURL(file)
+                preview.appendChild(this.#createPreviewItem(media.type, dataURL, mediaId, fieldName))
+
+                this.dispatchMediaAdd({ flashcardId: this.#flashcardId, mediaId, field: fieldName, type: media.type, file })
             })
         })
 
@@ -177,7 +174,7 @@ class VocabularyView extends FlashcardView {
         return row
     }
 
-    #createPreviewItem(mediaType, url, mediaId) {
+    #createPreviewItem(mediaType, dataURL, mediaId, fieldName) {
         const tag = mediaType.HTMLTag
 
         const wrapper = document.createElement('div')
@@ -186,13 +183,22 @@ class VocabularyView extends FlashcardView {
 
         const media = document.createElement(tag)
         media.classList.add(`${mediaType.name}-preview`)
-        media.src = url
+        media.src = dataURL
         if (tag === 'audio') media.controls = true
 
         const button = document.createElement('button')
         button.classList.add(`remove-${mediaType.name}-button`)
         button.innerHTML = 'X'
-        button.addEventListener('click', () => wrapper.remove())
+        
+        button.addEventListener('click', () => {
+            wrapper.remove()
+            this.dispatchMediaRemove({
+                flashcardId: this.#flashcardId,
+                mediaId: mediaId,
+                field: fieldName,
+                type: mediaType
+            })
+        })
     
         wrapper.appendChild(button)
         wrapper.appendChild(media)

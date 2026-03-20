@@ -41,3 +41,10 @@ class MediaManager:
         mime_type = mime_type or "application/octet-stream"
 
         return f"data:{mime_type};base64,{b64}"
+
+    def delete(self, filename: str) -> bool:
+        try:
+            self._local_storage.delete(filename)
+            return True
+        except:
+            return False

@@ -33,6 +33,15 @@ class MediaViewModel {
         })
     }
 
+    async delete(filename) {
+        const mediaViewModel = await this.#ready
+        return new Promise((resolve) => {
+            mediaViewModel.get(filename, (result) => {
+                resolve(result)
+            })
+        })
+    }
+
     async isReady() {
         return this.#ready
     }

@@ -15,3 +15,7 @@ class MediaViewModel(QObject):
     @Slot(str, result=str)
     def get(self, filename:str) -> str:
         return self._media_manager.get(filename)
+    
+    @Slot(str, result=bool)
+    def delete(self, filename:str) -> bool:
+        return self._media_manager.delete(filename)
