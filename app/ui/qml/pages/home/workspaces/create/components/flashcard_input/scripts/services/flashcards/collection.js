@@ -3,16 +3,12 @@ class FlashcardCollectionService {
     #flashcardsById = new Map()
 
     constructor(jsonData = {}) {
-        if (!jsonData.flashcards || jsonData.flashcards.length === 0) {
-            const card = new Flashcard()
-            this.#insert(card)
-            return
-        }
-
-        for (const data of jsonData.flashcards) {
-            const card = new Flashcard()
-            card.setByJSON(data)
-            this.#insert(card)
+        if (jsonData.flashcards) {
+            for (const data of jsonData.flashcards) {
+                const card = new Flashcard()
+                card.setByJSON(data)
+                this.#insert(card)
+            }
         }
     }
 

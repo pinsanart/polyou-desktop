@@ -8,25 +8,10 @@ class EditorState {
     }
 
     async #init(resolve, reject) {
-        const tryInit = () => {
-            if (window.qt && qt.webChannelTransport) {
-                new QWebChannel(qt.webChannelTransport, (channel) => {
-                    const editorState = channel.objects.editorState
-                    if (!editorState) {
-                        reject("The object 'editorState' was not exposed by WebChannel")
-                        return
-                    }
-                    
-                    this.editorState = editorState
-
-                    resolve(this.editorState)
-                })
-            } else {
-               setTimeout(tryInit, 100);
-            }
-        }
-
-        tryInit()
+        const objects = await Channel.init()
+        if (!objects.editorState) { reject("The object 'editorState' was not exposed by WebChannel"); return }
+        this.editorState = objects.editorState
+        resolve(this.editorState)
     }
 
     async saveFlashcards(data) {

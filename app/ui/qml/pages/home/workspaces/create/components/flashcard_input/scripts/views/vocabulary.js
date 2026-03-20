@@ -47,6 +47,11 @@ class VocabularyView extends FlashcardView {
     }
 
     create() {
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('wrapper-flashcard-control')
+
+        wrapper.appendChild(this.createControlBar())
+        
         const cardEditor = document.createElement('div')
         cardEditor.classList.add('card-editor')
 
@@ -55,10 +60,10 @@ class VocabularyView extends FlashcardView {
 
         body.appendChild(this.#createField(VocabularyView.Fields.FRONT))
         body.appendChild(this.#createField(VocabularyView.Fields.BACK))
-
         cardEditor.appendChild(body)
         
-        return cardEditor
+        wrapper.appendChild(cardEditor)
+        return wrapper
     }
 
     #createField(field) {
@@ -66,7 +71,7 @@ class VocabularyView extends FlashcardView {
         fieldRow.classList.add('field-row')
 
         fieldRow.appendChild(this.#createFieldHeader(field.label))
-        fieldRow.appendChild(this.#createFieldModes(field.getHTML(this)))
+        fieldRow.appendChild(this.#createFieldModes(field))
         fieldRow.appendChild(this.#createFieldMedia(field))
 
         return fieldRow
@@ -85,7 +90,9 @@ class VocabularyView extends FlashcardView {
         return header
     }
 
-    #createFieldModes(initialHTML) {
+    #createFieldModes(field) {
+        const initialHTML = field.getHTML(this)
+
         const fieldMode = document.createElement('div')
         fieldMode.classList.add('field-modes')
 
@@ -103,10 +110,20 @@ class VocabularyView extends FlashcardView {
 
         editor.addEventListener('input', () => {
             HTMLArea.value = editor.innerHTML
+            this.dispatchFieldChange({
+                flashcardId: this.#flashcardId, 
+                field: field.name, 
+                html: editor.innerHTML
+            })
         })
 
         HTMLArea.addEventListener('input', () => {
             editor.innerHTML = HTMLArea.value
+            this.dispatchFieldChange({
+                flashcardId: this.#flashcardId, 
+                field: field.name, 
+                html: HTMLArea.value
+            })
         })
 
         fieldMode.appendChild(HTMLArea)

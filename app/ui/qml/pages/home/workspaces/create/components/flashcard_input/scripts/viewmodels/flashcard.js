@@ -8,25 +8,10 @@ class FlashcardViewModel {
     }
 
     async #init(resolve, reject) {
-        const tryInit = () => {
-            if (window.qt && qt.webChannelTransport) {
-                new QWebChannel(qt.webChannelTransport, (channel) => {
-                    const flashcardViewModel = channel.objects.flashcardViewModel
-                    if (!flashcardViewModel) {
-                        reject("The object 'flashcardViewModel' was not exposed by WebChannel")
-                        return
-                    }
-                    
-                    this.flashcardViewModel = flashcardViewModel
-
-                    resolve(this.flashcardViewModel)
-                })
-            } else {
-               setTimeout(tryInit, 100);
-            }
-        } 
-
-        tryInit()
+        const objects = await Channel.init()
+        if (!objects.flashcardViewModel) { reject("The object 'flashcardViewModel' was not exposed by WebChannel"); return }
+        this.flashcardViewModel = objects.flashcardViewModel
+        resolve(this.flashcardViewModel)
     }
 
     async create_one(data) {

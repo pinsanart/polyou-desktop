@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script src="scripts/channel.js"></script>
     
     <link rel="stylesheet" href="style.css">
 
@@ -18,47 +19,44 @@
     
     <script src="scripts/services/media/media.js"></script>
     <script src="scripts/services/flashcards/collection.js"></script>
+
+    <script src="scripts/flashcard_view_factory.js"></script>
+    <script src="scripts/services/flashcards/controller.js"></script>
+    <script src="scripts/services/states/editor.js"></script>
 </head>
 <body>
     <div id = 'editor'></div>
     <script>
-        async function main() {           
-            flashcard = new Flashcard()
+        async function main() {
+            const editorState = new EditorState()
+            await editorState.isReady()
+
+            const editorStateService = new EditorStateService(editorState)
+            collection = await editorStateService.getCollection()
+
+            await editorStateService.saveCollection(collection)
+
+            const flashcard = new Flashcard()
+
+            flashcard.type = 'vocabulary'
             flashcard.frontHTML = 'front'
             flashcard.backHTML = 'back'
             flashcard.addFrontImage('certificado.png')
             flashcard.addFrontAudio('WhatsApp Audio 2026-03-06 at 21.54.43.ogg')
 
-            mediaViewmodel = new MediaViewModel()
-            mediaService = new MediaService(mediaViewmodel)
+            const mediaViewmodel = new MediaViewModel()
+            const mediaService = new MediaService(mediaViewmodel)
 
             await mediaViewmodel.isReady()
-            
-            const initialFrontImages = await Promise.all(
-                flashcard.frontImagesFilenames.map(async (filename) => ({
-                    mediaId: crypto.randomUUID(),
-                    filename,
-                    url: await mediaService.getMediaURL(filename)
-                }))
-            )
 
-            const initialFrontAudios = await Promise.all(
-                flashcard.frontAudiosFilenames.map(async (filename) => ({
-                    mediaId: crypto.randomUUID(),
-                    filename,
-                    url: await mediaService.getMediaURL(filename)
-                }))
-            )
+            const viewFactory = new FlashcardViewFactory(mediaService)
+            const flashcardCollection = new FlashcardCollectionService({ flashcards: [flashcard.toJSON()] })
+            const container = document.getElementById('editor')
             
-            vocabularyView = new VocabularyView(
-                crypto.randomUUID(),
-                "front_test",
-                "back_test",
-                initialFrontImages,
-                initialFrontAudios
-            )
+            const flashcardController = new FlashcardControllerService(container, editorStateService, viewFactory)
             
-            document.getElementById('editor').appendChild(FlaschardViewControls.create(vocabularyView))
+            await flashcardController.init()
+            await flashcardController.render()
         }
 
         main()

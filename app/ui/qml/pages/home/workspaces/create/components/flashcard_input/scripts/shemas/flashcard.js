@@ -23,7 +23,6 @@ class Flashcard {
 
     ) {
         this.#id = crypto.randomUUID()
-
         this.#frontHTML = frontHTML
         this.#backHTML = backHTML
         this.#language = language

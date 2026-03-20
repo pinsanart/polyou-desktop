@@ -8,25 +8,10 @@ class MediaViewModel {
     }
 
     async #init(resolve, reject) {
-        const tryInit = () => {
-            if (window.qt && qt.webChannelTransport) {
-                new QWebChannel(qt.webChannelTransport, (channel) => {
-                    const mediaViewModel = channel.objects.mediaViewModel
-                    if (!mediaViewModel) {
-                        reject("The object 'mediaViewModel' was not exposed by WebChannel")
-                        return
-                    }
-                    
-                    this.mediaViewModel = mediaViewModel
-
-                    resolve(this.mediaViewModel)
-                })
-            } else {
-               setTimeout(tryInit, 100);
-            }
-        } 
-
-        tryInit()
+        const objects = await Channel.init()
+        if (!objects.mediaViewModel) { reject("The object 'mediaViewModel' was not exposed by WebChannel"); return }
+        this.mediaViewModel = objects.mediaViewModel
+        resolve(this.mediaViewModel)
     }
 
     async save(base64_data, mime_type) {
