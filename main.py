@@ -3,6 +3,7 @@ from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QTranslator
+from PySide6.QtWebEngineQuick import QtWebEngineQuick
 
 import resources_rc
 
@@ -42,6 +43,8 @@ from app.ui.viewmodels.media import MediaViewModel
 from app.ui.states.editor import EditorState
 
 if __name__ == "__main__":
+    QtWebEngineQuick.initialize()
+    
     db_connection = DBConnectionFactory.create(
         DATABASE_URL= db_settings.DATABASE_URL,
         DEBUG= app_settings.DEBUG
@@ -121,7 +124,7 @@ if __name__ == "__main__":
     ui_engine.rootContext().setContextProperty("editorState", editor_state)
 
     #LOAD
-    ui_engine.load(str(qmlRoot / 'MainWindow.qml'))
+    ui_engine.load(str(qmlRoot / 'main.qml'))
 
     if not ui_engine.rootObjects():
         print("'MainWindow.qml' was not found.")

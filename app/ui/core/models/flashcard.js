@@ -1,7 +1,7 @@
 class Flashcard {
     #id
-    #frontHTML
-    #backHTML
+    #frontText
+    #backText
     #language
     #type
 
@@ -12,8 +12,8 @@ class Flashcard {
     #backImagesFilenames
 
     constructor(
-        frontHTML = '',
-        backHTML = '',
+        frontText = '',
+        backText = '',
         language = '',
         type = '',
         frontImagesFilenames = [],
@@ -23,8 +23,8 @@ class Flashcard {
 
     ) {
         this.#id = crypto.randomUUID()
-        this.#frontHTML = frontHTML
-        this.#backHTML = backHTML
+        this.#frontText = frontText
+        this.#backText = backText
         this.#language = language
         this.#type = type
 
@@ -35,8 +35,8 @@ class Flashcard {
     }
 
     get id() { return this.#id }
-    get frontHTML() { return this.#frontHTML }
-    get backHTML() { return this.#backHTML }
+    get frontText() { return this.#frontText }
+    get backText() { return this.#backText }
     get language() { return this.#language }
     get type() { return this.#type }
 
@@ -45,8 +45,8 @@ class Flashcard {
     get backAudiosFilenames() { return [...this.#backAudiosFilenames] }
     get backImagesFilenames() { return [...this.#backImagesFilenames] }
 
-    set frontHTML(value) { this.#frontHTML = value }
-    set backHTML(value) { this.#backHTML = value }
+    set frontText(value) { this.#frontText = value }
+    set backText(value) { this.#backText = value }
     set language(value) { this.#language = value }
     set type(value) { this.#type = value }
 
@@ -89,8 +89,8 @@ class Flashcard {
     toJSON() {
         return {
             id: this.#id,
-            frontHTML: this.#frontHTML,
-            backHTML: this.#backHTML,
+            frontText: this.#frontText,
+            backText: this.#backText,
             type: this.#type,
             language: this.#language,
             
@@ -103,8 +103,8 @@ class Flashcard {
 
     setByJSON(jsonData) {
         this.#id = jsonData.id ?? crypto.randomUUID()
-        this.#frontHTML = jsonData.frontHTML ?? ""
-        this.#backHTML = jsonData.backHTML ?? ""
+        this.#frontText = jsonData.frontText ?? ""
+        this.#backText = jsonData.backText ?? ""
         this.#language = jsonData.language ?? ""
         this.#type = jsonData.type ?? ""
 

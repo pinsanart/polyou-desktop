@@ -4,30 +4,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script src="scripts/channel.js"></script>
-    
+    <script src="qrc:///core/channel.js"></script>
+    <script src="qrc:///core/models/flashcard.js"></script>
+    <script src="qrc:///core/flashcard_view_factory.js"></script>
+
+    <script src="qrc:///bridges/editor.js"></script>
+    <script src="qrc:///bridges/flashcard.js"></script>
+    <script src="qrc:///bridges/media.js"></script>
+
+    <script src="qrc:///views/flashcard.js"></script>
+    <script src="qrc:///views/vocabulary.js"></script>
+    <script src="qrc:///views/orthographic.js"></script>
+    <script src="qrc:///views/pronounce.js"></script>
+
+    <script src="qrc:///services/states/editor.js"></script>
+    <script src="qrc:///services/media/media.js"></script>
+    <script src="qrc:///services/flashcards/collection.js"></script>
+    <script src="qrc:///services/flashcards/controller.js"></script>
+
     <link rel="stylesheet" href="style.css">
-
-    <script src="scripts/shemas/flashcard.js"></script>
-    <script src="scripts/views/flashcard.js"></script>
-    <script src="scripts/views/vocabulary.js"></script>
-    <script src="scripts/views/controls.js"></script>
-    
-    <script src="scripts/states/editor.js"></script>
-    <script src="scripts/viewmodels/flashcard.js"></script>
-    <script src="scripts/viewmodels/media.js"></script>
-    
-    <script src="scripts/services/media/media.js"></script>
-    <script src="scripts/services/flashcards/collection.js"></script>
-
-    <script src="scripts/flashcard_view_factory.js"></script>
-    <script src="scripts/services/flashcards/controller.js"></script>
-    <script src="scripts/services/states/editor.js"></script>
 </head>
 <body>
-    <div id = 'editor'></div>
+    <div id="editor"></div>
     <script>
-        async function main() {
+        window.addEventListener('load', async function() {
             const editorState = new EditorState()
             const mediaViewmodel = new MediaViewModel()
             await editorState.isReady()
@@ -36,14 +36,12 @@
             const container = document.getElementById('editor')
             const editorStateService = new EditorStateService(editorState)
             const mediaService = new MediaService(mediaViewmodel)
-            
+
             const flashcardController = new FlashcardControllerService(container, editorStateService, mediaService)
-            
+
             await flashcardController.init()
             await flashcardController.render()
-        }
-
-        main()
+        })
     </script>
 </body>
 </html>

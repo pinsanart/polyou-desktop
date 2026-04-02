@@ -27,12 +27,23 @@ class FlashcardViewFactory {
 
             return new VocabularyView(
                 flashcard.id,
-                flashcard.frontHTML,
-                flashcard.backHTML,
+                flashcard.frontText,
+                flashcard.backText,
                 frontImages,
                 frontAudios,
                 backImages,
                 backAudios
+            )
+        },
+
+        orthographic: async(flashcard) => {
+            const { frontImages, frontAudios, backImages, backAudios } =
+                await this.#buildMediaArgs(flashcard)
+            
+            return new OrthographicView(
+                flashcard.id,
+                flashcard.frontText,
+                frontAudios
             )
         }
     }

@@ -1,60 +1,54 @@
 class VocabularyView extends FlashcardView {
     #flashcardId
-    #initialFrontHTML
-    #initialBackHTML
-    #initialFrontImagesMedia
-    #initialFrontAudiosMedia
-    #initialBackImagesMedia
-    #initialBackAudiosMedia
+    #initialPhraseHTML
+    #initialMeaningHTML
+    #initialPhraseImagesMedia
+    #initialPhraseAudiosMedia
+    #initialMeaningImagesMedia
+    #initialMeaningAudiosMedia
 
     static Fields = {
-        FRONT: {
+        PHRASE: {
             name: FlashcardView.FieldNames.FRONT,
-            label: "Front",
-            getHTML: (ctx) => ctx.#initialFrontHTML,
-            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialFrontImagesMedia}),
-            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialFrontAudiosMedia})
+            label: "PHRASE",
+            getHTML: (ctx) => ctx.#initialPhraseHTML,
+            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialPhraseImagesMedia}),
+            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialPhraseAudiosMedia})
         },
-        BACK: {
+        MEANING: {
             name: FlashcardView.FieldNames.BACK, 
-            label: "Back",
-            getHTML: (ctx) => ctx.#initialBackHTML,
-            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialBackImagesMedia}),
-            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialBackAudiosMedia})
+            label: "MEANING",
+            getHTML: (ctx) => ctx.#initialMeaningHTML,
+            getImageMedia: (ctx) => ({type: FlashcardView.MediaTypes.IMAGE, value: ctx.#initialMeaningImagesMedia}),
+            getAudioMedia: (ctx) => ({type: FlashcardView.MediaTypes.AUDIO, value: ctx.#initialMeaningAudiosMedia})
         }
     }
 
-    static setLabel(key, newLabel) {
-        if (this.Fields[key]) {
-            this.Fields[key].label = newLabel
-        }
-    }
-
-    constructor(flashcardId, initialFrontHTML = '', initialBackHTML = '', initialFrontImagesMedia = [], initialFrontAudiosMedia = [], initialBackImagesMedia = [], initialBackAudiosMedia = []) {
+    constructor(flashcardId, initialPhraseHTML = '', initialMeaningHTML = '', initialPhraseImagesMedia = [], initialPhraseAudiosMedia = [], initialMeaningImagesMedia = [], initialMeaningAudiosMedia = []) {
         super()
         this.#flashcardId = flashcardId
-        this.#initialFrontHTML = initialFrontHTML
-        this.#initialBackHTML = initialBackHTML
-        this.#initialFrontImagesMedia = initialFrontImagesMedia
-        this.#initialFrontAudiosMedia = initialFrontAudiosMedia
-        this.#initialBackImagesMedia = initialBackImagesMedia
-        this.#initialBackAudiosMedia = initialBackAudiosMedia
+        this.#initialPhraseHTML = initialPhraseHTML
+        this.#initialMeaningHTML = initialMeaningHTML
+        this.#initialPhraseImagesMedia = initialPhraseImagesMedia
+        this.#initialPhraseAudiosMedia = initialPhraseAudiosMedia
+        this.#initialMeaningImagesMedia = initialMeaningImagesMedia
+        this.#initialMeaningAudiosMedia = initialMeaningAudiosMedia
     }
 
     create() {
         const wrapper = document.createElement('div')
-        wrapper.classList.add('wrapper-flashcard-control')
+        wrapper.classList.add('wrapper-flashcard-control', 'vocabulary-wrapper-flashcard-control')
 
         wrapper.appendChild(this.createControlBar())
         
         const cardEditor = document.createElement('div')
-        cardEditor.classList.add('card-editor')
+        cardEditor.classList.add('card-editor', 'vocabulary-card-editor')
 
         const body = document.createElement('div')
-        body.classList.add('card-body')
-
-        body.appendChild(this.#createField(VocabularyView.Fields.FRONT))
-        body.appendChild(this.#createField(VocabularyView.Fields.BACK))
+        body.classList.add('card-body', 'vocabulary-card-body')
+        
+        body.appendChild(this.#createField(VocabularyView.Fields.PHRASE))
+        body.appendChild(this.#createField(VocabularyView.Fields.MEANING))
         cardEditor.appendChild(body)
         
         wrapper.appendChild(cardEditor)
@@ -63,22 +57,22 @@ class VocabularyView extends FlashcardView {
 
     #createField(field) {
         const fieldRow = document.createElement('div')
-        fieldRow.classList.add('field-row')
+        fieldRow.classList.add('field-row', 'vocabulary-field-row')
 
-        fieldRow.appendChild(this.#createFieldHeader(field.label))
+        fieldRow.appendChild(this.#createFieldHeader(field))
         fieldRow.appendChild(this.#createFieldModes(field))
         fieldRow.appendChild(this.#createFieldMedia(field))
 
         return fieldRow
     }
 
-    #createFieldHeader(label) {
+    #createFieldHeader(field) {
         const header = document.createElement('div')
-        header.classList.add('field-header')
+        header.classList.add('field-header', 'vocabulary-field-header')
 
         const fieldLabel = document.createElement('span')
-        fieldLabel.classList.add('field-label')
-        fieldLabel.textContent = label
+        fieldLabel.classList.add('field-label', 'vocabulary-field-label')
+        fieldLabel.textContent = field.label
 
         header.appendChild(fieldLabel)
 
@@ -89,17 +83,17 @@ class VocabularyView extends FlashcardView {
         const initialHTML = field.getHTML(this)
 
         const fieldMode = document.createElement('div')
-        fieldMode.classList.add('field-modes')
+        fieldMode.classList.add('field-modes', 'vocabulary-field-modes')
 
         const editor = document.createElement('div')
-        editor.classList.add('editor-area')
+        editor.classList.add('editor-area', 'vocabulary-editor-area')
         editor.contentEditable = 'true'
         editor.innerHTML = initialHTML
         
         fieldMode.appendChild(editor)
 
         const HTMLArea = document.createElement('textarea')
-        HTMLArea.classList.add('html-area')
+        HTMLArea.classList.add('html-area', 'vocabulary-html-area')
         HTMLArea.spellcheck = false
         HTMLArea.textContent = initialHTML
 
@@ -128,7 +122,7 @@ class VocabularyView extends FlashcardView {
 
     #createFieldMedia(field) {
         const fieldMedia = document.createElement('div')
-        fieldMedia.classList.add('field-media')
+        fieldMedia.classList.add('field-media', 'vocabulary-field-media')
 
         fieldMedia.appendChild(this.#createMediaRow(field.name, field.getImageMedia(this)))
         fieldMedia.appendChild(this.#createMediaRow(field.name, field.getAudioMedia(this)))
@@ -138,20 +132,20 @@ class VocabularyView extends FlashcardView {
 
     #createMediaRow(fieldName, media) {
         const row = document.createElement('div')
-        row.classList.add(`${media.type.name}-row`)
+        row.classList.add(`${media.type.name}-row`, `vocabulary-${media.type.name}-row`)
 
         const label = document.createElement('span')
-        label.classList.add(`${media.type.name}-label`)
+        label.classList.add(`${media.type.name}-label`, `vocabulary-${media.type.name}-label`)
         label.textContent = `${media.type.name}s`
 
         row.appendChild(label)
         const input = document.createElement('input')
-        input.classList.add(`input-${media.type.name}`)
+        input.classList.add(`input-${media.type.name}`, `vocabulary-input-${media.type.name}`)
         input.type = 'file'
         input.accept = `${media.type.name}/*`
 
         const preview = document.createElement('div')
-        preview.classList.add(`${media.type.name}s-preview`)
+        preview.classList.add(`${media.type.name}s-preview`, `vocabulary-${media.type.name}s-preview`)
 
         for (const initialMedium of media.value) {
             const dataURL = initialMedium.dataURL
@@ -178,16 +172,16 @@ class VocabularyView extends FlashcardView {
         const tag = mediaType.HTMLTag
 
         const wrapper = document.createElement('div')
-        wrapper.classList.add(`${mediaType.name}-wrapper`)
+        wrapper.classList.add(`${mediaType.name}-wrapper`, `vocabulary-${mediaType.name}-wrapper`)
         wrapper.dataset.mediaId = mediaId
 
         const media = document.createElement(tag)
-        media.classList.add(`${mediaType.name}-preview`)
+        media.classList.add(`${mediaType.name}-preview`, `vocabulary-${mediaType.name}-preview`)
         media.src = dataURL
         if (tag === 'audio') media.controls = true
 
         const button = document.createElement('button')
-        button.classList.add(`remove-${mediaType.name}-button`)
+        button.classList.add(`remove-${mediaType.name}-button`, `vocabulary-remove-${mediaType.name}-button`)
         button.innerHTML = 'X'
         
         button.addEventListener('click', () => {

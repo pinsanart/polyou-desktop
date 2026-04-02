@@ -39,7 +39,7 @@ Page {
             FlashcardsInput {
                 anchors.horizontalCenter: parent.horizontalCenter
             
-                width: 800
+                width: parent.width
                 height: 800
             }
         }

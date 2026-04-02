@@ -6,16 +6,16 @@ class FlashcardControllerService {
     #mediaService
 
     #eventHandlers = {
-        [FlashcardView.Events.FIELD_CHANGE]: ({detail}) => this.#onFieldChange(detail),
-        [FlashcardView.Events.MEDIA_ADD]: ({detail}) => this.#onMediaAdd(detail),
-        [FlashcardView.Events.MEDIA_REMOVE]: ({detail}) => this.#onMediaRemove(detail),
+        [FlashcardView.Events.FIELD_CHANGE]:    ({detail}) => this.#onFieldChange(detail),
+        [FlashcardView.Events.MEDIA_ADD]:       ({detail}) => this.#onMediaAdd(detail),
+        [FlashcardView.Events.MEDIA_REMOVE]:    ({detail}) => this.#onMediaRemove(detail),
 
-        [FlashcardView.Events.COPY]: ({detail}) => this.#onCopy(detail),
-        [FlashcardView.Events.MOVE_UP]: ({detail}) => this.#onMoveUp(detail),
-        [FlashcardView.Events.MOVE_DOWN]: ({detail}) => this.#onMoveDown(detail),
-        [FlashcardView.Events.ADD_UP]: ({detail}) => this.#onAddUp(detail),
-        [FlashcardView.Events.ADD_DOWN]: ({detail}) => this.#onAddDown(detail),
-        [FlashcardView.Events.DELETE]: ({detail}) => this.#onDelete(detail)
+        [FlashcardView.Events.COPY]:            ({detail}) => this.#onCopy(detail),
+        [FlashcardView.Events.MOVE_UP]:         ({detail}) => this.#onMoveUp(detail),
+        [FlashcardView.Events.MOVE_DOWN]:       ({detail}) => this.#onMoveDown(detail),
+        [FlashcardView.Events.ADD_UP]:          ({detail}) => this.#onAddUp(detail),
+        [FlashcardView.Events.ADD_DOWN]:        ({detail}) => this.#onAddDown(detail),
+        [FlashcardView.Events.DELETE]:          ({detail}) => this.#onDelete(detail)
 
     }
 
@@ -54,14 +54,14 @@ class FlashcardControllerService {
         }
     }
     
-    #onFieldChange({flashcardId, field, html}) {
+    async #onFieldChange({flashcardId, field, html}) {
         const flashcard = this.#flashcardCollection.findById(flashcardId)
         if (!flashcard) return
 
-        if (field === 'front') flashcard.frontHTML = html
-        if (field === 'back') flashcard.backHTML = html
+        if (field === FlashcardView.FieldNames.FRONT) flashcard.frontText = html
+        if (field === FlashcardView.FieldNames.BACK) flashcard.backText = html
 
-        this.#editorStateService.saveCollection(this.#flashcardCollection)
+        await this.#editorStateService.saveCollection(this.#flashcardCollection)
     }
 
     async #onMediaAdd({flashcardId, mediaId, field, type, file}) {

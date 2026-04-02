@@ -11,5 +11,19 @@
         <file>images/grey_home_icon.svg</file>
         <file>images/white_home_icon.svg</file>
         <file>images/home_icon.svg</file>
+        <file alias="core/channel.js">../core/channel.js</file>
+        <file alias="core/models/flashcard.js">../core/models/flashcard.js</file>
+        <file alias="core/flashcard_view_factory.js">../core/flashcard_view_factory.js</file>
+        <file alias="bridges/editor.js">../bridges/editor.js</file>
+        <file alias="bridges/flashcard.js">../bridges/flashcard.js</file>
+        <file alias="bridges/media.js">../bridges/media.js</file>
+        <file alias="views/flashcard.js">../views/flashcard.js</file>
+        <file alias="views/vocabulary.js">../views/vocabulary.js</file>
+        <file alias="views/orthographic.js">../views/orthographic.js</file>
+        <file alias="views/pronounce.js">../views/pronounce.js</file>
+        <file alias="services/states/editor.js">../services/states/editor.js</file>
+        <file alias="services/media/media.js">../services/media/media.js</file>
+        <file alias="services/flashcards/collection.js">../services/flashcards/collection.js</file>
+        <file alias="services/flashcards/controller.js">../services/flashcards/controller.js</file>
     </qresource>
 </RCC>
