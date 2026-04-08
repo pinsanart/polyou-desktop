@@ -1,21 +1,21 @@
 class MediaService {
-    #mediaViewModel
+    #mediaBridge
     #mediaIdMap = new Map()
     
-    constructor(mediaViewModel) {
-        this.#mediaViewModel = mediaViewModel
+    constructor(mediaBridge) {
+        this.#mediaBridge = mediaBridge
     }
 
     async registerExisting(filename) {
         const mediaId = crypto.randomUUID()
-        const dataURL = await this.#mediaViewModel.get(filename)
+        const dataURL = await this.#mediaBridge.get(filename)
         this.#mediaIdMap.set(mediaId, filename)
         return {mediaId, filename, dataURL}
     }
 
     async saveFile(file, mediaId = crypto.randomUUID()) {
         const base64 = await this.#fileToBase64(file)
-        const filename = await this.#mediaViewModel.save(base64, file.type)
+        const filename = await this.#mediaBridge.save(base64, file.type)
         this.#mediaIdMap.set(mediaId, filename)
         return filename
     }

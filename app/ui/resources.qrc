@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/images/arrow_down_icon.svg</file>
+        <file>assets/images/book_icon.svg</file>
+        <file>assets/images/cell_insert_below_icon.svg</file>
+        <file>assets/images/cell_insert_above_icon.svg</file>
+        <file>assets/images/copy_icon.svg</file>
+        <file>assets/images/plus_icon.svg</file>
+        <file>assets/images/trash_icon.svg</file>
+        <file>assets/images/arrow_up_icon.svg</file>
+        <file>assets/images/grey_home_icon.svg</file>
+        <file>assets/images/white_home_icon.svg</file>
+        <file>assets/images/home_icon.svg</file>
+
+        <file alias="js/core/channel.js">js/core/channel.js</file>
+        <file alias="js/core/models/flashcard.js">js/core/models/flashcard.js</file>
+        <file alias="js/core/flashcard_view_factory.js">js/core/flashcard_view_factory.js</file>
+        <file alias="js/bridges/editor.js">js/bridges/editor.js</file>
+        <file alias="js/bridges/flashcard.js">js/bridges/flashcard.js</file>
+        <file alias="js/bridges/media.js">js/bridges/media.js</file>
+        <file alias="js/views/flashcard.js">js/views/flashcard.js</file>
+        <file alias="js/views/vocabulary.js">js/views/vocabulary.js</file>
+        <file alias="js/views/orthographic.js">js/views/orthographic.js</file>
+        <file alias="js/views/pronounce.js">js/views/pronounce.js</file>
+        <file alias="js/services/states/editor.js">js/services/states/editor.js</file>
+        <file alias="js/services/media/media.js">js/services/media/media.js</file>
+        <file alias="js/services/flashcards/collection.js">js/services/flashcards/collection.js</file>
+        <file alias="js/services/flashcards/controller.js">js/services/flashcards/controller.js</file>
+    </qresource>
+</RCC>

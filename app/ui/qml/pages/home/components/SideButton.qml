@@ -1,5 +1,8 @@
 import QtQuick
 
+import "../../../style"
+
+
 Rectangle {
     id: root
 
@@ -9,14 +12,10 @@ Rectangle {
     property var workspaceID
     property var currentWorkspaceID
 
-    property color backgroundColor
-    property color selectBorderColor
-    property color bottomBorderColor
-
     signal clicked(var workspaceID)
 
     width: parent.width
-    color: root.backgroundColor
+    color: Style.backgroundColor
 
     // Select Border
     Rectangle {
@@ -28,7 +27,7 @@ Rectangle {
 
         width: 2
         visible: root.currentWorkspaceID === root.workspaceID
-        color: root.selectBorderColor
+        color: Style.buttonLighterColor
     }
 
     // Bottom Border
@@ -40,7 +39,7 @@ Rectangle {
         anchors.right: parent.right
 
         height: 1
-        color: root.bottomBorderColor
+        color: Style.borderColor
     }
 
     //Icon

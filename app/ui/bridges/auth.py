@@ -4,7 +4,7 @@ from uuid import UUID
 from app.services.managers.auth_session import AuthSessionManager
 from app.core.schemas.auth.requests import TokenRequest, RefreshRequest, LogoutRequest
 
-class AuthViewModel(QObject):
+class AuthBridge(QObject):
     authStateChanged = Signal()
     loadingChanged = Signal(bool)
     errorOccurred = Signal(str)

@@ -88,7 +88,7 @@ class FlashcardView extends EventTarget {
             }
         })
     }
-    
+  
     dispatchDelete({flashcardId}) {
         this.dispatchEvent(new CustomEvent(FlashcardView.Events.DELETE), {
             detail: {
@@ -106,12 +106,12 @@ class FlashcardView extends EventTarget {
         controls.classList.add('flashcard-control-bar')
 
         const buttons = [
-            { action: 'copy',      iconURL: 'qrc:/images/copy_icon.svg'},
-            { action: 'move-up',   iconURL: 'qrc:/images/arrow_up_icon.svg'},
-            { action: 'move-down', iconURL: 'qrc:/images/arrow_down_icon.svg'},
-            { action: 'add-up',    iconURL: 'qrc:/images/cell_insert_above_icon.svg'},
-            { action: 'add-down',  iconURL: 'qrc:/images/cell_insert_below_icon.svg'},
-            { action: 'delete',    iconURL: 'qrc:/images/trash_icon.svg'},
+            { action: 'copy',      iconURL: 'qrc:assets/images/copy_icon.svg'},
+            { action: 'move-up',   iconURL: 'qrc:assets/images/arrow_up_icon.svg'},
+            { action: 'move-down', iconURL: 'qrc:assets/images/arrow_down_icon.svg'},
+            { action: 'add-up',    iconURL: 'qrc:assets/images/cell_insert_above_icon.svg'},
+            { action: 'add-down',  iconURL: 'qrc:assets/images/cell_insert_below_icon.svg'},
+            { action: 'delete',    iconURL: 'qrc:assets/images/trash_icon.svg'},
         ]
 
         buttons.forEach(({ action, iconURL }) => {

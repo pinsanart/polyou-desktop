@@ -1,23 +1,16 @@
 import QtQuick
 import QtQuick.Controls
 
+import "../../../../style"
 import "./components/flashcard_input"
 
 Page {
     id: root
 
-    property color backgroundColor
-    property color buttonLighterColor
-    property color buttonDarkerColor
-    property color borderColor
-    property color fieldColor
-    property color fontColor
-    property string fontFamily
-
     //Background
     Rectangle {
         anchors.fill: parent
-        color: root.backgroundColor
+        color: Style.backgroundColor
     }
 
     ScrollView {
@@ -30,10 +23,10 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 
                 text: qsTr('CREATE FLASHCARDS')
-                font.family: root.fontFamily
+                font.family: Style.fontFamily
                 font.pixelSize: 50
                 font.bold: true
-                color: root.fontColor
+                color: Style.fontColor
             }
             
             FlashcardsInput {

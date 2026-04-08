@@ -1,4 +1,4 @@
-class EditorState {
+class EditorStateBridge {
     #ready
 
     constructor() {
@@ -9,20 +9,20 @@ class EditorState {
 
     async #init(resolve, reject) {
         const objects = await Channel.init()
-        if (!objects.editorState) { reject("The object 'editorState' was not exposed by WebChannel"); return }
-        this.editorState = objects.editorState
-        resolve(this.editorState)
+        if (!objects.editorStateBridge) { reject("The object 'editorStateBridge' was not exposed by WebChannel"); return }
+        this.editorStateBridge = objects.editorStateBridge
+        resolve(this.editorStateBridge)
     }
 
     async saveFlashcards(data) {
-        const editorState = await this.#ready
-        return await editorState.saveFlashcards(data)
+        const editorStateBridge = await this.#ready
+        return await editorStateBridge.saveFlashcards(data)
     }
 
     async getFlashcards() {
-        const editorState = await this.#ready
+        const editorStateBridge = await this.#ready
         return new Promise((resolve) => {
-            editorState.getFlashcards((data) => {
+            editorStateBridge.getFlashcards((data) => {
                 resolve(data)
             })
         })        

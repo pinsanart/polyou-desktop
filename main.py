@@ -24,7 +24,7 @@ from app.core.config.desktop import desktop_settings
 
 from app.dependencies.sqlalchemy.db.factory import DBConnectionFactory
 
-from app.ui.viewmodels.auth import AuthViewModel
+from app.ui.bridges.auth import AuthBridge
 
 from app.services.managers.auth_session import AuthSessionManager
 from app.services.managers.editor_state import EditorStateManager
@@ -38,9 +38,9 @@ from app.dependencies.storages.local import LocalStorage
 from app.core.security.access_token_provider import AccessTokenProvider
 from app.core.security.refresh_token_vault import RefreshTokenVault
 
-from app.ui.viewmodels.flashcards import FlashcardViewModel
-from app.ui.viewmodels.media import MediaViewModel
-from app.ui.states.editor import EditorState
+from app.ui.bridges.flashcards import FlashcardBridge
+from app.ui.bridges.media import MediaBridge
+from app.ui.bridges.editor_state import EditorState
 
 if __name__ == "__main__":
     QtWebEngineQuick.initialize()
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     )
 
 
-    auth_vm = AuthViewModel(
+    auth_vm = AuthBridge(
         auth_manager= auth_manager,
         device_id= uuid4(),
         device_name= desktop_settings.DESKTOP_NAME,
@@ -101,27 +101,25 @@ if __name__ == "__main__":
     
     ui_engine.addImportPath(qmlRoot)
     
-    #VIEWMODELS
-    flashcard_viewmodel = FlashcardViewModel()
-    media_viewmodel = MediaViewModel(
+    #bridge
+    flashcard_bridge = FlashcardBridge()
+    media_bridge = MediaBridge(
         media_manager= MediaManager(
             local_storage= LocalStorage(path_settings.MEDIA_PATH)
         )
     )
-
-    #STATES
-    editor_state = EditorState(
+    editor_state_bridge = EditorState(
         editor_state_manager= EditorStateManager(
             local_storage= LocalStorage(path_settings.STATES_PATH),
             filename= 'editor.json'
         )
     )
 
-    #SET VIEWMODELS AND STATES
+    #SET BRIDGES AND STATES
     ui_engine.rootContext().setContextProperty("app_name", app_settings.APP_NAME)
-    ui_engine.rootContext().setContextProperty("flashcardViewModel", flashcard_viewmodel)
-    ui_engine.rootContext().setContextProperty("mediaViewModel", media_viewmodel)
-    ui_engine.rootContext().setContextProperty("editorState", editor_state)
+    ui_engine.rootContext().setContextProperty("flashcardBridge", flashcard_bridge)
+    ui_engine.rootContext().setContextProperty("mediaBridge", media_bridge)
+    ui_engine.rootContext().setContextProperty("editorStateBridge", editor_state_bridge)
 
     #LOAD
     ui_engine.load(str(qmlRoot / 'main.qml'))

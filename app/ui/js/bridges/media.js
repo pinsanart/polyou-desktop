@@ -1,4 +1,4 @@
-class MediaViewModel {
+class MediaBridge {
     #ready
 
     constructor() {
@@ -9,15 +9,15 @@ class MediaViewModel {
 
     async #init(resolve, reject) {
         const objects = await Channel.init()
-        if (!objects.mediaViewModel) { reject("The object 'mediaViewModel' was not exposed by WebChannel"); return }
-        this.mediaViewModel = objects.mediaViewModel
-        resolve(this.mediaViewModel)
+        if (!objects.mediaBridge) { reject("The object 'mediaBridge' was not exposed by WebChannel"); return }
+        this.mediaBridge = objects.mediaBridge
+        resolve(this.mediaBridge)
     }
 
     async save(base64_data, mime_type) {
-        const mediaViewModel = await this.#ready
+        const mediaBridge = await this.#ready
         return new Promise((resolve) => {
-            mediaViewModel.save(base64_data, mime_type, (filename) => {
+            mediaBridge.save(base64_data, mime_type, (filename) => {
                 resolve(filename)
             })
 
@@ -25,18 +25,18 @@ class MediaViewModel {
     }
 
     async get(filename) {
-        const mediaViewModel = await this.#ready
+        const mediaBridge = await this.#ready
         return new Promise((resolve) => {
-            mediaViewModel.get(filename, (dataURL) => {
+            mediaBridge.get(filename, (dataURL) => {
                 resolve(dataURL)
             })
         })
     }
 
     async delete(filename) {
-        const mediaViewModel = await this.#ready
+        const mediaBridge = await this.#ready
         return new Promise((resolve) => {
-            mediaViewModel.get(filename, (result) => {
+            mediaBridge.get(filename, (result) => {
                 resolve(result)
             })
         })

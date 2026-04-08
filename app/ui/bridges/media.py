@@ -2,7 +2,7 @@ from PySide6.QtCore import Slot, QObject
 
 from app.services.managers.media import MediaManager
 
-class MediaViewModel(QObject):
+class MediaBridge(QObject):
     def __init__(self, media_manager: MediaManager):
         super().__init__()
         self._media_manager = media_manager

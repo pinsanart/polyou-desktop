@@ -2,6 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "../../style/"
+
 import "./components"
 import "./workspaces/home"
 import "./workspaces/review"
@@ -9,21 +11,13 @@ import "./workspaces/create"
 
 Page {
     id: root
-
-    property color backgroundColor
-    property color buttonLighterColor
-    property color buttonDarkerColor
-    property color borderColor
-    property color fieldColor       
-    property color fontColor
-    property string fontFamily
     
     visible: true
 
     //Background
     Rectangle {
         anchors.fill: parent
-        color: root.backgroundColor
+        color: Style.backgroundColor
     }
 
     //Header
@@ -36,19 +30,19 @@ Page {
 
         height: 50
 
-        color: root.backgroundColor
+        color: Style.backgroundColor
         
         //Header Title
         Text {
             text: "POLYOU"
-            color: root.fontColor
+            color: Style.fontColor
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
 
             anchors.leftMargin: 10
             
             font.pixelSize: parent.height * 0.6
-            font.family: root.fontFamily
+            font.family: Style.fontFamily
             font.bold: true
         }
     }
@@ -61,7 +55,7 @@ Page {
         width: header.width
         height: 1
 
-        color: root.borderColor
+        color: Style.borderColor
     }
 
     //Footer
@@ -74,7 +68,7 @@ Page {
 
         height: 20
 
-        color: root.backgroundColor
+        color: Style.backgroundColor
     }
 
     //Footer Border
@@ -85,7 +79,7 @@ Page {
         width: footer.width
         height: 1
 
-        color: root.borderColor
+        color: Style.borderColor
     }
 
     //Workspace
@@ -122,15 +116,7 @@ Page {
             Component {
                 id: createWorkspace
                 
-                CreateWorkspace {
-                    backgroundColor:     root.backgroundColor
-                    buttonLighterColor:  root.buttonLighterColor
-                    buttonDarkerColor:   root.buttonDarkerColor
-                    borderColor:         root.borderColor
-                    fieldColor:          root.fieldColor
-                    fontColor:           root.fontColor
-                    fontFamily:          root.fontFamily
-                }
+                CreateWorkspace {}
             }
 
         }
@@ -143,8 +129,8 @@ Page {
         anchors.bottom: footerBorder.top
         anchors.left: parent.left
 
-        color: root.backgroundColor
-        borderColor: root.borderColor
+        color: Style.backgroundColor
+        borderColor: Style.borderColor
 
         width: 50
 
@@ -154,9 +140,9 @@ Page {
 
             Repeater {
                 model: [
-                    {"iconURL": "qrc:/images/home_icon.svg", "floatText": qsTr("Home Page"),             "workspaceID": homeWorkspace},
-                    {"iconURL": "qrc:/images/book_icon.svg", "floatText": qsTr("Review Flashcards"),     "workspaceID": reviewWorkspace},
-                    {"iconURL": "qrc:/images/plus_icon.svg", "floatText": qsTr("Create New Flashcards"), "workspaceID": createWorkspace}
+                    {"iconURL": "qrc:assets/images/home_icon.svg", "floatText": qsTr("Home Page"),             "workspaceID": homeWorkspace},
+                    {"iconURL": "qrc:assets/images/book_icon.svg", "floatText": qsTr("Review Flashcards"),     "workspaceID": reviewWorkspace},
+                    {"iconURL": "qrc:assets/images/plus_icon.svg", "floatText": qsTr("Create New Flashcards"), "workspaceID": createWorkspace}
                 ]
 
                 SideButton {
@@ -168,10 +154,6 @@ Page {
                     currentWorkspaceID: workspaceLoader.sourceComponent
 
                     height: sideBar.width
-
-                    backgroundColor: root.backgroundColor
-                    selectBorderColor: root.buttonLighterColor
-                    bottomBorderColor: root.borderColor
 
                     onClicked: function(id) {
                         workspaceLoader.sourceComponent = id

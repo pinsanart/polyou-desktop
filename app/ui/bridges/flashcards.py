@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Slot
 
-class FlashcardViewModel(QObject):
+class FlashcardBridge(QObject):
     def __init__(self):
         super().__init__()
 

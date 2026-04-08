@@ -4,23 +4,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script src="qrc:///core/channel.js"></script>
-    <script src="qrc:///core/models/flashcard.js"></script>
-    <script src="qrc:///core/flashcard_view_factory.js"></script>
+    <script src="qrc:///js/core/channel.js"></script>
+    <script src="qrc:///js/core/models/flashcard.js"></script>
+    <script src="qrc:///js/core/flashcard_view_factory.js"></script>
 
-    <script src="qrc:///bridges/editor.js"></script>
-    <script src="qrc:///bridges/flashcard.js"></script>
-    <script src="qrc:///bridges/media.js"></script>
+    <script src="qrc:///js/bridges/editor.js"></script>
+    <script src="qrc:///js/bridges/flashcard.js"></script>
+    <script src="qrc:///js/bridges/media.js"></script>
 
-    <script src="qrc:///views/flashcard.js"></script>
-    <script src="qrc:///views/vocabulary.js"></script>
-    <script src="qrc:///views/orthographic.js"></script>
-    <script src="qrc:///views/pronounce.js"></script>
+    <script src="qrc:///js/views/flashcard.js"></script>
+    <script src="qrc:///js/views/vocabulary.js"></script>
+    <script src="qrc:///js/views/orthographic.js"></script>
+    <script src="qrc:///js/views/pronounce.js"></script>
 
-    <script src="qrc:///services/states/editor.js"></script>
-    <script src="qrc:///services/media/media.js"></script>
-    <script src="qrc:///services/flashcards/collection.js"></script>
-    <script src="qrc:///services/flashcards/controller.js"></script>
+    <script src="qrc:///js/services/states/editor.js"></script>
+    <script src="qrc:///js/services/media/media.js"></script>
+    <script src="qrc:///js/services/flashcards/collection.js"></script>
+    <script src="qrc:///js/services/flashcards/controller.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -28,14 +28,14 @@
     <div id="editor"></div>
     <script>
         window.addEventListener('load', async function() {
-            const editorState = new EditorState()
-            const mediaViewmodel = new MediaViewModel()
-            await editorState.isReady()
-            await mediaViewmodel.isReady()
+            const editorStateBridge = new EditorStateBridge()
+            const mediaBridge = new MediaBridge()
+            await editorStateBridge.isReady()
+            await mediaBridge.isReady()
 
             const container = document.getElementById('editor')
-            const editorStateService = new EditorStateService(editorState)
-            const mediaService = new MediaService(mediaViewmodel)
+            const editorStateService = new EditorStateService(editorStateBridge)
+            const mediaService = new MediaService(mediaBridge)
 
             const flashcardController = new FlashcardControllerService(container, editorStateService, mediaService)
 
